@@ -1,0 +1,24 @@
+{
+    "addListResponse": {
+        "writeResponseList": {
+            "status": {
+                "@isSuccess": "true",
+                "__text": null
+            },
+            "writeResponse": {
+                "status": {
+                    "@isSuccess": "true",
+                    "statusDetail": {
+                        "afterSubmitFailed": "false"
+                    }
+                },
+                "baseRef": {
+                    "@internalId": "42737799",
+                    "@type": "invoice",
+                    "@type": "platformCore:RecordRef",
+                    "__text": null
+                }
+            }
+        }
+    }
+}

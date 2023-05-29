@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging" xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd">
+	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="0ce3e798-d80b-42db-8cd4-3bfdf8b5a945" />
+	<flow name="flexport-jpm-process-flows-main">
+        <http:listener config-ref="HTTP_Schedular_Listener_config" path='${https.api.version}'>
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="flexport-jpm-process-flows-config" />
+    </flow>
+    <flow name="post:\jpm\sftp\file\content:application\xml:flexport-jpm-process-flows-config">
+    <choice doc:name="Choice" doc:id="bd1cf59c-8138-40d6-895c-a4ab0ca8b734" >
+			<when expression="#[(&#10;	((attributes.queryParams.filename contains ('ACK')) &#10;		and &#10;(((attributes.queryParams.filename contains ('APAC'))) or ((attributes.queryParams.filename contains ('CustomerRefund'))))) &#10;		or &#10;	((attributes.queryParams.filename contains ('PSOURCE')) &#10;		and &#10;(((attributes.queryParams.filename contains ('APAC'))) or ((attributes.queryParams.filename contains ('CustomerRefund')))))&#10;)]">
+				<flow-ref doc:name="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" doc:id="95a405f1-5a82-46b0-865a-9a47c8e8a598" name="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+			</when>
+			<when expression="#[(((attributes.queryParams.filename contains ('ACK')) and ((attributes.queryParams.filename contains ('NAMEA')))) or (attributes.queryParams.filename contains (p('sftp.file.contains'))) or ((attributes.queryParams.filename contains ('PSOURCE')) and ((attributes.queryParams.filename contains ('NAMEA')))))]">
+				<flow-ref doc:name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow" doc:id="10775763-a682-41be-a7a2-253345d3a0ee" name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow"/>
+			</when>
+			<otherwise >
+				<module-logging:log-other doc:name="Log other" doc:id="62ba41d7-2430-4120-879a-36df6e9c56fe" message="********** File is not processed  **********" messageType='#["file name is :" ++ attributes.queryParams.filename]'/>
+			</otherwise>
+		</choice>
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: "Success"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\jpm\sftp\file\content:text\plain:flexport-jpm-process-flows-config">
+		<validation:is-true doc:name="Is true" doc:id="4a491d68-4884-41fa-b2da-f32d78bce1d3" config-ref="Validation_Config" expression="#[attributes.queryParams.filename contains (p('sftp.file.contains'))]" message="Reconcile file is not in correct format"/>
+		<flow-ref doc:name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow" doc:id="b3b94039-50ab-4943-abc8-350b18da51a4" name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow"/>
+		<ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: "Success"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>

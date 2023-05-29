@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:search xmlns:ns0="urn:messages_2020_2.platform.webservices.netsuite.com">
+  <ns0:searchRecord xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns01:TransactionSearchAdvanced" savedSearchId="4005" savedSearchScriptId="customsearch4005">
+    <ns01:criteria>
+      <ns01:applyingTransactionJoin>
+        <ns02:lastModifiedDate xmlns:ns02="urn:common_2020_2.platform.webservices.netsuite.com" operator="within">
+          <ns03:searchValue xmlns:ns03="urn:core_2020_2.platform.webservices.netsuite.com">2022-09-26T00:00:00.000000-07:00</ns03:searchValue>
+          <ns03:searchValue2 xmlns:ns03="urn:core_2020_2.platform.webservices.netsuite.com">2022-09-26T00:05:00.000000-07:00</ns03:searchValue2>
+        </ns02:lastModifiedDate>
+      </ns01:applyingTransactionJoin>
+    </ns01:criteria>
+  </ns0:searchRecord>
+</ns0:search>

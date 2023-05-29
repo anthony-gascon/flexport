@@ -1,0 +1,95 @@
+[
+  {
+    "ID": "1",
+    "Code": "USD"
+  },
+  {
+    "ID": "2",
+    "Code": "GBP"
+  },
+  {
+    "ID": "3",
+    "Code": "CAD"
+  },
+  {
+    "ID": "4",
+    "Code": "EUR"
+  },
+  {
+    "ID": "5",
+    "Code": "HKD"
+  },
+  {
+    "ID": "6",
+    "Code": "AUD"
+  },
+  {
+    "ID": "7",
+    "Code": "NOK"
+  },
+  {
+    "ID": "8",
+    "Code": "DKK"
+  },
+  {
+    "ID": "9",
+    "Code": "CNY"
+  },
+  {
+    "ID": "10",
+    "Code": "JPY"
+  },
+  {
+    "ID": "11",
+    "Code": "CHF"
+  },
+  {
+    "ID": "12",
+    "Code": "INR"
+  },
+  {
+    "ID": "13",
+    "Code": "SEK"
+  },
+  {
+    "ID": "14",
+    "Code": "TWD"
+  },
+  {
+    "ID": "15",
+    "Code": "NZD"
+  },
+  {
+    "ID": "16",
+    "Code": "COP"
+  },
+  {
+    "ID": "17",
+    "Code": "SGD"
+  },
+  {
+    "ID": "18",
+    "Code": "MXN"
+  },
+  {
+    "ID": "19",
+    "Code": "BRL"
+  },
+  {
+    "ID": "20",
+    "Code": "KRW"
+  },
+  {
+    "ID": "21",
+    "Code": "PLN"
+  },
+  {
+    "ID": "22",
+    "Code": "THB"
+  }
+  ,
+  {
+    "ID": "23",
+    "Code": "ZAR"
+  }
+]

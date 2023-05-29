@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="flexport-jpm-process-flows-test-suite.xml" />
+	<munit:test doc:id="025e0459-b64c-4ae7-b82c-58b9ffa77fe4" description="Test" name="apac-update-vendor-bill-payment-status-netsuite-jpm-ack-psr-publish-test-success">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Object store" doc:id="7efe7612-256a-4d82-bd22-eb0ace28e2a9" processor="os:store">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Store fileName" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a848478b-ee9b-448d-9645-f102841016c0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when VM publish" doc:id="021635a5-0443-4401-99ef-d235b2f4bb72" processor="vm:publish">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ec067d5d-fe3b-461e-b032-bca40f152926" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="6eb59738-133c-4287-acee-04775126572c" >
+				<munit:payload value="#[output application/xml --- readUrl(('classpath://apac/china/sftp-mock-post-ack-payload.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" />
+				<munit:attributes value='#[{&#10;	"queryParams": {&#10;		"filename" : "FLEXPISO.ACK.MRCNFRM.APAC.China"&#10;	}&#10;}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\jpm\sftp\file\content:application\xml:flexport-jpm-process-flows-config" doc:id="7aee504d-dfb5-489b-aab2-782b9a551030" name="post:\jpm\sftp\file\content:application\xml:flexport-jpm-process-flows-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="0d517bd1-9a2a-474f-8a66-5377ed209b41" processor="module-logging:log-other">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="e1897cf7-7a73-4985-a785-a69ffbe9c048" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-ack-update-vendor-bill-payment-status-subflow-test" doc:id="d74aca1a-1cac-4532-928a-53f000ee91ea" timeOut="12000000">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when Retrieve fileName" doc:id="dcc03af3-28df-42e0-bfd9-1c47ccb6c712" processor="os:retrieve">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Retrieve fileName" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="47454b1c-d989-40f4-bb22-dbbde31601ac" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="fileName" value="#[output application/json --- readUrl(('classpath://apac/china/mock-filename-retrive-os.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Request Netsuite sapi GET msg id data" doc:id="1cab5ccd-fb91-4112-b7ec-b57726b5d682" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="cccd487b-68d8-4caa-b0be-bb88412c3899" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/china/get-file-data-by-msg-id.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Request Netsuite sapi update" doc:id="bc42bba6-8664-4cb4-a79b-5d175cbc95a2" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="1fbd44c3-cb8e-4e87-ac0f-5a38e7c271f4" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="dd8314ea-f652-44a2-ac7a-a7dc1fe73af8">
+				<munit:payload value="#[output application/xml --- readUrl(('classpath://apac/china/sftp-mock-post-ack-payload.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" />
+				<munit:attributes value='#[{&#10;	"queryParams": {&#10;		"filename" : "FLEXPISO.ACK.MRCNFRM.APAC.China"&#10;	}&#10;}]' />
+			</munit:set-event>
+			<flow-ref doc:name="apac-update-vendor-bill-payment-status-subflow" doc:id="31669a48-9b14-4f88-a1f2-a36f20e177d6" name="apac-update-vendor-bill-payment-status-subflow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="a9ea4559-fc8a-4faa-b428-612d6c3e8254" processor="module-logging:log-exit">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log exit" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-psr-update-vendor-bill-payment-status-subflow-test" doc:id="a69466d0-090d-4ace-a672-09aa7f9d2a6f" timeOut="1200000">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when Retrieve fileName" doc:id="fb6ca0ad-33ec-4f97-924e-2de4afa093f7" processor="os:retrieve" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Retrieve fileName" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="47454b1c-d989-40f4-bb22-dbbde31601ac" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="fileName" value="#[output application/json --- readUrl(('classpath://apac/china/mock-psr-filename-retrive-os.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Netsuite Update Request" doc:id="066677c6-0293-4a30-8268-cfbbe9469ab7" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f24a189e-1798-4889-ba67-a6b8c0d416da" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="8d073cf8-32ff-4d54-9154-8f8138877830">
+				<munit:payload value="#[output application/xml --- readUrl(('classpath://apac/china/sftp-mock-post-psr-payload.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" />
+				<munit:attributes value='#[{&#10;	"queryParams": {&#10;		"filename" : "FLEXPISO.ACK.MRCNFRM.APAC.China"&#10;	}&#10;}]' />
+			</munit:set-event>
+			<flow-ref doc:name="apac-update-vendor-bill-payment-status-subflow" doc:id="d5dd1f56-95e6-435e-87b3-e261887d56e0" name="apac-update-vendor-bill-payment-status-subflow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="9a451a3d-d07e-4f2a-a55e-d2427ab84fe9" processor="module-logging:log-exit" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log exit" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-update-vendor-bill-payment-status-netsuite-jpm-ack-psr-publish-test-default-route-invalid-country" doc:id="19018b27-07e0-40cc-b944-c491e2425cb3" description="Test" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Object store" doc:id="c02bca3e-ae20-477d-93d5-e378ac586f39" processor="os:store" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Store fileName" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a848478b-ee9b-448d-9645-f102841016c0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="37f4e308-2780-4169-a437-3276b80638c9" >
+				<munit:payload value="#[output application/xml --- readUrl(('classpath://apac/china/sftp-mock-post-ack-payload.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" />
+				<munit:attributes value='#[{&#10;	"queryParams": {&#10;		"filename" : "FLEXPISO.ACK.MRCNFRM.APAC.SomeOtherCountry"&#10;	}&#10;}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\jpm\sftp\file\content:application\xml:flexport-jpm-process-flows-config" doc:id="8606dda0-023a-4720-9c03-7ae5e58261b0" name="post:\jpm\sftp\file\content:application\xml:flexport-jpm-process-flows-config" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="apac-update-vendor-bill-payment-status-netsuite-jpm-ack-psr-publish-test-default-route-invalid-region" doc:id="a39bcee0-0780-42d5-a940-9017c9270bae" description="Test" timeOut="1200000" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Object store" doc:id="b0cf28ca-96e2-42dd-8d11-8bfa698f21c9" processor="os:store" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Store fileName" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a848478b-ee9b-448d-9645-f102841016c0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="1148917d-2b8d-4605-8f83-024cabe1fc9e" >
+				<munit:payload value="#[output application/xml --- readUrl(('classpath://apac/china/sftp-mock-post-ack-payload.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" />
+				<munit:attributes value='#[{&#10;	"queryParams": {&#10;		"filename" : "FLEXPISO.ACK.MRCNFRM.ABCREGION.SomeOtherCountry"&#10;	}&#10;}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\jpm\sftp\file\content:application\xml:flexport-jpm-process-flows-config" doc:id="e167af74-0280-4872-aca1-7b44c16e0cd3" name="post:\jpm\sftp\file\content:application\xml:flexport-jpm-process-flows-config" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="apac-psr-update-vendor-bill-payment-status-subflow-invalidFile-not-ack-psr" doc:id="eeb8af00-2909-42f5-a057-1ff0e7038ab4" timeOut="1200000" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Retrieve fileName" doc:id="7da59a69-df2c-422a-af33-637c3e2f6baa" processor="os:retrieve" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Retrieve fileName" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="47454b1c-d989-40f4-bb22-dbbde31601ac" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="fileName" value="#[output application/json --- readUrl(('classpath://apac/china/mock-invalid-psr-filename-retrive-os.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Netsuite Update Request" doc:id="ccb8defc-fd22-4622-a2e8-51804984503d" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f24a189e-1798-4889-ba67-a6b8c0d416da" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="58e93348-3f8e-4992-a500-7bec779b0060" >
+				<munit:payload value="#[output application/xml --- readUrl(('classpath://apac/china/sftp-mock-post-psr-payload.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" />
+				<munit:attributes value='#[{&#10;	"queryParams": {&#10;		"filename" : "FLEXPISO.ACK.MRCNFRM.APAC.China"&#10;	}&#10;}]' />
+			</munit:set-event>
+			<flow-ref doc:name="apac-update-vendor-bill-payment-status-subflow" doc:id="6111dfa8-1dcb-40e6-8055-239c197d31ef" name="apac-update-vendor-bill-payment-status-subflow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="6a04eae8-09e5-4a3d-80d9-985322b064c5" processor="module-logging:log-exit" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log exit" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+</mule>

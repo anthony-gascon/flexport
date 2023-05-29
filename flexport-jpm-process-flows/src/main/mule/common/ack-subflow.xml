@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/dw http://www.mulesoft.org/schema/mule/core/current/dw.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd">
+	<sub-flow name="ack-subflow"
+		doc:id="93aa3826-e32f-4452-b5fe-8cb8d256a0e0">
+		<set-variable value="#[payload]" doc:name="sftpPayload"
+			doc:id="a8c61af1-3c94-4072-889e-9be32d654b94"
+			variableName="sftpPayload" />
+		<module-logging:log-inbound
+			doc:name="Log inbound" doc:id="23393496-eecf-4627-956f-47717309e8b4"
+			message="******ACK File Flow Started**************"
+			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+		<ee:transform doc:name="URI param" doc:id="fe7d3833-459f-45f1-bd6c-1da36eaa9a07" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dataweave/msgId.dwl" variableName="URIParam" />
+			</ee:variables>
+		</ee:transform>
+		<until-successful maxRetries="${https.retry.attempt}"
+			doc:name="Until Successful"
+			doc:id="c9ac1a88-7a4d-4dcf-9b9b-9c8d91466e63"
+			millisBetweenRetries="${https.retry.frequency}">
+			<http:request method="GET"
+				doc:name="Request Netsuite sapi"
+				doc:id="7e5b6618-ecfd-47dd-8cdd-a691ed4f738a"
+				path="${https.retrieve.payments.path.netsuite}" config-ref="Http_NS__Request"
+				responseTimeout="${http.response.timeout.netsuite}">
+				<http:uri-params><![CDATA[#[output application/java
+				
+---
+vars.URIParam]]]></http:uri-params>
+			</http:request>
+		</until-successful>
+		<choice doc:name="Choice : Is ACK Data Present"
+			doc:id="8663a144-fd91-4dd4-87ad-d3c393da71c8">
+			<when expression="#[sizeOf(payload)!=0]">
+				<foreach doc:name="For Each"
+					doc:id="0f9b1317-0521-48ce-b11b-24d731cf296a"
+					collection="#[payload]" batchSize="${foreach.batch.size}">
+					<ee:transform doc:name="Transform Message"
+						doc:id="6153eff5-5f9b-45be-b4ed-2f9939d2a0fc">
+						<ee:message>
+							<ee:set-payload
+								resource="dataweave/namea/ackDwlTransformation.dwl" />
+						</ee:message>
+					</ee:transform>
+					<until-successful
+						maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+						doc:id="275f9e22-6155-41cc-838e-984b16130f33"
+						millisBetweenRetries="${https.retry.frequency}">
+						<http:request method="PUT"
+							doc:name="Request Netsuite sapi update"
+							doc:id="29ddb87b-4d6e-439f-a732-9e178f4423c4"
+							path="${https.update.payments.path.netsuite}" config-ref="Http_NS__Request"
+							responseTimeout="${http.response.timeout.netsuite}" />
+					</until-successful>
+				</foreach>
+			</when>
+			<otherwise>
+				<module-logging:log-other
+					doc:name="Log other" doc:id="807bd1c9-93c2-4378-ad73-23fc92abd585"
+					message="**********No Record Found  for ACK msg ID**********"
+					source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+			</otherwise>
+		</choice>
+		<module-logging:log-outbound
+			doc:name="Log outbound" doc:id="ca894ccd-65fc-41e7-85e4-ac80e74979ec"
+			message="******ACK File Flow ends*************"
+			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+	</sub-flow>
+	<sub-flow name="apac-ack-subflow" doc:id="30bdaa05-61d5-4bcd-bec0-d47757f4653d" >
+							
+		<set-variable value="#[payload]" doc:name="sftpPayload" doc:id="03bcaeff-fabc-4dbd-a895-ad3f0720ea6d" variableName="sftpPayload" />
+		<module-logging:log-inbound doc:name="Log inbound" doc:id="368fc576-297c-45f2-a470-5313fb18c553" message="****** APAC ACK File Flow Started**************" source="apac-ack-subflow" />
+		<ee:transform doc:name="URI param" doc:id="3c253d43-83c6-4104-b427-9b68c2324bb3" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dataweave/msgId.dwl" variableName="URIParam" />
+			</ee:variables>
+		</ee:transform>
+		<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="8dea023d-bf9b-4077-b669-eae3d5178d60" millisBetweenRetries="${https.retry.frequency}" >
+			<http:request method="GET" doc:name="Request Netsuite sapi" doc:id="cccd487b-68d8-4caa-b0be-bb88412c3899" config-ref="Http_NS__Request" path="${ns.payment.vendor.messageId.path}" responseTimeout="${http.response.timeout.netsuite}" >
+				<http:uri-params ><![CDATA[#[output application/json
+
+---
+vars.URIParam]]]></http:uri-params>
+			</http:request>
+		</until-successful>
+		<choice doc:name="Choice : Is ACK Data Present" doc:id="79c7144f-a130-4b54-98c7-3014503fc7bd" >
+			<when expression="#[sizeOf(payload)!=0]" >
+				<foreach doc:name="For Each" doc:id="b9d3325e-9b03-453f-9770-948dabd94368" collection="#[payload]" batchSize="${foreach.batch.size}" >
+					<ee:transform doc:name="Transform Message" doc:id="7462c19f-1a2b-4657-aa71-1883f301a880" >
+						<ee:message >
+							<ee:set-payload resource="dataweave/apac/china/ackDwlTransformation.dwl" />
+						</ee:message>
+					</ee:transform>
+					<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="ef910398-b97e-4b7d-bef7-9bb5e0491f96" millisBetweenRetries="${https.retry.frequency}" >
+						<http:request method="PUT" doc:name="Request Netsuite sapi update" doc:id="1fbd44c3-cb8e-4e87-ac0f-5a38e7c271f4" config-ref="Http_NS__Request" path="${ns.update.vendor.payment.path}" responseTimeout="${http.response.timeout.netsuite}" />
+					</until-successful>
+				</foreach>
+			</when>
+			<otherwise >
+				<module-logging:log-other doc:name="Log other" doc:id="7de1e723-c23a-42a9-815f-cf6f98de1566" message="********** apac  No Record Found  for ACK msg ID**********" source="apac-ack-subflow" />
+			</otherwise>
+		</choice>
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="74ae6c7f-0181-41e3-a756-d28d2135c068" message="****** apac  ACK File Flow ends*************" source="apac-ack-subflow" />
+	</sub-flow>
+	<sub-flow name="ack-common-subflow"
+		doc:id="cc23c312-1338-4c99-90e6-18984e209635">
+		<set-variable value="#[payload]" doc:name="sftpPayload"
+			doc:id="900eced6-7ab9-4430-8950-781623381cba"
+			variableName="sftpPayload" />
+		<module-logging:log-inbound
+			doc:name="Log inbound" doc:id="2528a7ed-061d-41d1-afea-c768be0d422c"
+			message="******ACK File Flow Started**************"
+			source="common-ack-subflow" />
+		<ee:transform doc:name="FileName"
+			doc:id="5539d7f4-03d5-485d-b5fa-83d9714d13f0">
+			<ee:message />
+			<ee:variables>
+				<ee:set-variable resource="dataweave/msgId.dwl"
+					variableName="URIParam" />
+			</ee:variables>
+		</ee:transform>
+		<ee:transform
+			doc:name="Get Customers Refund based on FileName SOAP Request"
+			doc:id="fa12d36d-ccee-46a9-a935-9b7d71cd89a9">
+			<ee:message>
+				<ee:set-payload
+					resource="dataweave/customerrefund/getCustomerRefundBasedFileName.dwl" />
+			</ee:message>
+		</ee:transform>
+
+		<http:request method="POST"
+			doc:name="Netsuite SaveSearch Request"
+			doc:id="e90d29c9-8233-4bc6-b0ae-a2fd11a135cb"
+			config-ref="NSv11v2httpRequest"
+			path="${https.netsuite.sapi.v11.v2.savesearch.path}">
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"pageSize" : p('customer.refund.savesearch.pageSize'),
+	"limit" : p('customer.refund.savesearch.limit'),
+	"searchKey" : p('customer.refund.savesearch.searchKey')
+}]]]></http:query-params>
+		</http:request>
+
+		<choice doc:name="Choice : Is ACK Data Present"
+			doc:id="5f72492d-da24-4e63-9fab-45937a6993fa">
+			<when expression="#[sizeOf(payload)!=0]">
+				<foreach doc:name="For Each"
+					doc:id="76e8f3ff-6e56-4218-9690-811c3c5bb6ff"
+					collection="#[payload]" batchSize="${foreach.batch.size}">
+					<ee:transform doc:name="ACK Records List"
+						doc:id="f55b2f31-4a06-479e-99fd-7ca920b682e9">
+						<ee:message>
+							<ee:set-payload
+								resource="dataweave/namea/ackDwlTransformation.dwl" />
+						</ee:message>
+					</ee:transform>
+					<ee:transform
+						doc:name="Customer Refund Update SOAP Request"
+						doc:id="558cb277-a674-4e51-aef4-2b172c8d80e6">
+						<ee:message>
+							<ee:set-payload
+								resource="dataweave/customerrefund/ack-update.dwl" />
+						</ee:message>
+					</ee:transform>
+
+					<http:request method="PUT"
+						doc:name="Netsuite Customer Refund Update Request"
+						doc:id="922cd953-ab1f-414e-80b5-7237efc7988b"
+						config-ref="NSv11v2httpRequest"
+						path="${https.netsuite.sapi.v11.v2.update.path}">
+						<http:query-params><![CDATA[#[output application/java
+---
+{
+	"recordType" : p('customer.refund.savesearch.recordType')
+}]]]></http:query-params>
+					</http:request>
+
+					<ee:transform doc:name="XML to JSON Conversion"
+						doc:id="dbb2a89a-ac6e-4a9d-87f9-9db96c3b2c1e">
+						<ee:message>
+							<ee:set-payload
+								resource="dataweave/customerrefund/updateList-response-customer-refund.dwl" />
+						</ee:message>
+					</ee:transform>
+					<module-logging:log-outbound
+						doc:name="Log Output"
+						doc:id="2872ebdc-bf14-4893-8772-a261ee686919"
+						message='#["Netsuite update done for block number: " ++ vars.counter]'
+						messageType="#[output application/json --- payload]"
+						source="common-ack-subflow" />
+				</foreach>
+			</when>
+			<otherwise>
+				<module-logging:log-other
+					doc:name="Log other" doc:id="b0f994e7-81d8-4f9f-a768-658fb4fc10b5"
+					message="**********No Record Found  for ACK msg ID**********"
+					source="common-ack-subflow" />
+			</otherwise>
+		</choice>
+		<module-logging:log-outbound
+			doc:name="Log outbound" doc:id="3dd0421c-41aa-4c0b-a3e8-18af09b36e31"
+			message="******ACK File Flow ends*************"
+			source="common-ack-subflow" />
+	</sub-flow>
+</mule>

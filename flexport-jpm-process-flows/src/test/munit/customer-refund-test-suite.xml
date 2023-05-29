@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="new-test-suite.xml" />
+	<munit:test name="namea-customer-refund-impl-flowTest" doc:id="8de55292-689f-436c-bcdd-53bb8b955c6a" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when http:request" doc:id="0fd2a545-7430-4286-8df6-616e024380bc" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="55bbcab4-eaf4-41ba-9352-cedbf871f907" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json&#10;---&#10;readUrl(('classpath://namea/customerrefund/netsuiteSaveSearchData.json'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock VM: Publish" doc:id="85de35c4-302d-4a2b-b27c-9067335d2513" processor="vm:publish">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="01b7cab0-fc5e-49b2-afa0-667fd6805eef" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to namea-customer-refund-impl-flow" doc:id="6e5e2cee-2750-4feb-b8c0-5dbcde96cfe3" name="namea-customer-refund-impl-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="3caf87fa-d710-457d-9f35-54f9c9bbf2bf" expression="#[payload]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="namea-customer-refund-impl-no-data-flowTest" doc:id="0f52652d-4a3b-4363-a503-ff31c8792930" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when http:request" doc:id="0dcc7bb0-43e5-4079-93cf-dcd4a41d5682" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="55bbcab4-eaf4-41ba-9352-cedbf871f907" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- []]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Request Send Email" doc:id="7631ab13-0969-45c4-aa20-dd0111a396f2" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="6601e8ec-289c-4d70-b1eb-0c047dfbb9ad" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to namea-customer-refund-impl-flow" doc:id="031ac803-7f20-4a52-a62d-4e24a8af89a5" name="namea-customer-refund-impl-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="255e4ffc-a3b0-42c5-bc05-2309f5d8a673" expression="#[payload]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="customer-refund-vendor-bill-payment-listner-success-test-Flow" doc:id="1e8aad8b-7080-4767-a450-394c8c1b9ecb" >
+		<munit:behavior >
+			<munit-tools:store doc:name="Store transactionJPMFile" doc:id="34964782-e8fb-4184-b26b-be9ebfd5fdb3" key="transactionJPMFile"/>
+			<munit-tools:mock-when doc:name="Mock when request to pgp" doc:id="a49bb4fa-5d96-4131-b252-8daf54ad8942" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7de65e8c-1c67-4e53-85d7-f8076d020e7c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output text/plain --- readUrl(('classpath://namea/customerrefund/pgpEncryptionResponseCustomerRefund.dwl'), &quot;text/plain&quot;)]" mediaType="text/plain" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to sftp upload" doc:id="a8b2a4ce-d83a-492a-98f8-b0325dd269e9" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4f34c9ae-5707-4c4b-a737-1741458bb194" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/china/sftpUploadResponsechina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Netsuite Customer Refund Update Request" doc:id="ee86de52-02e3-465a-bf6d-3dff8be62868" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2ab3d299-7441-4658-b594-3d1be63a9675" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://namea/customerrefund/netsuiteUpdateFileCustomerRefund.json'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock CustomerRefund ACK PSR Consume" doc:id="082cf192-842a-438f-b832-a2df261fa2e0" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="cac08c34-6dec-4e42-9142-b0c8a82cb2c1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/xml --- readUrl(('classpath://namea/customerrefund/psrCustomerRefund.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock OS Retrieve" doc:id="6a2fb6a1-4627-46f5-ad19-17826f15fd01" processor="os:retrieve">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4177cca7-d0ea-4c06-a381-19d5ebbc7dc3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="fileName" value="#[output application/json --- readUrl(('classpath://namea/customerrefund/retrieveObjectStore.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Netsuite Customer Refund Update Request1" doc:id="66aa1688-8729-47f3-9fe7-d7ab37143d52" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="74e41e15-30ad-424e-874e-28e78ae2865f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://namea/customerrefund/netsuiteUpdateFileCustomerRefund.json'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock OS:Remove" doc:id="781198b5-5d13-498b-a0fc-5872bd08ea5b" processor="os:remove">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d99ac603-4c2a-487f-a5d0-95777316ebc6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock OS:Remove" doc:id="f5243e07-7e28-45dd-a201-412cc0747363" processor="os:remove">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="afecf54f-c29b-4509-8bd7-26bf92835bc3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<!-- <munit-tools:retrieve doc:name="Retrieve" doc:id="20268a35-6322-4da7-be9d-5b7056dbf800" key="customerrefundfile" target="fileName"/> -->
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Consume Data" doc:id="8549dd6a-5088-4b4f-93af-62c79d026066" >
+				<munit:payload value="#[output application/json&#10;---&#10;readUrl(('classpath://namea/customerrefund/consumeNetsuiteSavedSearch.json'), &quot;application/json&quot;)]" encoding="UTF-8" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="namea-customer-refund-listener-flow" doc:id="6c8528a5-166a-4f9d-9e72-de3a7edc13b8" name="namea-customer-refund-listener-flow"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="customer-refund-vendor-bill-payment-listner-ack-test-Flow" doc:id="d65f6772-6718-412f-badc-ae7f200d285a" >
+		<munit:behavior >
+			<munit-tools:store doc:name="Store transactionJPMFile" doc:id="ffa11889-e791-4c51-9ca1-32c147c1ee57" key="transactionJPMFile"/>
+			<munit-tools:mock-when doc:name="Mock when request to pgp" doc:id="acdd8bc8-4a1c-4723-ac80-a9a06a9cf684" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7de65e8c-1c67-4e53-85d7-f8076d020e7c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output text/plain --- readUrl(('classpath://namea/customerrefund/pgpEncryptionResponseCustomerRefund.dwl'), &quot;text/plain&quot;)]" mediaType="text/plain" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to sftp upload" doc:id="8e74e1c9-316c-4798-938c-63ec8175a134" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4f34c9ae-5707-4c4b-a737-1741458bb194" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/china/sftpUploadResponsechina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Netsuite Customer Refund Update Request" doc:id="241d37a8-285d-46af-b5f6-30ae1268dd8e" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2ab3d299-7441-4658-b594-3d1be63a9675" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://namea/customerrefund/netsuiteUpdateFileCustomerRefund.json'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock CustomerRefund ACK PSR Consume" doc:id="aae6f455-4a54-453b-81f6-cfc5035d8a40" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="cac08c34-6dec-4e42-9142-b0c8a82cb2c1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/xml --- readUrl(('classpath://namea/customerrefund/ackCustomerRefund.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" encoding="UTF-8" />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock OS Retrieve" doc:id="1777b184-6155-4685-bc64-7129bec11ced" processor="os:retrieve">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4177cca7-d0ea-4c06-a381-19d5ebbc7dc3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="fileName" value="#[output application/json --- readUrl(('classpath://namea/customerrefund/ackfileNameRetrieve.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Netsuite Search Request" doc:id="0757e706-44b8-4a2c-b947-fc7bd0d390d1" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="e90d29c9-8233-4bc6-b0ae-a2fd11a135cb" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json&#10;---&#10;readUrl(('classpath://namea/customerrefund/netsuiteSaveSearchData.json'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock ACK File Email Request " doc:id="6edce1f4-30c4-49c8-841b-8d8474f046c9" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="31344800-a7f3-437b-9080-53d37b1b6ad1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Retrieve JPM File Obj Store" doc:id="494b3814-bf65-47d6-a7c0-aee00b96565d" processor="os:retrieve">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2387fb01-7522-48ef-8c49-d554d002b840" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/xml&#10;---&#10;readUrl(('classpath://namea/customerrefund/customerRefundJPM.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Netsuite Customer Refund Update Request1" doc:id="8cdfdee5-f947-4a13-8a89-aa2d6f33a0fb" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="922cd953-ab1f-414e-80b5-7237efc7988b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://namea/customerrefund/netsuiteUpdateFileCustomerRefund.json'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock OS:Remove" doc:id="4cef12d6-0ddf-4140-84af-88d7cde0262e" processor="os:remove">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d99ac603-4c2a-487f-a5d0-95777316ebc6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock OS:Remove" doc:id="377dd73e-e7b6-4671-b153-32499fc9b176" processor="os:remove">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="afecf54f-c29b-4509-8bd7-26bf92835bc3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<!-- <munit-tools:retrieve doc:name="Retrieve" doc:id="6f189486-56e3-4d6e-886b-95b47794241f" key="customerrefundfile" target="fileName"/> -->
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Consume Data" doc:id="a1984489-fb8d-4cad-86cf-90431cbf6f12" >
+				<munit:payload value="#[output application/json&#10;---&#10;readUrl(('classpath://namea/customerrefund/consumeNetsuiteSavedSearch.json'), &quot;application/json&quot;)]" encoding="UTF-8" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="namea-customer-refund-listener-flow" doc:id="3ed3951e-3e4b-42be-8522-bb0670655a7d" name="namea-customer-refund-listener-flow"/>
+		</munit:execution>
+	</munit:test>
+	
+	<munit:test name="customer-refund-vendor-bill-payment-listner-expression-error" doc:id="6ff875b7-e344-4d83-859d-c0d015c3d259" expectedErrorType="EXPRESSION">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock Flow-Ref" doc:id="2479701b-89c2-4c4c-8f05-950f48d699c8" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="b01ea49e-ba8c-4b95-8f77-01e286585ce2" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="MULE:EXPRESSION" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Request Send Email" doc:id="ebe8e91b-8019-445a-8a3f-d8306fedfbe2" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="097b0f6e-5a21-4b1e-b9f2-26c56d487dd6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+
+			<!-- <munit-tools:retrieve doc:name="Retrieve" doc:id="791234b2-b1ae-4030-a265-8ef7aac0e15d" key="customerrefundfile" target="fileName"/> -->
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Consume Data" doc:id="232f955a-21f7-4e59-b12f-1bbc9a7f4e41" >
+				<munit:payload value="#[output application/json&#10;---&#10;readUrl(('classpath://namea/customerrefund/consumeNetsuiteSavedSearch.json'), &quot;application/json&quot;)]" encoding="UTF-8" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="namea-customer-refund-listener-flow" doc:id="7143a972-7cd2-444c-8930-0968ef356063" name="namea-customer-refund-listener-flow"/>
+		</munit:execution>
+	</munit:test>
+	
+	<munit:test name="customer-refund-vendor-bill-payment-listner-vm-error-test-Flow" doc:id="442db411-6476-40e8-9b94-1f80293eabcc" expectedErrorType="VM:QUEUE_TIMEOUT">
+		<munit:behavior >
+			<munit-tools:store doc:name="Store transactionJPMFile" doc:id="25c2b346-6a69-4cd8-8a3e-0dce5ceb669f" key="transactionJPMFile"/>
+			<munit-tools:mock-when doc:name="Mock when request to pgp" doc:id="7b0309f3-90bc-41e6-bb8b-b70976a81254" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7de65e8c-1c67-4e53-85d7-f8076d020e7c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output text/plain --- readUrl(('classpath://namea/customerrefund/pgpEncryptionResponseCustomerRefund.dwl'), &quot;text/plain&quot;)]" mediaType="text/plain" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to sftp upload" doc:id="17b16915-c95e-441d-88dd-033cf6bf579d" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4f34c9ae-5707-4c4b-a737-1741458bb194" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/china/sftpUploadResponsechina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Netsuite Customer Refund Update Request" doc:id="b84a7fb9-4c04-40c3-a6ba-3f50937b1fbb" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2ab3d299-7441-4658-b594-3d1be63a9675" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://namea/customerrefund/netsuiteUpdateFileCustomerRefund.json'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock CustomerRefund ACK PSR Consume" doc:id="27830d8b-fde3-4c11-82a8-9b2545f584e6" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="cac08c34-6dec-4e42-9142-b0c8a82cb2c1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="VM:QUEUE_TIMEOUT" />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Email Request" doc:id="66c9e430-42a0-41f5-82c0-24f82998c26e" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="32b7f977-7122-4489-b67e-6afcdeee9316" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<!-- <munit-tools:retrieve doc:name="Retrieve" doc:id="6f72b2f2-3262-4cd7-b865-87a3938b4f2d" key="customerrefundfile" target="fileName"/> -->
+		
+</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Consume Data" doc:id="cabba6bf-df0f-4050-99a6-ffbd477c865c" >
+				<munit:payload value="#[output application/json&#10;---&#10;readUrl(('classpath://namea/customerrefund/consumeNetsuiteSavedSearch.json'), &quot;application/json&quot;)]" encoding="UTF-8" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="namea-customer-refund-listener-flow" doc:id="07f3c7a4-f32d-4f8d-8e07-539755b06617" name="namea-customer-refund-listener-flow"/>
+		</munit:execution>
+	</munit:test>
+
+</mule>

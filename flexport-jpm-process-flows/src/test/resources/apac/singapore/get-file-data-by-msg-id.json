@@ -1,0 +1,103 @@
+[
+  {
+    "tranId": "233844",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2022-12-21T14:05:27",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "233844",
+    "memo": "x5813 ACH Test",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "11",
+      "name": "Flexport International (Shanghai) Co Ltd"
+    },
+    "internalId": "43313100",
+    "payeeAddress": {
+      "zip": null,
+      "country": "CHINA",
+      "addr2": null,
+      "addr1": null,
+      "city": null,
+      "addr3": null,
+      "addrText": "上海臣丰源生态农业专业合作社<br>China",
+      "addrPhone": null,
+      "internalId": "174461",
+      "addressee": "上海臣丰源生态农业专业合作社",
+      "attention": null,
+      "override": false,
+      "state": null,
+      "nullFieldList": null,
+      "customFieldList": null
+    },
+    "total": 4000.0,
+    "createdDate": "2022-12-19T08:35:58",
+    "currencyName": "CNY",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "255",
+      "name": "Dec 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "9",
+      "name": "CNY"
+    },
+    "tranDate": "2022-12-18T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1276",
+      "name": "10258 Cash : JPM SH checking x5813 - CNY"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "26224655",
+      "name": "上海臣丰源生态农业专业合作社"
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbodysvbexport": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": false,
+          "SelectCustomFieldRef__custbody_payment_type": {
+            "internalId": "10",
+            "name": "ACH (DAC)",
+            "externalId": null,
+            "typeId": "84"
+          },
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APAC.China74603e001bae40ce8c79dd6385cf2d89",
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM SH checking x5813 - CNY",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "103",
+            "name": "JPM CNY Checking x5813",
+            "externalId": null,
+            "typeId": "896"
+          }
+        }
+      ]
+    },
+    "status": "Approved"
+  }
+]

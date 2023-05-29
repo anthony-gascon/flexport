@@ -1,0 +1,52 @@
+{
+  "updateListResponse": {
+    "writeResponseList": {
+      "status": {
+        "@isSuccess": "true",
+        "__text": null
+      },
+      "writeResponse": {
+        "status": {
+          "@isSuccess": "true",
+          "statusDetail": {
+            "afterSubmitFailed": "false"
+          }
+        },
+        "baseRef": {
+          "@internalId": "45588874",
+          "@type": "customerRefund",
+          "@type": "platformCore:RecordRef",
+          "__text": null
+        }
+      },
+      "writeResponse": {
+        "status": {
+          "@isSuccess": "true",
+          "statusDetail": {
+            "afterSubmitFailed": "false"
+          }
+        },
+        "baseRef": {
+          "@internalId": "45588875",
+          "@type": "customerRefund",
+          "@type": "platformCore:RecordRef",
+          "__text": null
+        }
+      },
+      "writeResponse": {
+        "status": {
+          "@isSuccess": "true",
+          "statusDetail": {
+            "afterSubmitFailed": "false"
+          }
+        },
+        "baseRef": {
+          "@internalId": "45599567",
+          "@type": "customerRefund",
+          "@type": "platformCore:RecordRef",
+          "__text": null
+        }
+      }
+    }
+  }
+}

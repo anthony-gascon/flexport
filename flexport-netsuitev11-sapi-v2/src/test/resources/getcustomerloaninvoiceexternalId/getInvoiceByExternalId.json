@@ -1,0 +1,97 @@
+[
+  {
+    "inboundAttachmentNames": [],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [],
+    "outboundAttachmentNames": [],
+    "outboundPropertyNames": [],
+    "payload": {
+      "record": {
+        "createdDate": "2022-05-11T00:56:35.000-07:00",
+        "lastModifiedDate": "2022-05-11T00:56:35.000-07:00",
+        "arAcct": {
+          "name": "11100 Accounts Receivable : Trade"
+        },
+        "customer": {
+          "name": "63336 - 820750 - Portico Brands - US"
+        },
+        "pending": "0.0",
+        "currency": {
+          "name": "USD"
+        },
+        "payment": "25600.0",
+        "tranDate": "2022-04-17T16:00:00.000-07:00",
+        "tranId": "PMT97636008061607181",
+        "postingPeriod": {
+          "name": "Apr 2022"
+        },
+        "paymentMethod": {
+          "name": "Stripe - ACH"
+        },
+        "currencyName": "USD",
+        "exchangeRate": "1.0",
+        "isRecurringPayment": "false",
+        "account": {
+          "name": "10301 Cash Equivalents : Stripe"
+        },
+        "subsidiary": {
+          "name": "Flexport Inc. - Operating"
+        },
+        "applied": "25600.0",
+        "unapplied": "0.0",
+        "class": {
+          "name": "Other"
+        },
+        "department": {
+          "name": "Margin Related"
+        },
+        "status": "Deposited",
+        "customFieldList": {
+          "BooleanCustomFieldRef__custbody1": {
+            "value": "false"
+          },
+          "BooleanCustomFieldRef__custbody_no_remittance": {
+            "value": "false"
+          },
+          "StringCustomFieldRef__custbody_stripe_bal_trans_id": {
+            "value": "txn_0Kq1iTVOXmLTEyWfPPVdedAn"
+          },
+          "StringCustomFieldRef__custbody_stripe_charge_id": {
+            "value": "py_0Kq1iTVOXmLTEyWfQi7Ne4yX"
+          },
+          "SelectCustomFieldRef__custbody_stripe_status": {
+            "value": {
+              "name": "Successful"
+            }
+          }
+        }
+      }
+    },
+    "attributes": {
+      "transportHeaders": {
+        "date": "Mon, 11 Jul 2022 09:27:30 GMT",
+        "set-cookie": "NS_ROUTING_VERSION=LAGGING; path=/",
+        "content-length": "4211",
+        "vary": "User-Agent",
+        "x-n-operationid": "7437e745-122b-44a0-8901-e0a6c6fb5b7d",
+        "connection": "keep-alive",
+        "content-type": "text/xml;charset=utf-8",
+        "p3p": "CP=\"CAO PSAa OUR BUS PUR\"",
+        "strict-transport-security": "max-age=31536000",
+        "akamai-grn": "0.86a83b17.1657531649.8f609ada",
+        "ns_rtimer_composite": "1184892158:706172746E6572733033342E70726F642E7376616C652E6E65746C65646765722E636F6D:80"
+      },
+      "transportAdditionalData": {
+        "reasonPhrase": "OK",
+        "statusCode": "200"
+      },
+      "soapHeaders": {
+        "documentInfo": {
+          "documentInfo": {
+            "nsId": "WEBSERVICES_4134291_SB3_07112022325726100386365042_6382081f2"
+          }
+        }
+      }
+    }
+  }
+]

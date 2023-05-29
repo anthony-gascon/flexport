@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03">
+<CstmrPmtStsRpt><GrpHdr>
+  <MsgId>M-ID-346573</MsgId>
+  <CreDtTm>2022-12-22T06:42:34.0Z</CreDtTm>
+  <InitgPty>
+    <Id>
+      <OrgId>
+        <Othr>
+          <Id>JP Morgan</Id>
+          <SchmeNm>
+            <Cd>BANK</Cd>
+          </SchmeNm>
+        </Othr>
+      </OrgId>
+    </Id>
+  </InitgPty>
+</GrpHdr>
+<OrgnlGrpInfAndSts>
+  <OrgnlMsgId>ad75ce1ed647416a941e89262b4a41e0</OrgnlMsgId>
+  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>
+  <OrgnlNbOfTxs>338</OrgnlNbOfTxs>
+  <OrgnlCtrlSum>44615072.090</OrgnlCtrlSum>
+  <GrpSts>ACSP</GrpSts>
+  <NbOfTxsPerSts>
+    <DtldNbOfTxs>338</DtldNbOfTxs>
+    <DtldSts>ACSP</DtldSts>
+    <DtldCtrlSum>44615072.090</DtldCtrlSum>
+  </NbOfTxsPerSts>
+  <NbOfTxsPerSts>
+    <DtldNbOfTxs>0</DtldNbOfTxs>
+    <DtldSts>RJCT</DtldSts>
+    <DtldCtrlSum>0.000</DtldCtrlSum>
+  </NbOfTxsPerSts>
+</OrgnlGrpInfAndSts><OrgnlPmtInfAndSts>
+  <OrgnlPmtInfId>BATCHREFERENCE000001</OrgnlPmtInfId>
+  <TxInfAndSts>
+    <OrgnlInstrId>43273025</OrgnlInstrId>
+    <OrgnlEndToEndId>233371</OrgnlEndToEndId>
+    <TxSts>ACSP</TxSts>
+    <OrgnlTxRef>
+      <Amt>
+        <InstdAmt Ccy="USD">105970.00</InstdAmt>
+      </Amt>
+      <ReqdExctnDt>2022-12-22</ReqdExctnDt>
+    </OrgnlTxRef>
+  </TxInfAndSts>
+</OrgnlPmtInfAndSts>
+</CstmrPmtStsRpt>
+</Document>

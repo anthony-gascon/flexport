@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd">
+	<munit:config
+		name="flexport-netsuitev11-sapi-v2-test-suite.xml" />
+	<munit:test name="create-notes-success-test"
+		doc:id="560fa8d7-1253-46bf-a356-e07ee19db779" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock when request to Netsuite"
+				doc:id="f67d753c-640e-4c76-8cfc-443fd42adeee"
+				processor="netsuite:add-list">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="09083bf4-aa2a-4dfe-a8a7-282dac0fa38f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value='#[output application/json --- readUrl("classpath://createNotes/createNotesResponsePayload.dwl","application/json")]'
+						mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set event payload" doc:id="5e427d5e-c745-45c3-a95e-36b8e770822c" >
+				<munit:payload value='#[output application/xml --- readUrl("classpath://createNotes/createNotesRequestPayload.xml",  "application/xml")]' mediaType="application/xml" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\notes:application\xml:flexport-netsuitev11-sapi-v2-config" doc:id="7a12c838-7d71-4d18-b772-75b92d1ac791" name="post:\notes:application\xml:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="3a013c0f-1523-42e7-8b6d-e0db101b293e" processor="module-logging:log-exit">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="e7c0a304-6238-46da-b3c8-191ccebe45fc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="create-notes-error-test" doc:id="dfd2fba2-dd28-4fad-8579-7449ed8b0abb" description="Test" expectedErrorType="NETSUITE:CONNECTIVITY">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to Netsuite" doc:id="6aa9a86a-8433-4ee4-85bf-45fd6c3de178" processor="netsuite:add-list">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="09083bf4-aa2a-4dfe-a8a7-282dac0fa38f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="NETSUITE:CONNECTIVITY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set event payload" doc:id="70ba1738-13ec-4246-888e-6ddb76e8f5ec" >
+				<munit:payload value='#[output application/xml --- readUrl("classpath://createNotes/createNotesRequestPayload.xml",  "application/xml")]' mediaType="application/xml" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\notes:application\xml:flexport-netsuitev11-sapi-v2-config" doc:id="74a4abbd-fe7a-4532-8bc6-d8c1f985ad3f" name="post:\notes:application\xml:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="fd9cc76a-47ee-4d39-af6b-d8c3d2492137" processor="module-logging:log-exit">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="e7c0a304-6238-46da-b3c8-191ccebe45fc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-contact-by-internal-subflow-test-success" doc:id="2a346894-aab5-4863-8d70-ead94b86c2f3" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="1f874d3a-c8f9-4651-baa5-91d043ff54d1" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="cfbeca7e-7a70-4f48-baa0-5d1bd9412265" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- readUrl("classpath://getContactById/getContactByinternalId.json","application/json")]' mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event " doc:id="e8fbc27f-00b6-4af9-8c5a-bbe010ef7d8f">
+				<munit:attributes value='#[output application/json --- readUrl("classpath://getContactById/getContactByInternalIdAttribute.json","application/json")]' mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="get-contact-by-internal-subflow" doc:id="ab4a89e7-08dd-4f59-91d8-4bb1d0a73aa0" name="get-contact-by-internal-subflow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="70efc2fd-b316-4981-a153-23a72ea86796" processor="module-logging:log-exit" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="3b48c4a0-e04b-40e5-aac3-6aeb9d2fa329" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-contact-by-internal-subflow-test-empty-response" doc:id="a2653b6d-b925-4e2f-914c-2c329ef7e0c5" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="8a4324fe-0e4b-4f9a-abb6-d301f49fe246" processor="netsuite:search" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="cfbeca7e-7a70-4f48-baa0-5d1bd9412265" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- readUrl("classpath://getContactById/getContactByinternalIdEmpty.json","application/json")]' mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event " doc:id="542b4671-4ded-4bab-a25b-5898a8919e15" >
+				<munit:attributes value='#[output application/json --- readUrl("classpath://getContactById/getContactByInternalIdAttribute.json","application/json")]' mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="get-contact-by-internal-subflow" doc:id="eefcae61-4ef5-419a-bcb1-60223e40c64f" name="get-contact-by-internal-subflow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="c91b67e4-37d4-446d-b671-78aaca97172e" processor="module-logging:log-exit" atLeast="1" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="3b48c4a0-e04b-40e5-aac3-6aeb9d2fa329" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+</mule>

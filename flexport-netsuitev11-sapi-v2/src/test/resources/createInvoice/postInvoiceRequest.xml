@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:add xmlns:ns0="urn:messages_2020_2.platform.webservices.netsuite.com">
+  <ns0:record xmlns:ns0="urn:messages_2020_2.platform.webservices.netsuite.com" xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns01:Invoice">
+    <ns01:entity xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>24970057</internalId>
+    </ns01:entity>
+    <ns01:tranDate xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">2021-09-30T16:51:03+00:00</ns01:tranDate>
+    <ns01:tranId xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">FLEX-123456T-2</ns01:tranId>
+    <ns01:postingPeriod xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>217</internalId>
+    </ns01:postingPeriod>
+    <ns01:department xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>105</internalId>
+    </ns01:department>
+    <ns01:class xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>1</internalId>
+    </ns01:class>
+    <ns01:subsidiary xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>2</internalId>
+    </ns01:subsidiary>
+    <ns01:currency xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>4</internalId>
+    </ns01:currency>
+    <ns01:dueDate xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">2021-12-30T00:00:00+00:00</ns01:dueDate>
+    <ns01:memo xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">https://core.flexport.com/shipments/1246715/billing</ns01:memo>
+    <ns01:account xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>334</internalId>
+    </ns01:account>
+    <ns01:itemList xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <ns01:item>
+        <ns01:item>
+          <internalId>43741</internalId>
+        </ns01:item>
+        <amount>15</amount>
+        <description>Freight Insurance</description>
+      </ns01:item>
+    </ns01:itemList>
+  </ns0:record>
+</ns0:add>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:ftp="http://www.mulesoft.org/schema/mule/ftp"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ftp http://www.mulesoft.org/schema/mule/ftp/current/mule-ftp.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+
+	<flow name="namea-customer-refund-impl-flow"
+		doc:id="2e998661-5025-41f2-9d34-3b8d2767140c"
+		doc:description="Netsuite has Customer Refund records that need to be processed and credited to the respective vendor accounts, which is done by JPM. We will use this Mulesoft integration to transfer customer refund data from Netsuite to the JPM system.">
+		<scheduler doc:name="NAMEA-Customer-Refund-Scheduler"
+			doc:id="b569e59b-7412-4f36-ad9b-6863123aa2bc">
+			<scheduling-strategy>
+				<cron expression="${cron.expression.namea.customer.refund}" />
+			</scheduling-strategy>
+		</scheduler>
+		<module-logging:log-entry
+			doc:name="Customer Refund flow started"
+			doc:id="c835052f-eb84-45fc-8fbf-cb0949142dd0"
+			message="Customer Refund NAMEA flow started"
+			messageType="***********   Customer Refund NAMEA flow started   ************"
+			source="namea-customer-refund-impl-flow" />
+		<ee:transform doc:name="SaveSearch SOAP Request"
+			doc:id="afb63941-a363-4206-a6c6-33cf815e82de">
+			<ee:message>
+				<ee:set-payload resource="dataweave/customerrefund/customerrefund-savesearch-soap-request.dwl" />
+			</ee:message>
+		</ee:transform>
+
+		<http:request method="POST"
+			doc:name="Netsuite SaveSearch Request"
+			doc:id="55bbcab4-eaf4-41ba-9352-cedbf871f907"
+			config-ref="NSv11v2httpRequest"
+			path="${https.netsuite.sapi.v11.v2.savesearch.path}">
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"pageSize" : p('customer.refund.savesearch.pageSize'),
+	"limit" : p('customer.refund.savesearch.limit'),
+	"searchKey" : p('customer.refund.savesearch.searchKey')
+}]]]></http:query-params>
+		</http:request>
+
+		<choice doc:name="Choice"
+			doc:id="9ba51ef8-0e0c-4bd8-91e9-ed579b97fad1">
+			<when expression="#[!isEmpty(payload)]">
+				<flow-ref
+					doc:name="customer-refund-netsuite-mapping-subflow"
+					doc:id="a08e4517-cbb3-4a6d-92f7-d3ac01801d2e"
+					name="customer-refund-netsuite-mapping-subflow" />
+				<vm:publish
+					queueName="${vm.queue.namea.customer.refund.savedsearch}"
+					doc:name="Publish netsuite saved search"
+					doc:id="01b7cab0-fc5e-49b2-afa0-667fd6805eef"
+					config-ref="VM_Config" sendCorrelationId="ALWAYS"
+					timeout="${vm.queue.namea.customer.refund.publish.timeout}" />
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Set email body"
+					doc:id="a84e0317-f97f-4a20-ab0f-eeb19e043996">
+					<ee:message>
+						<ee:set-payload
+							resource="dataweave/customerrefund/empty-ns-data.dwl" />
+					</ee:message>
+				</ee:transform>
+				<http:request method="POST"
+					doc:name="Request Send Email"
+					doc:id="6601e8ec-289c-4d70-b1eb-0c047dfbb9ad"
+					config-ref="PGP_Encrpt_Request" path="${email.path}" />
+				<module-logging:log-exit doc:name="Log exit"
+					doc:id="c73b2991-d556-47a0-8e4f-279a2ee1089f"
+					message="*********** No Data in SavedSearch *********** "
+					source="namea-customer-refund-impl-flow"
+					messageType="Empty SavedSearch" />
+			</otherwise>
+		</choice>
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="dcb89001-d6c3-4e47-b950-b1e8f686f1be"
+			message="#[&quot;Message published to VM Queue successfully &quot; ++ p('vm.queue.namea.customer.refund.savedsearch')]"
+			messageType="******  NAMEA-Customer-Refund-impl-flow Ended  **********"
+			source="namea-customer-refund-impl-flow" logLevel="WARN" />
+	</flow>
+	<flow name="namea-customer-refund-listener-flow"
+		doc:id="413325ab-3475-4845-8fec-f651726493b4" initialState="started">
+		<vm:listener
+			queueName="${vm.queue.namea.customer.refund.savedsearch}"
+			doc:name="Listener" doc:id="9e4e51d3-c80d-4db1-a311-38f031f2ab21"
+			config-ref="VM_Config"
+			timeout="${vm.queue.namea.customer.refund.consume.timeout}" />
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="368f8828-d707-4064-a09d-12a44837751c"
+			message="#[&quot;Message received from the VM Queue &quot; ++ p('vm.queue.namea.customer.refund.savedsearch')]"
+			messageType="************  namea-customer-refund-listener-flow started ***********"
+			source="namea-customer-refund-listener-flow" />
+		<set-variable value='#["CustomerRefund"]'
+			doc:name="Set source variable"
+			doc:id="74e92c50-27f4-4401-8a09-476b04440fb2" variableName="source" />
+		<flow-ref doc:name="set-common-variable"
+			doc:id="d7a7a499-cb82-423d-95c2-9f7cf960d26f"
+			name="set-common-variable" />
+		<choice doc:name="check payload?"
+			doc:id="f31d5a1d-251f-406c-8562-69817587e810">
+			<when expression="#[!isEmpty(payload)]">
+				<try doc:name="Try"
+					doc:id="6c3c616a-4a1c-4b4a-b5ae-070c596f8686">
+					<flow-ref doc:name="wire-ach-mapping-subflow"
+						doc:id="b01ea49e-ba8c-4b95-8f77-01e286585ce2"
+						name="wire-ach-mapping-subflow" />
+					<error-handler>
+						<on-error-propagate enableNotifications="true"
+							logException="true" doc:name="On Error Propagate"
+							doc:id="80a41050-b84d-4ccc-8415-19fee0fc2916">
+							<ee:transform doc:name="Set email body"
+								doc:id="d5d4f1d8-788b-4255-be8a-65f0b28eebee">
+								<ee:message>
+									<ee:set-payload
+										resource="dataweave/customerrefund/mapping-error-email.dwl" />
+								</ee:message>
+							</ee:transform>
+							<until-successful
+								maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+								doc:id="f440e3a1-632e-474f-951c-1968fe9fec5c"
+								millisBetweenRetries="${https.retry.frequency}">
+								<http:request method="POST"
+									doc:name="Request Send Email"
+									doc:id="097b0f6e-5a21-4b1e-b9f2-26c56d487dd6"
+									config-ref="PGP_Encrpt_Request" path="${email.path}" />
+							</until-successful>
+						</on-error-propagate>
+					</error-handler>
+				</try>
+				<os:store doc:name="Store XML into ObjectStore"
+					doc:id="c143343a-3958-4c7d-8d53-a336b6fa6c04"
+					objectStore="Object_store" key="transactionJPMFile" />
+				<flow-ref doc:name="pgp-sftp-ns-update-subflow"
+					doc:id="8c577ec7-44eb-40d1-be15-eb375d3059b2"
+					name="pgp-sftp-ns-update-subflow" />
+				<try doc:name="Try Consume Operation"
+					doc:id="f3837f9b-b00e-4bd5-8083-7d5db0aff6cb">
+					<vm:consume
+						queueName="${vm.queue.namea.customer.refund.ack.psr}"
+						doc:name="CustomerRefund ACK PSR Consume"
+						doc:id="cac08c34-6dec-4e42-9142-b0c8a82cb2c1"
+						config-ref="VM_Config"
+						timeout="${vm.queue.namea.customer.refund.consume.timeout}"
+						timeoutUnit="MINUTES" />
+					<error-handler>
+						<on-error-propagate enableNotifications="true"
+							logException="true" doc:name="On Error Propagate"
+							doc:id="c48dbb70-43aa-4bc0-8442-16069224ea1c">
+							<module-logging:log-error
+								doc:name="Log error"
+								doc:id="7474b31b-8f35-47c1-915f-c041ee4aca56"
+								message="Error While Consuming payload on VM queue. Please use failure-recover-psr-flow/failure-recover-ack-flow for updating records as per PSR or ACK file received accordingly"
+								messageType="*******************  VM Consumer ACK/PSR ERROR  *******************"
+								source="create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow" />
+							<ee:transform doc:name="Set email"
+								doc:id="17c332b3-d0d2-4900-8c66-43e1769b5f52">
+								<ee:message>
+									<ee:set-payload
+										resource="dataweave/customerrefund/email-vm-queue-failure.dwl" />
+								</ee:message>
+							</ee:transform>
+							<until-successful
+								maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+								doc:id="689105a4-9b5f-4580-b206-be9fe0a06b50"
+								millisBetweenRetries="${https.retry.frequency}">
+								<http:request method="POST"
+									doc:name="Email Request"
+									doc:id="32b7f977-7122-4489-b67e-6afcdeee9316"
+									config-ref="PGP_Encrpt_Request" path="/email" />
+							</until-successful>
+						</on-error-propagate>
+					</error-handler>
+				</try>
+				<flow-ref
+					doc:name="customer-refund-update-vendor-bill-payment-status-subflow"
+					doc:id="3ff1b299-4e22-4e14-911a-9791d6ac6f58"
+					name="customer-refund-update-vendor-bill-payment-status-subflow" />
+				<os:remove doc:name="Remove  transactionJPMFile"
+					doc:id="afecf54f-c29b-4509-8bd7-26bf92835bc3"
+					key="transactionJPMFile" objectStore="Object_store" />
+			</when>
+			<otherwise>
+				<module-logging:log-exit doc:name="Log exit"
+					doc:id="c3713405-200c-48c7-8fb7-a535b3af8235"
+					message="*********** No Data in SavedSearch *********** "
+					messageType="******  create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow Ended  **********"
+					source="create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

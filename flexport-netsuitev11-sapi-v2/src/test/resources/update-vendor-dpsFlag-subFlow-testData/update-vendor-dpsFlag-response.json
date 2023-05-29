@@ -1,0 +1,40 @@
+{
+    "updateListResponse": {
+        "writeResponseList": {
+            "status": {
+                "@isSuccess": "true",
+                "__text": null
+            },
+            "writeResponse": {
+                "status": {
+                    "@isSuccess": "true",
+                    "statusDetail": {
+                        "afterSubmitFailed": "false"
+                    }
+                },
+                "baseRef": {
+                    "@externalId": "CoupaSupplier-3037",
+                    "@internalId": "26146631",
+                    "@type": "vendor",
+                    "@type": "platformCore:RecordRef",
+                    "__text": null
+                }
+            },
+            "writeResponse": {
+                "status": {
+                    "@isSuccess": "true",
+                    "statusDetail": {
+                        "afterSubmitFailed": "false"
+                    }
+                },
+                "baseRef": {
+                    "@externalId": "1001203",
+                    "@internalId": "6038",
+                    "@type": "vendor",
+                    "@type": "platformCore:RecordRef",
+                    "__text": null
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+	<flow name="customer-refund-psr-failure-recover-flow" doc:id="5650e3f4-8c42-486e-9e7c-b63424e64901" >
+		<scheduler doc:name="Customer-Refund-PSR-Failure-Recovery" doc:id="f22fa07c-e82b-4cbb-8737-0c5209c6be16" >
+			<scheduling-strategy >
+				<cron expression="${schedular.psr.cron}" />
+			</scheduling-strategy>
+		</scheduler>
+		<module-logging:log-entry doc:name="Log entry" doc:id="b86c624e-5aa8-41e4-9666-16dafeade2ec" message="*********Failure-PSR-Recover-Flow Started****" messageType="*********Read Operation Started*******" source="customer-refund-ack-psr-failure-recover-flow" />
+		<flow-ref doc:name="listfile-subflow" doc:id="ef655d08-30f7-498e-ad78-b34f5b67c3e6" name="apac-listfile-subflow" />
+		<choice doc:name="Check for Files" doc:id="42b99d3a-345a-433f-ae4c-218d981a0c2b" >
+			<when expression="#[!isEmpty(payload)]" >
+				<ee:transform doc:name="filter PSR file" doc:id="f1612689-069a-40c8-a830-fb0a2ab62a58" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable resource="dataweave/customerrefund/fileNamePSR.dwl" variableName="fileName" />
+					</ee:variables>
+				</ee:transform>
+				<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="b7c8cc56-86a3-407e-999d-39646a48257e" millisBetweenRetries="${https.retry.frequency}" >
+					<http:request method="POST" doc:name="Request to read a psr file" doc:id="c9e8c588-d9a6-4291-ab23-8dd53286fadf" config-ref="HTTP_Request_configuration" path="${jpm.sftp.read.path}" >
+						<http:body ><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+			"directoryPath" : p('jpm.directory.list.path')
+}]]]></http:body>
+						<http:uri-params ><![CDATA[#[{
+	"fileName": vars.fileName
+}]]]></http:uri-params>
+					</http:request>
+				</until-successful>
+				<set-payload value="#[payload]" doc:name="set mime type application/xml" doc:id="d28ba9be-fbec-41ae-a459-784a5cbe3105" mimeType="application/xml" />
+				<flow-ref doc:name="psr-common-subflow" doc:id="ecddf77c-db98-4295-8465-49216eddb6d9" name="psr-common-subflow" />
+				<try doc:name="Try" doc:id="389e74b6-54ee-4ca3-b823-f40e4e734734" >
+					<vm:consume queueName="${vm.queue.singapore.ack.psr}" doc:name="Dequeue ack psr queue" doc:id="83305fd6-661f-4b1f-90f0-64f5da0b8f47" config-ref="VM_Config" timeout="${vm.queue.apac.singapore.publish.timeout}" />
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="false" doc:name="On Error Continue" doc:id="0f2536d1-cc49-4e36-9386-4762cc83615a" >
+							<module-logging:log-error doc:name="Log error" doc:id="a37d3e3a-aced-4bf3-b6bd-e3c43a8d7007" message="No Message Available on Queue" source="customer-refund-psr-failure-recover-flow" />
+						</on-error-continue>
+					</error-handler>
+				</try>
+				<module-logging:log-exit doc:name="Log exit" doc:id="0fca8af0-1c6a-4e22-9c65-a68b4c7052b7" message='#["Netsuite Update, VM deque and Object Clear Completed"]' messageType='#["PSR file - " ++ vars.fileName ++ " processed Successfully"]' source="customer-refund-psr-failure-recover-flow" />
+			</when>
+			<otherwise >
+				<module-logging:log-outbound doc:name="Log outbound" doc:id="b7654d8b-6a6e-4436-b3e8-342094f2179d" message="No file availble for given time range" source="customer-refund-ack-psr-failure-recover-flow" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="customer-refund-ack-failure-recover-flow" doc:id="75c957be-3b08-4ccd-be22-a6874468ffea" >
+		<scheduler doc:name="Customer-Refund-ACK-Failure-Recovery" doc:id="4146d3cb-3d72-4ae4-ad0a-ea451e3dbdc1" >
+			<scheduling-strategy >
+				<cron expression="${schedular.ack.cron}" />
+			</scheduling-strategy>
+		</scheduler>
+		<module-logging:log-entry doc:name="Log entry" doc:id="fbea133e-38a5-4d6d-a6d2-c24f8a7d330c" message="*********Customer-Refund-ACK-Failure-Recover-Flow Started****" messageType="*********Read Operation Started*******" source="customer-refund-ack-failure-recover-flow" />
+		<set-variable value="CustomerRefund" doc:name="Set Variable" doc:id="b9e6c5e4-c153-439f-b503-d508a5494275" variableName="source" />
+		<flow-ref doc:name="apac-listfile-subflow" doc:id="5ab892af-13ce-475d-a585-daee1e8affb4" name="apac-listfile-subflow" />
+		<choice doc:name="Choice" doc:id="a5904d16-1ac1-4925-8268-5a11272e4724" >
+			<when expression="#[!isEmpty(payload)]" >
+				<ee:transform doc:name="filter Ack file" doc:id="2ce7ddac-690c-4a66-a02d-336ee0599af2" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable resource="dataweave/apac/hongkong/fileNameAck.dwl" variableName="fileName" />
+					</ee:variables>
+				</ee:transform>
+				<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="cbd20694-718a-4fad-8760-c285256b581d" millisBetweenRetries="${https.retry.frequency}" >
+					<http:request method="POST" doc:name="Request to read a ack file" doc:id="cc34f60b-c2d4-4b76-864d-a216ceaa5782" config-ref="HTTP_Request_configuration" path="${jpm.sftp.read.path}" >
+						<http:body ><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+			"directoryPath" : p('jpm.directory.list.path')
+}]]]></http:body>
+						<http:uri-params ><![CDATA[#[{
+	"fileName": vars.fileName
+}]]]></http:uri-params>
+					</http:request>
+				</until-successful>
+				<set-payload value="#[payload]" doc:name="set mime type application/xml" doc:id="ed754d66-dcb2-423a-9fb7-964a3403e8e4" mimeType="application/xml" />
+				<flow-ref doc:name="ack-common-subflow" doc:id="b0d49754-209d-4a86-86e7-c979dd7c8e32" name="ack-common-subflow" />
+				<try doc:name="Try" doc:id="32958a25-4c72-48c4-8a2d-a395376f27f3" >
+					<vm:consume queueName="${vm.queue.hongkong.ack.psr}" doc:name="Dequeue ack psr queue" doc:id="16b6bd32-0f5c-47c8-99dc-c83d159c32c8" config-ref="VM_Config" timeout="${vm.queue.apac.china.publish.timeout}" />
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="false" doc:name="On Error Continue" doc:id="3956206f-8a53-439b-ae7d-6f4ae2ab2a34" >
+							<module-logging:log-error doc:name="Log error" doc:id="fd2a4eb8-037a-480f-9986-fd5ba311cff9" message="No Message Available on Queue" source="customer-refund-ack-failure-recover-flow" />
+						</on-error-continue>
+					</error-handler>
+				</try>
+				<module-logging:log-exit doc:name="Log exit" doc:id="e6bc4781-a03b-4c94-a2a2-f21dc508d4e6" message='#["Netsuite Update, VM deque and Object Clear Completed"]' messageType='#["ACK file - " ++ vars.fileName ++ " processed Successfully"]' source="customer-refund-ack-failure-recover-flow" />
+			</when>
+			<otherwise >
+				<module-logging:log-outbound doc:name="Log outbound" doc:id="2d7bb0e6-91ff-49c4-9bd9-0afbc2fb36c2" message="No file availble for given time range" source="customer-refund-ack-failure-recover-flow" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

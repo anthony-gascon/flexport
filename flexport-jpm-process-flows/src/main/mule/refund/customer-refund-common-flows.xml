@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<sub-flow name="upload-ack-error-data-subflow" doc:id="9fbdeaf1-7288-4b9a-bb9e-8916511e632a" >
+		<ee:transform doc:name="Set email body" doc:id="9e7b3a3e-c9fe-49cd-879b-2cbe89f62c70">
+					<ee:message />
+					<ee:variables>
+						<ee:set-variable resource="dataweave/customerrefund/email-ack-file.dwl" variableName="emailPayload" />
+					</ee:variables>
+				</ee:transform>
+		<http:request method="POST" doc:name="ACK File Email Request " doc:id="31344800-a7f3-437b-9080-53d37b1b6ad1" config-ref="PGP_Encrpt_Request" path="/email" target="AckEmailResp">
+						<http:body><![CDATA[#[vars.emailPayload]]]></http:body>
+					</http:request>
+		<ee:transform doc:name="ACK lineNumbers" doc:id="f4ce21ce-8396-435f-9e06-fce05f1438c1">
+					<ee:message>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable resource="dataweave/customerrefund/ack-lineNumbers.dwl" variableName="lineNumbers" />
+					</ee:variables>
+				</ee:transform>
+		<os:retrieve doc:name="Retrieve JPM File Obj Store" doc:id="2387fb01-7522-48ef-8c49-d554d002b840" key="transactionJPMFile" objectStore="Object_store">
+					<os:default-value><![CDATA[#[""]]]></os:default-value>
+				</os:retrieve>
+		<ee:transform doc:name="ACK-Troubleshout-JSONFile" doc:id="09179b65-9eaa-4ead-8690-0ea01727d409">
+					<ee:message>
+						<ee:set-payload resource="dataweave/customerrefund/ack-errorline-internalId-file.dwl" />
+					</ee:message>
+				</ee:transform>
+		<http:request method="POST" doc:name="Request File Upload File Cabinet" doc:id="7ce80953-0303-4f71-a8dc-574be4a95b06" config-ref="NSv11v2httpRequest" path='${https.netsuite.sapi.v11.v2.addfile.path}'>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"folderId" : p('namea.customer.refund.ns.folderId'),
+	"fileName" : vars.fileName
+}]]]></http:query-params>
+		</http:request>
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="700f3f38-c389-4244-99fd-0dbefeb405ba" message="#[%dw 2.0&#10;output application/json writeAttributes=true&#10;---&#10;payload]" source="upload-ack-error-data-subflow" messageType="*********************** File Upload to Cabinet Done ***********************"/>
+	
+</sub-flow>
+	<sub-flow name="customer-refund-netsuite-mapping-subflow" doc:id="cbcc9a8e-7c24-4a0f-9c1f-babfa88e65b8" >
+		<ee:transform doc:name="Flatten Data" doc:id="37058fc4-b15b-4d1e-8624-38ad9a609829" >
+			<ee:message >
+				<ee:set-payload resource="dataweave/customerrefund/flatten-data.dwl" />
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="NS field mapping" doc:id="65c532fb-c486-4bda-93e8-51199141ce3f" >
+			<ee:message >
+				<ee:set-payload resource="dataweave/customerrefund/ns-field-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Currency mapping" doc:id="c8501da6-85bd-47bc-89cd-61e07918918b" >
+			<ee:message >
+				<ee:set-payload resource="dataweave/customerrefund/currency-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="customer-refund-ach-wire-filter-subflow" doc:id="3e2fdde5-c67c-4433-8df3-ba4f94f69e05" >
+		<scatter-gather doc:name="WIRE-ACH" doc:id="f72b063c-a6e6-4940-8a47-88ffa7460c97" >
+			<route >
+				<ee:transform doc:name="filter WIRE" doc:id="d8e950fe-9d63-4e4d-96f9-6afd11226808" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/filter-wire.dwl" />
+					</ee:message>
+				</ee:transform>
+				<flow-ref doc:name="customer-refund-wire-subflow" doc:id="b024240f-f078-468b-9179-029d1698984d" name="customer-refund-wire-subflow" />
+				<ee:transform doc:name="Flatten Data" doc:id="2995d3c4-dbc3-4d23-aef5-364cace8911b">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload..payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="filter ACH" doc:id="c01eea7a-671d-4a36-b737-6ce39968ff8d" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/ach-filter-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+				<flow-ref doc:name="customer-refund-ach-subflow" doc:id="474cac6d-e7b0-4362-a44a-ee2422da058b" name="customer-refund-ach-subflow" />
+				<ee:transform doc:name="Flatten Data" doc:id="fb4393c5-73b2-4d8c-a50e-74358b57b38d">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[payload]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</route>
+		</scatter-gather>
+	</sub-flow>
+	<sub-flow name="customer-refund-wire-subflow" doc:id="e5b5b1f1-50cb-420a-a3a6-a350237f06b1" >
+		<scatter-gather doc:name="Scatter-Gather" doc:id="68a56557-1ac9-4649-b9da-56a0cd0b1fec" >
+			<route >
+				<ee:transform doc:name="FED" doc:id="09f92d7f-d71a-40f9-80c9-d3b5747e5bd7" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/fed-groupby-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="BOOK" doc:id="439cdd6d-cf30-420d-8364-380f94cee42d" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/book-groupby-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="AUTOFX WIRE" doc:id="34bd5b02-df9e-4cd0-8594-a32e02090b43" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/autofx-groupby-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="CHIP" doc:id="f1531caa-75b5-4d48-a83e-ac495a4e762e" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/chip-groupby-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</route>
+		</scatter-gather>
+	</sub-flow>
+	<sub-flow name="customer-refund-ach-subflow" doc:id="054d3ef0-a939-4fbf-8dee-024c1169c04d" >
+		<ee:transform doc:name="ACH" doc:id="31ed74e8-6d76-4547-a80c-b2659ce3139c" >
+			<ee:message >
+				<ee:set-payload resource="dataweave/customerrefund/ach-groupby.dwl" />
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="pgp-sftp-ns-update-subflow" doc:id="e3098303-1cc2-48ae-915e-2ce8f2b4cdb0" >
+		<set-variable value="#[output application/json&#10;---&#10;{&#10;	internalId  :payload.Document.CstmrCdtTrfInitn.*PmtInf..InstrId,&#10;	msgId : payload.Document.CstmrCdtTrfInitn.GrpHdr.MsgId&#10;}]" doc:name="netsuite update" doc:id="6642ffff-f3df-4712-a62c-4a0271b2e496" variableName="payloadCopy" />
+		<flow-ref doc:name="pgp-encryption-sftp-upload-apac-subflow" doc:id="3f03f0c7-ed57-4515-ae08-a95bc56e7871" name="pgp-encryption-sftp-upload-apac-subflow" />
+		<flow-ref doc:name="netsuite-update-common-subflow" doc:id="896810ae-bf14-4f09-9fab-624dd961d6ef" name="netsuite-update-common-subflow" />
+		<module-logging:log-exit doc:name="netsuite updation done" doc:id="a462489e-7153-4bed-a7c7-185c6e70bcf3" message="netsuite updation done" source="apac-pgp--sftp-ns-subflow" />
+	</sub-flow>
+	<sub-flow name="customer-refund-update-vendor-bill-payment-status-subflow" doc:id="329829fd-b02e-44d6-ab9a-648e5ee5d2d9" >
+		<module-logging:log-entry doc:name="Log entry" doc:id="507d229c-39d0-43c6-abde-4d53f68e9b1e" message="ACK/PSR file has been consumed from VM queue" source="customer-refund-update-vendor-bill-payment-status-subflow" messageType="***********customer-refund-update-vendor-bill-payment-status-flow-started***********"/>
+		<ee:transform doc:name="sourceCountryFile" doc:id="bcb1165c-051c-484d-9f33-f0ca8015f28d" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable resource="dataweave/customerrefund/sourceCountryFileMapping.dwl" variableName="sourceCountryFile" />
+			</ee:variables>
+		</ee:transform>
+		<os:retrieve doc:name="Retrieve fileName" doc:id="4177cca7-d0ea-4c06-a381-19d5ebbc7dc3" key="#[vars.sourceCountryFile]" objectStore="Object_store" target="fileName" >
+			<os:default-value ><![CDATA[#[""]]]></os:default-value>
+		</os:retrieve>
+		<module-logging:log-other doc:name="Log other" doc:id="82ec5c4e-f0cf-4160-a7e7-36ce7d475566" message='#[%dw 2.0&#10;output application/json&#10;---&#10;vars.sourceCountryFile ++ ":" ++ vars.fileName]' messageType="Object Store Key value retrieved" logType="Log Other" source="customer-refund-update-vendor-bill-payment-status-subflow" />
+		<choice doc:name="Choice : ACK or PSR file" doc:id="0ef939b2-b79f-40d2-844c-42268b2f0782" >
+			<when expression="#[vars.fileName contains ('ACK')]" >
+				<scatter-gather doc:name="Scatter-Gather" doc:id="ccd98d93-4c83-4652-8c34-f83b276e3374" >
+					<route>
+						<flow-ref doc:name="upload-ack-error-data-subflow" doc:id="c104dee6-1c95-4e21-beeb-b30a11892f9a" name="upload-ack-error-data-subflow" />
+					</route>
+					<route >
+						<flow-ref doc:name="ack-common-subflow" doc:id="21e0e2af-4771-4726-92f6-901e4b680694" name="ack-common-subflow" />
+					</route>
+				</scatter-gather>
+			</when>
+			<when expression='#[vars.fileName contains ("PSOURCE")]' >
+				<flow-ref doc:name="psr-common-subflow" doc:id="d0e465cd-000c-4112-80e7-92af59050d8d" name="psr-common-subflow" />
+			</when>
+			<otherwise >
+				<module-logging:log-other doc:name="Log other" doc:id="8a610c5d-96bb-4e82-a85c-d7d74aaa0add" message="Not a ACK or PSR file" source="customer-refund-update-vendor-bill-payment-status-subflow" logType="Log Other" messageType="******Other File*******"/>
+			</otherwise>
+		</choice>
+		<os:remove doc:name="Remove fileName key from OS" doc:id="d99ac603-4c2a-487f-a5d0-95777316ebc6" key="#[vars.sourceCountryFile]" objectStore="Object_store" />
+		<module-logging:log-exit doc:name="Log exit" doc:id="ceadc38b-09c7-41a1-83b4-15b796ad9848" source="customer-refund-update-vendor-bill-payment-status-subflow" messageType="***********customer-refund-update-vendor-bill-payment-status-flow-ended***********" message="Customer Refund status update completed"/>
+	</sub-flow>
+</mule>

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:search xmlns:ns0="urn:messages_2020_2.platform.webservices.netsuite.com">
+  <ns0:searchRecord xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns01:TransactionSearchAdvanced" savedSearchId="5020" savedSearchScriptId="customsearch5020">
+    <ns03:criteria xmlns:ns03="urn:sales.transactions.webservices.netsuite.com">
+      <ns03:basic>
+      </ns03:basic>
+    </ns03:criteria>
+  </ns0:searchRecord>
+</ns0:search>

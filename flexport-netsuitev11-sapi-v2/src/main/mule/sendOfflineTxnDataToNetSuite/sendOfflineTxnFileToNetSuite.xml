@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite" xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd">
+	<flow name="sendOfflineTxnDataToNetSuiteFlow" doc:id="34a0525e-9874-437a-81cf-7444cd74842f" maxConcurrency="1">
+		<anypoint-mq:subscriber doc:name="Subscriber To JPMC Offline Txn File" doc:id="f93f8177-10a5-4257-9df9-a7d7cf116a87" config-ref="Anypoint_MQ_Config" destination="${mq.destinations.txnFileDestination}">
+			<ee:repeatable-file-store-stream bufferUnit="MB" />
+			<reconnect-forever frequency="${mq.reconnection.freq}" />
+		</anypoint-mq:subscriber>
+		<module-logging:log-entry doc:name="Log entry" doc:id="ca0ecf9d-c107-4f32-93e0-f9955d4dadca" messageType="Start:: Process offline transaction file."/>
+		<ee:transform doc:name="Set FileName and Folder Id" doc:id="787d7a2b-01ba-4d30-ad63-c6df452d3733" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="fileName" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.properties.fileName]]></ee:set-variable>
+				<ee:set-variable variableName="folderId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.properties.folderId default ""]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		
+		
+		<ee:transform doc:name="Transform Message" doc:id="9f39f5ea-be8d-4533-b6f5-33c48c08a447" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dwl/sendOfflineTxnFilesToNetSuite/addFileSoapRequest.dwl" variableName="fileRecord" />
+			</ee:variables>
+		</ee:transform>
+		
+		<flow-ref doc:name="Add File To NetSuite" doc:id="bb0dda0a-20f5-4f6d-a9a2-bc93ac5db74d" name="addFileToNetSuite" />
+		<module-logging:log-exit doc:name="Log exit" doc:id="8aef9811-322d-4958-a15c-5d2a5225ee8f" messageType="END:: File processing completed."/>
+	</flow>
+</mule>

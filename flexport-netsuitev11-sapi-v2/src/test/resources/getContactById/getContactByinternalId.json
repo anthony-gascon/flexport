@@ -1,0 +1,58 @@
+[
+    {
+        "inboundAttachmentNames": [],
+        "exceptionPayload": null,
+        "inboundPropertyNames": [],
+        "outboundAttachmentNames": [],
+        "payload": {
+            "record": {
+                "@externalId": "accounting@ecopowerinc.com",
+                "@internalId": "26513402",
+                "@type": "listRel:Contact",
+                "entityId": "Accounting Contact",
+                "company": {
+                    "@internalId": "17992733",
+                    "name": "47797 - 703106 - Ecopower Inc. - CA Ecopower Inc.  -  CA"
+                },
+                "firstName": "Accounting",
+                "lastName": "Contact",
+                "email": "accounting@ecopowerinc.com",
+                "isPrivate": "false",
+                "isInactive": "false",
+                "subsidiary": {
+                    "@internalId": "25",
+                    "name": "Flexport Canada Customs"
+                },
+                "dateCreated": "2022-05-12T15:09:02.000-07:00",
+                "lastModifiedDate": "2022-07-16T11:37:14.000-07:00"
+            }
+        },
+        "outboundPropertyNames": [],
+        "attributes": {
+            "transportHeaders": {
+                "date": "Tue, 22 Nov 2022 19:45:50 GMT",
+                "set-cookie": "NS_ROUTING_VERSION=LAGGING; path=/",
+                "content-length": "2072",
+                "vary": "User-Agent",
+                "x-n-operationid": "a8a9294c-680d-4bc2-a215-597401848402",
+                "connection": "keep-alive",
+                "content-type": "text/xml;charset=utf-8",
+                "p3p": "CP=\"CAO PSAa OUR BUS PUR\"",
+                "strict-transport-security": "max-age=31536000",
+                "akamai-grn": "0.aca83b17.1669146350.380ee413",
+                "ns_rtimer_composite": "2024609221:706172746E6572733030392E70726F642E7376616C652E6E65746C65646765722E636F6D:80"
+            },
+            "transportAdditionalData": {
+                "reasonPhrase": "OK",
+                "statusCode": "200"
+            },
+            "soapHeaders": {
+                "documentInfo": {
+                    "documentInfo": {
+                        "nsId": "WEBSERVICES_4134291_SB3_11222022159592744339769950_ed53e0a79"
+                    }
+                }
+            }
+        }
+    }
+]

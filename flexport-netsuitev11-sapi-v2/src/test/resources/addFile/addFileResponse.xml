@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addResponse xmlns="urn:messages.platform.webservices.netsuite.com">
+    <writeResponse>
+        <platformCore:status xmlns:platformCore="urn:core.platform.webservices.netsuite.com" isSuccess="true">
+            <platformCore:statusDetail>
+                <platformCore:afterSubmitFailed>false</platformCore:afterSubmitFailed>
+            </platformCore:statusDetail>
+        </platformCore:status>
+        <baseRef xmlns:platformCore="urn:core.platform.webservices.netsuite.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" internalId="1494658" type="file" xsi:type="platformCore:RecordRef"/>
+    </writeResponse>
+</addResponse>

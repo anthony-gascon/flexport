@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd">
+	<sub-flow name="addFileToNetSuite" doc:id="0479ce71-c64d-471b-94fe-829a87d1f6c7" >
+		<netsuite:add doc:name="Add" doc:id="69eb22fe-1878-405c-b731-8678a1b927d7" config-ref="NetSuite_Config" type="file">
+			<netsuite:message><![CDATA[#[vars.fileRecord]]]></netsuite:message>
+		</netsuite:add>
+	</sub-flow>
+</mule>

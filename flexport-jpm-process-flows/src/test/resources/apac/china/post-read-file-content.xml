@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03">
+<CstmrPmtStsRpt><GrpHdr>
+  <MsgId>M-ID-354108</MsgId>
+  <CreDtTm>2023-01-13T03:39:51.0Z</CreDtTm>
+  <InitgPty>
+    <Id>
+      <OrgId>
+        <Othr>
+          <Id>JP Morgan</Id>
+          <SchmeNm>
+            <Cd>BANK</Cd>
+          </SchmeNm>
+        </Othr>
+      </OrgId>
+    </Id>
+  </InitgPty>
+</GrpHdr>
+<OrgnlGrpInfAndSts>
+  <OrgnlMsgId>d684574c37d248baa80e56aebf2555de</OrgnlMsgId>
+  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>
+  <OrgnlNbOfTxs>4</OrgnlNbOfTxs>
+  <OrgnlCtrlSum>8208.100</OrgnlCtrlSum>
+  <GrpSts>ACSP</GrpSts>
+  <NbOfTxsPerSts>
+    <DtldNbOfTxs>4</DtldNbOfTxs>
+    <DtldSts>ACSP</DtldSts>
+    <DtldCtrlSum>8208.100</DtldCtrlSum>
+  </NbOfTxsPerSts>
+  <NbOfTxsPerSts>
+    <DtldNbOfTxs>0</DtldNbOfTxs>
+    <DtldSts>RJCT</DtldSts>
+    <DtldCtrlSum>0.000</DtldCtrlSum>
+  </NbOfTxsPerSts>
+</OrgnlGrpInfAndSts><OrgnlPmtInfAndSts>
+  <OrgnlPmtInfId>BATCHREFERENCE000001</OrgnlPmtInfId>
+  <TxInfAndSts>
+    <OrgnlInstrId>43018573</OrgnlInstrId>
+    <OrgnlEndToEndId>229641</OrgnlEndToEndId>
+    <TxSts>ACSP</TxSts>
+    <AcctSvcrRef>3013SIH000210000</AcctSvcrRef>
+    <OrgnlTxRef>
+      <Amt>
+        <InstdAmt Ccy="SGD">2868.03</InstdAmt>
+      </Amt>
+      <ReqdExctnDt>2023-01-13</ReqdExctnDt>
+    </OrgnlTxRef>
+  </TxInfAndSts>
+</OrgnlPmtInfAndSts>
+<OrgnlPmtInfAndSts>
+  <OrgnlPmtInfId>BATCHREFERENCE000002</OrgnlPmtInfId>
+  <TxInfAndSts>
+    <OrgnlInstrId>43058316</OrgnlInstrId>
+    <OrgnlEndToEndId>230250</OrgnlEndToEndId>
+    <TxSts>ACSP</TxSts>
+    <AcctSvcrRef>3013SIH000220000</AcctSvcrRef>
+    <OrgnlTxRef>
+      <Amt>
+        <InstdAmt Ccy="SGD">4122.38</InstdAmt>
+      </Amt>
+      <ReqdExctnDt>2023-01-13</ReqdExctnDt>
+    </OrgnlTxRef>
+  </TxInfAndSts>
+</OrgnlPmtInfAndSts>
+<OrgnlPmtInfAndSts>
+  <OrgnlPmtInfId>BATCHREFERENCE000003</OrgnlPmtInfId>
+  <TxInfAndSts>
+    <OrgnlInstrId>43188749</OrgnlInstrId>
+    <OrgnlEndToEndId>232070</OrgnlEndToEndId>
+    <TxSts>ACSP</TxSts>
+    <AcctSvcrRef>3013SIH000230000</AcctSvcrRef>
+    <OrgnlTxRef>
+      <Amt>
+        <InstdAmt Ccy="SGD">453.66</InstdAmt>
+      </Amt>
+      <ReqdExctnDt>2023-01-13</ReqdExctnDt>
+    </OrgnlTxRef>
+  </TxInfAndSts>
+</OrgnlPmtInfAndSts>
+<OrgnlPmtInfAndSts>
+  <OrgnlPmtInfId>BATCHREFERENCE000004</OrgnlPmtInfId>
+  <TxInfAndSts>
+    <OrgnlInstrId>43231055</OrgnlInstrId>
+    <OrgnlEndToEndId>232716</OrgnlEndToEndId>
+    <TxSts>ACSP</TxSts>
+    <AcctSvcrRef>01222392JR900001</AcctSvcrRef>
+    <OrgnlTxRef>
+      <Amt>
+        <InstdAmt Ccy="SGD">764.03</InstdAmt>
+      </Amt>
+      <ReqdExctnDt>2023-01-13</ReqdExctnDt>
+    </OrgnlTxRef>
+  </TxInfAndSts>
+</OrgnlPmtInfAndSts>
+</CstmrPmtStsRpt>
+</Document>

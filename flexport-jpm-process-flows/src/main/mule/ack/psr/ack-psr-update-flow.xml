@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging" xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
+	<sub-flow name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow" doc:id="b0d7906a-b8c0-4707-a0d3-63f27a8e5dea">
+		<module-logging:log-entry doc:name="Log entry" doc:id="00692aa0-8d37-4ea4-b38a-68c6d2309510" message="*********namea-update-vendor-bill-payment-status-netsuite-jpm-Flow Started****" source="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow" messageType="*********sftp triggered*******"/>
+		<module-logging:log-inbound doc:name="Log inbound" doc:id="17b182e4-6cd8-45dd-921e-8d48b724ef3e" message="#[attributes.queryParams.filename]" source="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow" messageType='"*****************File Name *****************"'/>
+		<os:store doc:name="Store fileName" doc:id="57ab678c-292e-429b-89a1-3394a3f33509" key="fileName" objectStore="Object_store">
+			<os:value ><![CDATA[#[attributes.queryParams.filename]]]></os:value>
+		</os:store>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="c434945c-896c-45f6-b6ba-08636d4b30e9" />
+		<choice doc:name="Choice" doc:id="b54b2a9e-789c-4992-bcb3-b198c63a0b2c" >
+			<when expression="#[( ((attributes.queryParams.filename contains ('ACK')) and ( (attributes.queryParams.filename contains ('NAMEA')) )) or (( attributes.queryParams.filename contains ('PSOURCE') ) and ( (attributes.queryParams.filename contains ('NAMEA')) ) ))]">
+				<vm:publish doc:name="Publish ACK or PSR" doc:id="2e13043e-f023-44c6-b521-4639c2d6c771" queueName="${vm.queue.namea.ack.psr}" timeout="${vm.publish.timeout}" config-ref="VM_Config" timeoutUnit="MINUTES" />
+				<module-logging:log-other doc:name="Log other" doc:id="4001de56-6d75-441f-8186-ef0775a2bd6a" message="*********ACK/PSR msg published on queue**********" source="update-vendor-bill-payment-status-netsuite-jpm-Flow"/>
+			</when>
+			<when expression="#[attributes.queryParams.filename contains (p('sftp.file.contains'))]">
+				<set-payload value="#[payload]" doc:name="mime type application/octet-stream" doc:id="afea484e-9826-45a0-9067-ac9a2516524a" mimeType="application/octet-stream" />
+				<scatter-gather doc:name="Scatter-Gather" doc:id="1ceb91f0-59ae-414f-b808-09fee1bf64a9">
+					<route>
+						<vm:publish queueName="${vm.queue.namea.reconcile}" doc:name="Publish Reconcile" doc:id="0d715d2c-f19f-4d77-adfe-4bb651b0c013" config-ref="VM_Config" timeout="${vm.publish.timeout}" timeoutUnit="MINUTES" />
+					</route>
+					<route>
+						<ee:transform doc:name="reconcile file version changed" doc:id="1ba12d82-5612-458e-b199-2863884e740d">
+							<ee:message>
+								<ee:set-payload resource="dataweave/namea/reconcileVersion.dwl" />
+							</ee:message>
+						</ee:transform>
+						<ee:transform doc:name="text/plain" doc:id="c0bb6cb8-ed29-451c-a38f-6514d6272b02">
+							<ee:message>
+								<ee:set-payload><![CDATA[%dw 2.0
+output text/plain
+var textdata = write(payload,"application/csv",{header:false})
+---
+textdata]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+						<set-payload value="#[payload]" doc:name="application/xml" doc:id="26dfc52d-a5f9-4b8e-8371-db8e19d954ff" mimeType="application/xml" />
+						<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="9cf8f526-4e6c-4e31-bca6-e27e67225862" millisBetweenRetries="${https.retry.frequency}">
+							<http:request method="POST" doc:name="reconcile file upload in netsuite" doc:id="caa7df4f-6783-4597-8f25-0cc6a3415fb6" config-ref="Http_NS__Request" path="${https.addfile.path.netsuite}" responseTimeout="${http.response.timeout.netsuite}">
+					<http:query-params><![CDATA[#[{
+	folderId : p('ns.reconcileFolderId'),
+	fileName : attributes.queryParams.filename
+}]]]></http:query-params>
+				</http:request>
+						</until-successful>
+						<module-logging:log-other doc:name="Log other" doc:id="e598d498-5985-4846-a005-7f4e2d527b0e" source="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow" message="***********reconcile file dropped in NetSuite Folder***************" />
+					</route>
+				</scatter-gather>
+			</when>
+			<otherwise>
+				<os:clear doc:name="Clear fileName" doc:id="b0b1efba-2904-465c-b570-bcb54ffe7a0f" objectStore="Object_store" />
+				<module-logging:log-other doc:name="Log other" doc:id="51c7cd0f-8691-4162-a222-615f1771fa5a" message="******************Other File*******************" source="update-vendor-bill-payment-status-netsuite-jpm-schedular-flow"/>
+			</otherwise>
+		</choice>
+	</sub-flow>
+	<sub-flow name="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" doc:id="66f0047a-9ea7-4f5f-8cd9-21c6523ae6db" >
+		<module-logging:log-entry doc:name="Log entry" doc:id="4238ca38-3e41-45d5-9546-029d09863982" message="*********apac-update-vendor-bill-payment-status-netsuite-jpm-Flow Started****" messageType="*********sftp triggered*******" source="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+		<module-logging:log-inbound doc:name="Log inbound" doc:id="b546295a-31fd-45d6-b9aa-ae9753efec64" message="#[attributes.queryParams.filename]" messageType='"*****************File Name *****************"' source="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+		<ee:transform doc:name="Set File Name Key" doc:id="126b77e6-ca6c-459c-a63f-bb1b9d86ab4d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dataweave/apac/file-name.dwl" variableName="fileName" />
+			</ee:variables>
+		</ee:transform>
+		<module-logging:log-other doc:name="Log other" doc:id="941a1a41-00d8-4acf-8d6e-0a33547f7d46" source="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" message='#[%dw 2.0&#10;output application/json&#10;---&#10;vars.fileName ++ ":" ++ attributes.queryParams.filename]' logType="Log Other" messageType="Object Store key value to be stored"/>
+		<os:store doc:name="Store fileName" doc:id="a848478b-ee9b-448d-9645-f102841016c0" key="#[vars.fileName]" objectStore="Object_store" >
+			<os:value ><![CDATA[#[attributes.queryParams.filename]]]></os:value>
+		</os:store>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="3dca17e6-5207-4824-a009-8a58228310e9" />
+		<choice doc:name="Choice" doc:id="4b02e6f3-66ea-46bc-910e-763dd4650290" >
+			<when expression="#[(((attributes.queryParams.filename contains ('ACK')) and ((attributes.queryParams.filename contains ('APAC')))) &#10;or ((attributes.queryParams.filename contains ('PSOURCE')) and ((attributes.queryParams.filename contains ('APAC')))) &#10;or ((attributes.queryParams.filename contains ('ACK')) and ((attributes.queryParams.filename contains (p('namea.customer.refund.vm.publish.condition.filename')))))&#10;or ((attributes.queryParams.filename contains ('PSOURCE')) and ((attributes.queryParams.filename contains (p('namea.customer.refund.vm.publish.condition.filename')))))&#10;)]" >
+				<choice doc:name="Choice" doc:id="13bd7725-32c2-4ffa-896c-c1f7291c45ce" >
+					<when expression="#[attributes.queryParams.filename contains ('China')]">
+						<vm:publish doc:name="Publish" doc:id="ec067d5d-fe3b-461e-b032-bca40f152926" config-ref="VM_Config" sendCorrelationId="ALWAYS" queueName="${vm.queue.china.ack.psr}" timeout="${vm.queue.apac.china.publish.timeout}"/>
+						<module-logging:log-other doc:name="Log other" doc:id="e1897cf7-7a73-4985-a785-a69ffbe9c048" message="*********apac  china ACK/PSR msg published on queue**********" source="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+					</when>
+					<when expression="#[attributes.queryParams.filename contains ('HongKong')]">
+						<vm:publish doc:name="Publish" doc:id="8c988bd1-902b-4d55-a930-74c3e869a273" config-ref="VM_Config" sendCorrelationId="ALWAYS" queueName="${vm.queue.hongkong.ack.psr}" timeout="${vm.queue.apac.hongkong.publish.timeout}"/>
+						<module-logging:log-other doc:name="Log other" doc:id="d5f54d99-bc16-446f-b4cf-9b0d3e9c4c84" message="*********apac Hong Kong ACK/PSR msg published on queue**********" source="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+					</when>
+					<when expression="#[attributes.queryParams.filename contains ('Singapore')]">
+						<vm:publish doc:name="Publish" doc:id="8f662ccc-5551-437e-b7ed-0f71ca56ee4f" config-ref="VM_Config" sendCorrelationId="ALWAYS" queueName="${vm.queue.singapore.ack.psr}" timeout="${vm.queue.apac.singapore.publish.timeout}"/>
+						<module-logging:log-other doc:name="Log other" doc:id="dd89f9fe-ee07-40da-9eee-5aa5a673abda" message="*********apac Singapore ACK/PSR msg published on queue**********" source="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+					</when>
+					<when expression="#[attributes.queryParams.filename contains (p('namea.customer.refund.vm.publish.condition.filename'))]">
+						<vm:publish doc:name="Publish Customer Refund Queue" doc:id="6c353540-47ad-44a5-bbe5-de8d22567518" config-ref="VM_Config" sendCorrelationId="ALWAYS" queueName="${vm.queue.namea.customer.refund.ack.psr}" timeout="${vm.queue.apac.singapore.publish.timeout}"/>
+						<module-logging:log-other doc:name="Log other" doc:id="f19e34dc-e58a-4948-ba37-603b156d0881" message="*********NAMEA Customer Refund ACK/PSR msg published on queue**********" source="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" logType="Log Other" messageType="************ Published to Queue ************"/>
+					</when>
+					<otherwise >
+						<os:clear doc:name="Clear" doc:id="9a1cacf8-d593-481b-8c33-131d555150d5" objectStore="Object_store"/>
+						<module-logging:log-other doc:name="Log other" doc:id="4c248d2f-f0c7-440c-9ef3-38d7e449d2b1" source="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" message="**** Filename contains invalid country ****"/>
+					</otherwise>
+				</choice>
+			</when>
+			<otherwise >
+				<os:clear doc:name="Clear fileName" doc:id="fc8862df-df5c-4fb6-89b1-57e12058a850" objectStore="Object_store" />
+				<module-logging:log-other doc:name="Log other" doc:id="ae1066ba-542e-4043-97b1-5efd13f4dfed" message="******************Other File*******************" source="apac-update-vendor-bill-payment-status-netsuite-jpm-Flow" logLevel="WARN"/>
+			</otherwise>
+		</choice>
+	</sub-flow>
+</mule>

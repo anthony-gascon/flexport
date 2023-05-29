@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="update-vendor-bill-payment-status-netsuite-jpm-suite.xml" />
+	<munit:test name="jpm-suite-update-vendor-bill-payment-status-netsuite-jpm-Flow-test-success" doc:id="a5f94aff-69ba-4c88-a674-7644086486a1" description="Test" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Request Netsuite sapi" doc:id="c5594966-28da-4a98-91d9-744aa0931044" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request Netsuite sapi" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="092899ef-5af4-4874-9d59-df5001706673" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmACKfileFlowtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Request Netsuite Sapi Update" doc:id="b79c882f-ec53-4a67-b13f-2a62f9aa1885" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request Netsuite sapi update" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="3c64155c-97ac-4418-a668-0a6c04d96c2a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when publish" doc:id="13cb9836-f24e-4a9d-8846-81534719be04" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2913127b-1e27-4158-95da-21ce1b0e55ed" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="d3831abf-668a-44f1-a9bc-56a5cfc12b10" >
+				<munit:payload value="#[output application/xml --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmACKfileFlowtest\sftp_mock_ACK_payload.xml',&quot;application/xml&quot;)]" />
+				<munit:attributes value='#[%dw 2.0&#10;output application/json --- readUrl("classpath://updatevendorbillpaymentstatusnetsuitejpmACKfileFlowtest\set-event_attributes.dwl", "application/json")]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\jpm\sftp\file\content:application\xml:flexport-jpm-process-flows-config" doc:id="a7507ac2-951b-44f3-b560-b2f581a66d44" name="post:\jpm\sftp\file\content:application\xml:flexport-jpm-process-flows-config"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="d17a96b0-6b67-43bb-a546-24e3d9f2b309" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="update-vendor-bill-payment-status-netsuite-jpm-flow-test-success-norecords" doc:id="c223a6bd-0138-444b-b4cb-3cca9a3afbe9">
+		<munit:behavior >
+			<munit:set-event doc:name="Set Event" doc:id="1902435e-4979-45b1-898a-4483d15c070c" >
+				<munit:payload value="#[output application/xml --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmACKfileFlowtest\sftp_mock_ACK_payload.xml',&quot;application/xml&quot;)]" encoding="UTF-8" mediaType="application/xml" />
+				<munit:attributes value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmACKfileFlowtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="sftpPayload" value="#[output application/xml --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmACKfileFlowtest\sftp_mock_ACK_payload.xml',&quot;application/xml&quot;)]" encoding="UTF-8" mediaType="application/xml" />
+				</munit:variables>
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="Mock when Netsuite Sapi" doc:id="3513a0e2-239e-4578-a4ab-93d380e86faa" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request Netsuite sapi" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="092899ef-5af4-4874-9d59-df5001706673" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmACKfileFlowtest\mock_payload_no_record.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to update-vendor-bill-payment-status-netsuite-jpm-Flow" doc:id="428ea0c7-7bbb-4350-a111-a3e03015e66e" name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="66f96e48-cbec-4f39-b5c0-cc06489b9fe3" >
+				<munit-tools:that ><![CDATA[#[import * from dw::test::Asserts 
+ ---
+payload must equalTo([])]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="update-vendor-bill-payment-status-netsuite-jpm-suite-failure" doc:id="c6e1bc42-f572-4f15-bbc0-195505fe94aa">
+		<munit:behavior >
+			<munit:set-event doc:name="Set Event" doc:id="64815ece-b01d-4763-b289-022fe773cc06" >
+				<munit:payload value="#[output application/xml --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmACKfileFlowtest\sftp_mock_ACK_payload.xml',&quot;application/xml&quot;)]" encoding="UTF-8" mediaType="application/xml" />
+				<munit:attributes value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmACKfileFlowtest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="Mock when sftp" doc:id="8a481f93-fd71-4851-90cd-4c99aba36c4e" processor="sftp:listener">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="On New or Updated File" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="bd34f4f8-1470-454b-88dd-664462d22b0b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmACKfileFlowtest\sftp_mock_ACK_payload.xml',&quot;application/xml&quot;)]" mediaType="application/xml" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Request Netsuite sapi" doc:id="2de9de2e-a79e-42f7-adc4-2b03f65f70bd" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request Netsuite sapi" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="092899ef-5af4-4874-9d59-df5001706673" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:CONNECTIVITY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="bf1d10e8-4287-4684-8986-b7f50a164c66" >
+				<flow-ref doc:name="Flow-ref to update-vendor-bill-payment-status-netsuite-jpm-Flow" doc:id="03892282-598e-41de-8d51-8c2fb143dd4a" name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="0dac88c7-7d07-4429-8dba-74af1352a4dd" >
+						<set-variable value="#[error.errorType.asString]" doc:name="Set Variable" doc:id="c29e2244-5c03-4002-ae23-8527ecc40152" variableName="errorType"/>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="25c3e2ef-18d0-4abf-aad1-21a391a3a01f" is='#[MunitTools::equalTo("500")]' expression="#[payload.errorCode as String]"/>
+		</munit:validation>
+	</munit:test>
+
+<munit:test name="update-vendor-bill-payment-status-netsuite-jpm-Flow-PSR-File-success-test" doc:id="30ede619-d566-416f-a154-bb851992ef17">
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="e4d3af49-0c96-48fb-9d70-ea4a82691610">
+				<munit:payload value="#[output application/xml --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFilesuccesstest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/xml" />
+				<munit:attributes value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFilesuccesstest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="Mock Netsuite Request" doc:id="b4022dd5-7370-445d-bae5-0c7da4923df1" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="da27f313-56f2-48c5-b4b8-71a478a28867" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFilesuccesstest\mock_payload.dwl')]" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFilesuccesstest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="rootMessage" value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFilesuccesstest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="counter" value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFilesuccesstest\mock_variable_1.dwl')]" />
+						<munit-tools:variable key="psrVariable" value="#[output application/json skipNullOn=&quot;everywhere&quot; --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFilesuccesstest\mock_variable_2.dwl')]" mediaType='application/json skipNullOn="everywhere"' encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to update-vendor-bill-payment-status-netsuite-jpm-Flow" doc:id="838cad84-bab8-46a6-a2cd-1c0eba5de1be" name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="f6043415-8956-4386-8136-e41f762edb5c" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import updatevendorbillpaymentstatusnetsuitejpmFlowPSRFilesuccesstest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="update-vendor-bill-payment-status-netsuite-jpm-Flow-PSR-File-NetsuiteError-test" doc:id="098d0e06-a95f-4ba0-91a2-8d83418dd5b9">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Netsuite Request" doc:id="e21ef487-994c-4f05-ad6b-c3859848ea7f" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="da27f313-56f2-48c5-b4b8-71a478a28867" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFileNetsuiteErrortest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFileNetsuiteErrortest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="rootMessage" value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFileNetsuiteErrortest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="counter" value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFileNetsuiteErrortest\mock_variable_1.dwl')]" />
+						<munit-tools:variable key="psrVariable" value="#[output application/json skipNullOn=&quot;everywhere&quot; --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFileNetsuiteErrortest\mock_variable_2.dwl')]" mediaType='application/json skipNullOn="everywhere"' encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="04fe0b49-fc03-4dac-a79a-bf6b3ccd1ada" >
+				<munit:payload value="#[output application/xml --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFileNetsuiteErrortest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/xml" />
+				<munit:attributes value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowPSRFileNetsuiteErrortest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow" doc:id="78ff08ad-1dc7-4c31-8f61-bf4ad3903720" name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="190e70e2-1cd0-47e8-822f-7b2dc3c93291" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import updatevendorbillpaymentstatusnetsuitejpmFlowPSRFileNetsuiteErrortest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="update-vendor-bill-payment-status-netsuite-jpm-Flow-other-file-test" doc:id="6ae2d3d5-d173-4b99-983b-cd4a02e58bec">
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="fa149c7e-03d9-47f8-b0c8-6ded78774122" >
+				<munit:payload value="#[output application/xml --- readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowOtherFiletest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/xml" />
+				<munit:attributes value="#[readUrl('classpath://updatevendorbillpaymentstatusnetsuitejpmFlowOtherFiletest\set-event_attributes.dwl')]" />
+			
+</munit:set-event>
+			<munit-tools:mock-when doc:name="Mock when Netsuite Request" doc:id="27be4028-3995-492b-a441-44dd27631cbf" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="reconcile file upload in netsuite" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="caa7df4f-6783-4597-8f25-0cc6a3415fb6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to update-vendor-bill-payment-status-netsuite-jpm-Flow" doc:id="b2a4eea2-4c56-493f-b067-8de518284088" name="namea-update-vendor-bill-payment-status-netsuite-jpm-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="03f75000-f371-4f0e-a7ad-57db53ea34c6" processor="module-logging:log-other" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log other" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="e598d498-5985-4846-a005-7f4e2d527b0e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		
+</munit:validation>
+	</munit:test>
+</mule>

@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CstmrCdtTrfInitn>
+    <GrpHdr>
+      <MsgId>811d61294996450d9cc74504179db27e</MsgId>
+      <CreDtTm>2023-04-26T11:05:23</CreDtTm>
+      <NbOfTxs>3</NbOfTxs>
+      <CtrlSum>289452.42</CtrlSum>
+      <InitgPty>
+        <Nm>Flexport Inc</Nm>
+      </InitgPty>
+    </GrpHdr>
+    <PmtInf>
+      <PmtInfId>BATCHREFERENCE000001</PmtInfId>
+      <PmtMtd>TRF</PmtMtd>
+      <NbOfTxs>2</NbOfTxs>
+      <CtrlSum>281336.18</CtrlSum>
+      <PmtTpInf>
+        <SvcLvl>
+          <Cd>URGP</Cd>
+        </SvcLvl>
+      </PmtTpInf>
+      <ReqdExctnDt>2023-04-26</ReqdExctnDt>
+      <Dbtr>
+        <Nm>Flexport Inc</Nm>
+        <PstlAdr>
+          <Ctry>US</Ctry>
+        </PstlAdr>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <Othr>
+            <Id>712538625</Id>
+          </Othr>
+        </Id>
+        <Ccy>USD</Ccy>
+      </DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId>
+          <BIC>CHASUS33</BIC>
+          <ClrSysMmbId>
+            <MmbId>021000021</MmbId>
+          </ClrSysMmbId>
+          <PstlAdr>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </FinInstnId>
+      </DbtrAgt>
+      <ChrgBr>DEBT</ChrgBr>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45588874</InstrId>
+          <EndToEndId>5776</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">5000</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <BIC>65464654654</BIC>
+            <Nm>JPM Chase</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>Gulf Coast Panama Jack, Inc.  -  US</Nm>
+          <PstlAdr>
+            <StrtNm>1411 MOYLAN RD</StrtNm>
+            <PstCd>32407-4069</PstCd>
+            <TwnNm>PANAMA CITY BEACH</TwnNm>
+            <CtrySubDvsn>FL</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>546543546546</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>FINOPS-61951</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45588875</InstrId>
+          <EndToEndId>5777</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">276336.18</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <BIC>65465356</BIC>
+            <Nm>Bank Of America</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>Peloton Interactive Inc  -  US</Nm>
+          <PstlAdr>
+            <StrtNm>125 W 25th St</StrtNm>
+            <PstCd>10001</PstCd>
+            <TwnNm>New York</TwnNm>
+            <CtrySubDvsn>NY</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>6565352656</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>FINOPS-61976</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+    </PmtInf>
+    <PmtInf>
+      <PmtInfId>BATCHREFERENCE000002</PmtInfId>
+      <PmtMtd>TRF</PmtMtd>
+      <NbOfTxs>1</NbOfTxs>
+      <CtrlSum>8116.24</CtrlSum>
+      <PmtTpInf>
+        <SvcLvl>
+          <Cd>URGP</Cd>
+        </SvcLvl>
+      </PmtTpInf>
+      <ReqdExctnDt>2023-04-26</ReqdExctnDt>
+      <Dbtr>
+        <Nm>Flexport Inc</Nm>
+        <PstlAdr>
+          <Ctry>US</Ctry>
+        </PstlAdr>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <Othr>
+            <Id>712538625</Id>
+          </Othr>
+        </Id>
+        <Ccy>USD</Ccy>
+      </DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId>
+          <BIC>CHASUS33</BIC>
+          <ClrSysMmbId>
+            <MmbId>021000021</MmbId>
+          </ClrSysMmbId>
+          <PstlAdr>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </FinInstnId>
+      </DbtrAgt>
+      <ChrgBr>DEBT</ChrgBr>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45599567</InstrId>
+          <EndToEndId>5785</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">8116.24</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <BIC>684646</BIC>
+            <Nm>First Bank</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>Allfasteners</Nm>
+          <PstlAdr>
+            <StrtNm>959 LAKE RD</StrtNm>
+            <PstCd>44256-2453</PstCd>
+            <TwnNm>MEDINA</TwnNm>
+            <CtrySubDvsn>OH</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>654643465465</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>FINOPS-62053</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+    </PmtInf>
+  </CstmrCdtTrfInitn>
+</Document>

@@ -1,0 +1,277 @@
+[
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>100000159153846000001</MsgId>\n  <CreDtTm>2023-01-12T00:09:14.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>4db5bd15ff5748188f9cafd7ecbe2e13</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <GrpSts>RJCT</GrpSts>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 283 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 283%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n</OrgnlGrpInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230111190914927",
+      "size": 1317,
+      "name": "FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230111190914927",
+      "timestamp": "2023-01-12T00:09:15"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>100000159156325000001</MsgId>\n  <CreDtTm>2023-01-12T01:35:45.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>39989572bf2846f997c794b57bf73ca1</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <GrpSts>RJCT</GrpSts>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 283 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 283%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n</OrgnlGrpInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230111203545821",
+      "size": 1317,
+      "name": "FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230111203545821",
+      "timestamp": "2023-01-12T01:35:47"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>100000159161885000001</MsgId>\n  <CreDtTm>2023-01-12T06:41:29.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>6caca95903ce4369be6b60e1e5f81029</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <GrpSts>RJCT</GrpSts>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 283 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 283%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n</OrgnlGrpInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112014130554",
+      "size": 1317,
+      "name": "FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112014130554",
+      "timestamp": "2023-01-12T06:41:30"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>100000159161902000001</MsgId>\n  <CreDtTm>2023-01-12T06:47:49.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>3346a5799ffc491aaa42a90a52bed5d1</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <GrpSts>RJCT</GrpSts>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 31 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 31%3B</AddtlInf>\n    <AddtlInf> columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B%2</AddtlInf>\n    <AddtlInf>2urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%3A</AddtlInf>\n    <AddtlInf>std%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 104 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 104%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B</AddtlInf>\n    <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%</AddtlInf>\n    <AddtlInf>3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 174 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 174%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B</AddtlInf>\n    <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%</AddtlInf>\n    <AddtlInf>3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 246 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 246%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B</AddtlInf>\n    <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%</AddtlInf>\n    <AddtlInf>3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 283 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 283%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n</OrgnlGrpInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112014751687",
+      "size": 3579,
+      "name": "FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112014751687",
+      "timestamp": "2023-01-12T06:47:52"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>100000159163237000001</MsgId>\n  <CreDtTm>2023-01-12T07:21:18.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>b68a37bca5dd48f2b3c81140e86c085f</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <GrpSts>RJCT</GrpSts>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 283 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 283%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n</OrgnlGrpInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112022121179",
+      "size": 1317,
+      "name": "FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112022121179",
+      "timestamp": "2023-01-12T07:21:21"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>100000159163508000001</MsgId>\n  <CreDtTm>2023-01-12T07:54:05.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>9765ef7b70e448c6bfab20145f33e70a</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <GrpSts>RJCT</GrpSts>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 31 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 31%3B</AddtlInf>\n    <AddtlInf> columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B%2</AddtlInf>\n    <AddtlInf>2urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%3A</AddtlInf>\n    <AddtlInf>std%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 104 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 104%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B</AddtlInf>\n    <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%</AddtlInf>\n    <AddtlInf>3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 174 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 174%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B</AddtlInf>\n    <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%</AddtlInf>\n    <AddtlInf>3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 246 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 246%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B</AddtlInf>\n    <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%</AddtlInf>\n    <AddtlInf>3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 283 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 283%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n</OrgnlGrpInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112025406342",
+      "size": 3579,
+      "name": "FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112025406342",
+      "timestamp": "2023-01-12T07:54:07"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>100000159165019000001</MsgId>\n  <CreDtTm>2023-01-12T08:39:37.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>a69a8266abb848faa884f521304669fc</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <GrpSts>RJCT</GrpSts>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 283 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 283%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n</OrgnlGrpInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112033941259",
+      "size": 1317,
+      "name": "FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112033941259",
+      "timestamp": "2023-01-12T08:39:43"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>100000159165040000001</MsgId>\n  <CreDtTm>2023-01-12T08:44:23.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>34469a1deb22449eace5ae92dd50d054</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <GrpSts>RJCT</GrpSts>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 283 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 283%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n</OrgnlGrpInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112034427512",
+      "size": 1317,
+      "name": "FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112034427512",
+      "timestamp": "2023-01-12T08:44:27"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>100000159165332000001</MsgId>\n  <CreDtTm>2023-01-12T09:01:18.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>162c87cb896245a8ab2279e6e3bc81fc</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <GrpSts>RJCT</GrpSts>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n  <StsRsnInf>\n    <Rsn>\n      <Cd>FF01</Cd>\n    </Rsn>\n    <AddtlInf>File Format incomplete or invalid: Line 283 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 283%</AddtlInf>\n    <AddtlInf>3B columnNumber%3A 20%3B cvc-type.3.1.3%3A The value %27%27 of element %27Ctry%27 is not valid.</AddtlInf>\n  </StsRsnInf>\n</OrgnlGrpInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112040118444",
+      "size": 1317,
+      "name": "FLEXPISO.ACK.ISO20022_PAIN_01Ver3.APACSingapore.20230112040118444",
+      "timestamp": "2023-01-12T09:01:18"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>M-ID-353781</MsgId>\n  <CreDtTm>2023-01-12T09:01:42.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>afff8ce7ffad4e08a9207f125cfcb716</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <OrgnlNbOfTxs>6</OrgnlNbOfTxs>\n  <OrgnlCtrlSum>365703.280</OrgnlCtrlSum>\n  <GrpSts>ACSP</GrpSts>\n  <NbOfTxsPerSts>\n    <DtldNbOfTxs>6</DtldNbOfTxs>\n    <DtldSts>ACSP</DtldSts>\n    <DtldCtrlSum>365703.280</DtldCtrlSum>\n  </NbOfTxsPerSts>\n  <NbOfTxsPerSts>\n    <DtldNbOfTxs>0</DtldNbOfTxs>\n    <DtldSts>RJCT</DtldSts>\n    <DtldCtrlSum>0.000</DtldCtrlSum>\n  </NbOfTxsPerSts>\n</OrgnlGrpInfAndSts><OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000001</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282874</OrgnlInstrId>\n    <OrgnlEndToEndId>233412</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3012HKH004530000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">1500.00</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282869</OrgnlInstrId>\n    <OrgnlEndToEndId>233408</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3012HKH004520000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">203681.63</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282867</OrgnlInstrId>\n    <OrgnlEndToEndId>233406</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3012HKH004510000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">11600.00</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n<OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000002</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282873</OrgnlInstrId>\n    <OrgnlEndToEndId>233411</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3012HKH004550000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">1320.00</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282870</OrgnlInstrId>\n    <OrgnlEndToEndId>233409</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3012HKH004540000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">3801.65</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n<OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000003</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282866</OrgnlInstrId>\n    <OrgnlEndToEndId>233405</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>01204011JR900001</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">143800.00</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.PSOURCE.MRCNFRM.APACHongKong.20230112040146961",
+      "size": 3366,
+      "name": "FLEXPISO.PSOURCE.MRCNFRM.APACHongKong.20230112040146961",
+      "timestamp": "2023-01-12T09:01:58"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>M-ID-353792</MsgId>\n  <CreDtTm>2023-01-12T09:47:12.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>c29ef02905d84d04ab5cb598f98ec39c</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <OrgnlNbOfTxs>6</OrgnlNbOfTxs>\n  <OrgnlCtrlSum>365703.280</OrgnlCtrlSum>\n  <GrpSts>ACSP</GrpSts>\n  <NbOfTxsPerSts>\n    <DtldNbOfTxs>6</DtldNbOfTxs>\n    <DtldSts>ACSP</DtldSts>\n    <DtldCtrlSum>365703.280</DtldCtrlSum>\n  </NbOfTxsPerSts>\n  <NbOfTxsPerSts>\n    <DtldNbOfTxs>0</DtldNbOfTxs>\n    <DtldSts>RJCT</DtldSts>\n    <DtldCtrlSum>0.000</DtldCtrlSum>\n  </NbOfTxsPerSts>\n</OrgnlGrpInfAndSts><OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000001</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282874</OrgnlInstrId>\n    <OrgnlEndToEndId>233412</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3012HKH004730000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">1500.00</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282869</OrgnlInstrId>\n    <OrgnlEndToEndId>233408</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3012HKH004720000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">203681.63</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282867</OrgnlInstrId>\n    <OrgnlEndToEndId>233406</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3012HKH004710000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">11600.00</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n<OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000002</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282873</OrgnlInstrId>\n    <OrgnlEndToEndId>233411</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3012HKH004750000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">1320.00</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282870</OrgnlInstrId>\n    <OrgnlEndToEndId>233409</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3012HKH004740000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">3801.65</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n<OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000003</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43282866</OrgnlInstrId>\n    <OrgnlEndToEndId>233405</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>01204464JR900001</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"HKD\">143800.00</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-12</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.PSOURCE.MRCNFRM.APACHongKong.20230112044719623",
+      "size": 3366,
+      "name": "FLEXPISO.PSOURCE.MRCNFRM.APACHongKong.20230112044719623",
+      "timestamp": "2023-01-12T09:47:38"
+    }
+  }
+]

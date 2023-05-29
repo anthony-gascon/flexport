@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urn:updateList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:urn="urn:messages_2020_2.platform.webservices.netsuite.com" xmlns:urn1="urn:customers_2020_2.transactions.webservices.netsuite.com" xmlns:ns21="urn:customers_2020_2.transactions.webservices.netsuite.com">
+    <urn:record internalId="45588874" xsi:type="ns21:CustomerRefund">
+            <ns21:memo xsi:type="xsd:string">Strawberry13167584</ns21:memo>
+    </urn:record>
+</urn:updateList>

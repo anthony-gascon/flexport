@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd">
+	<sub-flow name="email-psr-csv-subflow" doc:id="354c6a27-c500-40b9-97f6-bd9c8620ab33" >
+		<ee:transform doc:name="error internalId csv" doc:id="9c9c5eb5-6e56-4a90-a4fa-c2102bd08f0c">
+								<ee:message>
+				<ee:set-payload resource="dataweave/customerrefund/email-netsuite-psr-csv.dwl" />
+								</ee:message>
+							</ee:transform>
+		<ee:transform doc:name="email payload" doc:id="ee10458e-b562-4dca-bc31-6d7a04cd5db0">
+								<ee:message>
+				<ee:set-payload resource="dataweave/customerrefund/email-psr.dwl" />
+								</ee:message>
+							</ee:transform>
+		<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="74864d32-6532-49b8-846f-0204b830635e" millisBetweenRetries="${https.retry.frequency}">
+								<http:request method="POST" doc:name="Request" doc:id="9bb84247-7e4c-4534-af25-d116952fbc9c" config-ref="PGP_Encrpt_Request" path="/email" />
+							</until-successful>
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="bfb43af1-440a-4915-b531-80995af5ea19" message="******Email Sent*************" source="apac-psr-subflow" />
+	</sub-flow>
+	<sub-flow name="psr-subflow"
+		doc:id="3690d9bb-c2c9-476c-83de-2af62bd1d53d">
+		<set-variable value='""' doc:name="psrVariable"
+			doc:id="550ce319-8704-46f0-9ac2-92ba9286f313"
+			variableName="psrVariable" />
+		<module-logging:log-inbound
+			doc:name="Log inbound" doc:id="5ace1020-4abf-4591-a350-06e0d454b892"
+			message="******PSR File Flow Started**************"
+			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+		<ee:transform doc:name="Transform Message"
+			doc:id="192068f9-c08e-457c-a5cb-ab491b386af9">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload.Document.CstmrPmtStsRpt.*OrgnlPmtInfAndSts.*TxInfAndSts]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each"
+			doc:id="e3aab1d5-6ece-456b-9778-6116a9244a98" collection="#[payload]"
+			batchSize="${foreach.batch.size}">
+			<try doc:name="Try" doc:id="b191fa3f-0284-47f4-8d5a-8160c3062e57">
+				<ee:transform doc:name="Transform Message"
+					doc:id="4991ec04-69a9-4fe2-9d48-c6a3920ddda0">
+					<ee:message>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable resource="dataweave/apac/psrVariableDwlTransformation.dwl" variableName="psrVariable" />
+					</ee:variables>
+				</ee:transform>
+				<until-successful
+					maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+					doc:id="b689bce4-8fbd-4561-a4d1-ceb17da92331"
+					millisBetweenRetries="${https.retry.frequency}">
+					<http:request method="PUT" doc:name="Netsuite Request"
+						doc:id="6c06a199-c78d-4cc3-84ed-b40b7ef51eb5"
+						responseTimeout="${http.response.timeout.netsuite}"
+						config-ref="Http_NS__Request" path="${https.update.payments.path.netsuite}">
+						<http:body><![CDATA[#[vars.psrVariable]]]></http:body>
+					</http:request>
+				</until-successful>
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="b761b553-de6f-4fb9-a5a7-1a71e1657b37">
+						<module-logging:log-error
+							doc:name="Log error"
+							doc:id="12869a51-0562-44c6-bcc5-0af5f68c0a7b"
+							source="update-vendor-bill-payment-status-netsuite-jpm-Flow"
+							message='#["Skipping ForEach block since error while processing PSR ForEach block number: " ++ vars.counter]' />
+						<module-logging:log-error
+							doc:name="Log error"
+							doc:id="a86d6c59-e122-4f05-b7c4-081885d3cfdc"
+							source="update-vendor-bill-payment-status-netsuite-jpm-listener-flow"
+							message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;    "Netsuite Update Error Ids" : payload.*internalId&#10;}]'
+							messageType="-----------Netsuite Update Error ------------------" />
+						<try doc:name="Try"
+							doc:id="f343fb33-0fb3-4ddc-9fcb-45cc60a2e79d">
+							<ee:transform doc:name="error internalId csv"
+								doc:id="c0256fca-11e3-415f-a8cb-4d9526417381">
+								<ee:message>
+									<ee:set-payload
+										resource="dataweave/namea/email-netsuite-psr-csv.dwl" />
+								</ee:message>
+							</ee:transform>
+							<ee:transform doc:name="email payload"
+								doc:id="1c167a0c-9ead-4b4b-a8e9-a1e53b34bd13">
+								<ee:message>
+									<ee:set-payload resource="dataweave/apac/email-psr.dwl" />
+								</ee:message>
+							</ee:transform>
+							<until-successful
+								maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+								doc:id="42abdcc5-5688-4e5e-ad19-e814fe01360b"
+								millisBetweenRetries="${https.retry.frequency}">
+								<http:request method="POST" doc:name="Request"
+									doc:id="402e1bde-0bcf-47b2-86d6-5e2b0b77c968"
+									config-ref="PGP_Encrpt_Request" path="${https.email.path.pgp}" />
+							</until-successful>
+							<module-logging:log-outbound
+								doc:name="Log outbound"
+								doc:id="ac7a99d2-9dc0-43cf-bdbc-e2ea63ffb7bd"
+								message="******Email Sent*************"
+								source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+							<error-handler>
+								<on-error-continue enableNotifications="true"
+									logException="true" doc:name="On Error Continue"
+									doc:id="4bd09595-684f-4edd-abb4-64401e3b9365">
+									<module-logging:log-error
+										doc:name="Log error"
+										doc:id="2ee84750-58e8-4738-910c-d280ff714dd5"
+										message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;    "Sending Mail Error -- Netsuite Update Error Ids" : payload.*internalId&#10;}]'
+										messageType="-----------Sending Mail Error ------------------"
+										source="update-vendor-bill-payment-status-netsuite-jpm-listener-flow" />
+								</on-error-continue>
+							</error-handler>
+						</try>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</foreach>
+		<module-logging:log-outbound
+			doc:name="Log outbound" doc:id="0741c025-edb2-4031-8886-f37033a922a0"
+			message="******PSR File Flow ends*************"
+			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+	</sub-flow>
+	<sub-flow name="apac-psr-subflow" doc:id="f488b30c-b5c0-46fc-9571-b84bfa4461d9" >
+		<set-variable value='""' doc:name="psrVariable" doc:id="9d86ca3b-a3d8-45a7-baee-4e347a9b8285" variableName="psrVariable" />
+		<module-logging:log-inbound doc:name="Log inbound" doc:id="8a41fad2-6f7a-4824-866c-91878d542c43" message="****** apac  PSR File Flow Started**************" source="apac-psr-subflow" />
+		<ee:transform doc:name="Transform Message" doc:id="90af69a1-b3e4-41eb-b353-bd1f8c75a47a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload.Document.CstmrPmtStsRpt.*OrgnlPmtInfAndSts.*TxInfAndSts]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="622714a6-5020-4adb-a6a3-783c53f06bf1" collection="#[payload]" batchSize="${foreach.batch.size}" >
+			<try doc:name="Try" doc:id="58ce63e5-111a-43f6-bb9d-0511e2006efc" >
+				<ee:transform doc:name="Transform Message" doc:id="2fcecb02-8462-4b5b-ba9b-ad32730bc32e" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable resource="dataweave/apac/psrVariableDwlTransformation.dwl" variableName="psrVariable" />
+					</ee:variables>
+				</ee:transform>
+				<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="4af0e8a5-9f78-4316-b9ec-96af0e30ab9f" millisBetweenRetries="${https.retry.frequency}" >
+					<http:request method="PUT" doc:name="Netsuite Update Request" doc:id="f24a189e-1798-4889-ba67-a6b8c0d416da" config-ref="Http_NS__Request" path="${ns.update.vendor.payment.path}" responseTimeout="${http.response.timeout.netsuite}" >
+						<http:body ><![CDATA[#[vars.psrVariable]]]></http:body>
+					</http:request>
+				</until-successful>
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="967dc8bb-266e-4e3e-accf-bf2dd5842722" >
+						<module-logging:log-error doc:name="Log error" doc:id="b9eacc3c-1797-4367-bb80-7bc44172269e" message='#["Skipping ForEach block since error while processing PSR ForEach block number: " ++ vars.counter]' source="apac-psr-subflow" />
+						<module-logging:log-error doc:name="Log error" doc:id="55309e67-087f-4575-855f-758f29c2b1f6" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;    "Netsuite Update Error Ids" : payload.*internalId&#10;}]' messageType="-----------Netsuite Update Error ------------------" source="apac-psr-subflow" />
+						<try doc:name="Try" doc:id="aa986df5-bfbb-4b92-9e93-40009f78f134" >
+							<ee:transform doc:name="error internalId csv" doc:id="b25a33a2-a55c-4266-b599-408b570ec96e" >
+								<ee:message >
+									<ee:set-payload resource="dataweave/apac/china/email-netsuite-psr-csv.dwl" />
+								</ee:message>
+							</ee:transform>
+							<ee:transform doc:name="email payload" doc:id="539e1c81-289b-408a-8fd3-1c20af6b1fe3" >
+								<ee:message >
+									<ee:set-payload resource="dataweave/apac/email-psr.dwl" />
+								</ee:message>
+							</ee:transform>
+							<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="0d17082f-9b7e-464f-bbfd-e6d6ce413bf3" millisBetweenRetries="${https.retry.frequency}" >
+								<http:request method="POST" doc:name="Request" doc:id="ea725107-a316-4e7b-be27-31bedff349cf" config-ref="PGP_Encrpt_Request" path="/email" />
+							</until-successful>
+							<module-logging:log-outbound doc:name="Log outbound" doc:id="8cc8e7b0-5d11-4823-89ec-fd0f3d5226d9" message="******Email Sent*************" source="apac-psr-subflow" />
+							<error-handler >
+								<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="03b33845-5b74-4f6b-868c-59fa922258fd" >
+									<module-logging:log-error doc:name="Log error" doc:id="56acbd4f-e164-472f-9934-3c080daa8515" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;    "Sending Mail Error -- Netsuite Update Error Ids" : payload.*internalId&#10;}]' messageType="-----------Sending Mail Error ------------------" source="apac-psr-subflow" />
+								</on-error-continue>
+							</error-handler>
+						</try>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</foreach>
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="fdc59e93-d4fc-4c6e-9da8-c4f1ef8d435d" message="****** apac  PSR File Flow ends*************" source="apac-psr-subflow" />
+	</sub-flow>
+	<sub-flow name="psr-common-subflow" doc:id="c19d2d40-e7d6-42e3-bc05-6e00582a90e1" >
+		<set-variable value='""' doc:name="psrVariable" doc:id="a5436c53-ad8f-4822-86bf-67a0eb8ad2b7" variableName="psrVariable" />
+		<module-logging:log-inbound doc:name="Log inbound" doc:id="74ec917d-39be-4005-a91e-9d6e17c775ca" message="#[%dw 2.0&#10;output application/json writeAttributes=true&#10;---&#10;payload.Document.CstmrPmtStsRpt.*OrgnlPmtInfAndSts.*TxInfAndSts]" source="psr-common-subflow" messageType="************************** File Read from SFTP **************************"/>
+		<ee:transform doc:name="Transform Message" doc:id="76f2184b-0533-4976-9e51-9c7af50f5c32" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload.Document.CstmrPmtStsRpt.*OrgnlPmtInfAndSts.*TxInfAndSts]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="42cb34d7-f030-4a0e-ab02-c7779e59d697" collection="#[payload]" batchSize="${foreach.batch.size}" >
+			<try doc:name="Try" doc:id="4763353c-3f1a-4f6f-94c0-addbfb18941e" >
+				<ee:transform doc:name="PSR Update List" doc:id="e16265ab-a8ff-4b93-a74b-794aca1447fe" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable resource="dataweave/apac/psrVariableDwlTransformation.dwl" variableName="psrVariable" />
+					</ee:variables>
+				</ee:transform>
+				<ee:transform doc:name="PSR Update SOAP Request" doc:id="7ad7132b-a952-42e5-95cb-6915fc657369" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/updatelist-psr-soap-request.dwl" />
+					</ee:message>
+				</ee:transform>
+				<http:request method="PUT" doc:name="Netsuite Customer Refund Update Request" doc:id="74e41e15-30ad-424e-874e-28e78ae2865f" config-ref="NSv11v2httpRequest" path="${https.netsuite.sapi.v11.v2.update.path}" >
+					<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"recordType" : p('customer.refund.savesearch.recordType')
+}]]]></http:query-params>
+				</http:request>
+				<ee:transform doc:name="XML to JSON Conversion" doc:id="bff39220-8bfc-4045-8a57-6fbf40f4b42b" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/updateList-response-customer-refund.dwl" />
+					</ee:message>
+				</ee:transform>
+				<module-logging:log-outbound doc:name="Log Output" doc:id="011a65e1-8501-411f-bd85-537ab568c83c" message='#["Netsuite update done for block number: " ++ vars.counter]' messageType="#[output application/json --- payload]" source="psr-common-subflow" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="d2264f75-4c39-480c-88a7-f2e6f8b1a4fa" >
+						<module-logging:log-error doc:name="Log error" doc:id="ffe01ab8-9580-4c11-8a7c-792071dfe1b0" message='#["Skipping ForEach block since error while processing PSR ForEach block number: " ++ vars.counter]' source="psr-common-subflow" />
+						<module-logging:log-error doc:name="Log error1" doc:id="46201b8a-c507-4fc4-ad95-ac65a4368bb4" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;    "Netsuite Update Error Ids" : payload.*internalId&#10;}]' messageType="-----------Netsuite Update Error ------------------" source="psr-common-subflow" />
+						<try doc:name="Try" doc:id="44124cc8-0245-40e8-a237-4f4937a2fcf3" >
+							<flow-ref doc:name="email-psr-csv-subflow" doc:id="696c045d-e88a-43e4-a031-a5f205494eb8" name="email-psr-csv-subflow" />
+							<error-handler >
+								<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="ecc9589f-7a30-4200-a844-882541def8c8" >
+									<module-logging:log-error doc:name="Log error" doc:id="0f64f173-946b-4268-bd7b-e9785f898441" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;    "Sending Mail Error -- Netsuite Update Error Ids" : payload.*internalId&#10;}]' messageType="-----------Sending Mail Error ------------------" source="psr-common-subflow" />
+								</on-error-continue>
+							</error-handler>
+						</try>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</foreach>
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="252567f6-ce1b-4a5c-81b5-77f824a1e6a4" message="#[output application/json --- payload]" source="psr-common-subflow" messageType="************* PSR Update completed *************"/>
+	</sub-flow>
+</mule>

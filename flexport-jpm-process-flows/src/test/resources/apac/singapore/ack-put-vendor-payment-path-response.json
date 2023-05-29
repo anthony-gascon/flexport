@@ -1,0 +1,378 @@
+[
+  {
+    "tranId": "229641",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2023-01-13T04:29:45",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "229641",
+    "externalId": "Processed43018573",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "28",
+      "name": "Flexport Singapore"
+    },
+    "internalId": "43018573",
+    "payeeAddress": {
+      "zip": "068898",
+      "country": "SINGAPORE",
+      "addr2": "#02-00",
+      "addr1": "80 Robinson Road",
+      "city": "Singapore",
+      "addr3": null,
+      "addrText": "Tricor Singapore Pte. Ltd.<br>80 Robinson Road<br>#02-00<br>Singapore Singapore  068898<br>Singapore",
+      "addrPhone": null,
+      "internalId": "9587",
+      "addressee": "Tricor Singapore Pte. Ltd.",
+      "attention": null,
+      "override": false,
+      "state": "Singapore",
+      "nullFieldList": null,
+      "customFieldList": null
+    },
+    "total": 2868.03,
+    "createdDate": "2022-08-11T21:08:16",
+    "currencyName": "SGD",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "250",
+      "name": "Aug 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "17",
+      "name": "SGD"
+    },
+    "tranDate": "2022-08-11T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1281",
+      "name": "10262 Cash : JPM SG checking x6145 - SGD"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "14256817",
+      "name": "Tricor Singapore Pte. Ltd."
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": true,
+          "StringCustomFieldRef__custbody_jpm_paid_amount": "2868.03",
+          "SelectCustomFieldRef__custbody_payment_type": {
+            "internalId": "7",
+            "name": "Foreign Wire (IWI)",
+            "externalId": null,
+            "typeId": "84"
+          },
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APACSingapore.52b9c43e63374eec8570d8f9cec7cdf5",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "109",
+            "name": "JPM SGD Checking X6145",
+            "externalId": null,
+            "typeId": "896"
+          },
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbodysvbexport": true,
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_jpm_paid_currency": "SGD",
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM SG checking x6145 - SGD",
+          "StringCustomFieldRef__custbody_jpm_ack_psr_error_message": "FF01 - File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%"
+        }
+      ]
+    },
+    "status": "Approved"
+  },
+  {
+    "tranId": "229642",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2023-01-13T04:29:46",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "230250",
+    "externalId": "Processed 43058316 notinCoupa",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "28",
+      "name": "Flexport Singapore"
+    },
+    "internalId": "43058316",
+    "total": 4122.38,
+    "createdDate": "2022-08-16T01:29:00",
+    "currencyName": "SGD",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "250",
+      "name": "Aug 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "17",
+      "name": "SGD"
+    },
+    "tranDate": "2022-08-15T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1281",
+      "name": "10262 Cash : JPM SG checking x6145 - SGD"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "6777",
+      "name": "123 - Pat Lau (劉澤嘉)"
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": true,
+          "StringCustomFieldRef__custbody_jpm_paid_amount": "4122.38",
+          "SelectCustomFieldRef__custbody_payment_type": {
+            "internalId": "3",
+            "name": "WIRE",
+            "externalId": null,
+            "typeId": "84"
+          },
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APACSingapore.52b9c43e63374eec8570d8f9cec7cdf5",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "109",
+            "name": "JPM SGD Checking X6145",
+            "externalId": null,
+            "typeId": "896"
+          },
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbodysvbexport": true,
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_jpm_paid_currency": "SGD",
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM SG checking x6145 - SGD",
+          "StringCustomFieldRef__custbody_jpm_ack_psr_error_message": "FF01 - File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%"
+        }
+      ]
+    },
+    "status": "Approved"
+  },
+  {
+    "tranId": "232070",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2023-01-13T04:29:47",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "232070",
+    "externalId": "Processed43188749",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "28",
+      "name": "Flexport Singapore"
+    },
+    "internalId": "43188749",
+    "payeeAddress": {
+      "zip": "049319",
+      "country": "SINGAPORE",
+      "addr2": null,
+      "addr1": "20 Collyer Quay #23 - 01",
+      "city": "Singapore",
+      "addr3": null,
+      "addrText": "Lyreco (Singapore) Pte Ltd<br>20 Collyer Quay #23 - 01<br>Singapore  049319<br>Singapore",
+      "addrPhone": null,
+      "internalId": "106027",
+      "addressee": "Lyreco (Singapore) Pte Ltd",
+      "attention": null,
+      "override": false,
+      "state": null,
+      "nullFieldList": null,
+      "customFieldList": null
+    },
+    "total": 453.66,
+    "createdDate": "2022-08-25T20:23:09",
+    "currencyName": "SGD",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "250",
+      "name": "Aug 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "17",
+      "name": "SGD"
+    },
+    "tranDate": "2022-08-25T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1281",
+      "name": "10262 Cash : JPM SG checking x6145 - SGD"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "17998334",
+      "name": "Lyreco (Singapore) Pte Ltd"
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": true,
+          "StringCustomFieldRef__custbody_jpm_paid_amount": "453.66",
+          "SelectCustomFieldRef__custbody_payment_type": {
+            "internalId": "7",
+            "name": "Foreign Wire (IWI)",
+            "externalId": null,
+            "typeId": "84"
+          },
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APACSingapore.52b9c43e63374eec8570d8f9cec7cdf5",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "109",
+            "name": "JPM SGD Checking X6145",
+            "externalId": null,
+            "typeId": "896"
+          },
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbodysvbexport": true,
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_jpm_paid_currency": "SGD",
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM SG checking x6145 - SGD",
+          "StringCustomFieldRef__custbody_jpm_ack_psr_error_message": "FF01 - File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%"
+        }
+      ]
+    },
+    "status": "Approved"
+  },
+  {
+    "tranId": "232080",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2023-01-13T04:29:48",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "232716",
+    "externalId": "Processed 43231055 notinCoupa",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "28",
+      "name": "Flexport Singapore"
+    },
+    "internalId": "43231055",
+    "total": 764.03,
+    "createdDate": "2022-08-30T03:00:45",
+    "currencyName": "SGD",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "250",
+      "name": "Aug 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "17",
+      "name": "SGD"
+    },
+    "tranDate": "2022-08-29T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1281",
+      "name": "10262 Cash : JPM SG checking x6145 - SGD"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "11368052",
+      "name": "540 - Po Sin Kristy Ke"
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": true,
+          "StringCustomFieldRef__custbody_jpm_paid_amount": "764.03",
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APACSingapore.52b9c43e63374eec8570d8f9cec7cdf5",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "109",
+            "name": "JPM SGD Checking X6145",
+            "externalId": null,
+            "typeId": "896"
+          },
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbodysvbexport": true,
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_jpm_paid_currency": "SGD",
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM SG checking x6145 - SGD",
+          "StringCustomFieldRef__custbody_jpm_ack_psr_error_message": "FF01 - File Format incomplete or invalid: Line 141 Column 20 org.xml.sax.SAXParseException%3B lineNumber%3A 141%"
+        }
+      ]
+    },
+    "status": "Approved"
+  }
+]

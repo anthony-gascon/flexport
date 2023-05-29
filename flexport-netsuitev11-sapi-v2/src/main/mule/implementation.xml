@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
+	<sub-flow name="get-invoices-saveSearch-subflow"
+		doc:id="d363e161-623a-418f-9baf-a8bcda2d2eca">
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="ad5177d9-de73-4742-ab48-a13b57820232"
+			message="******** get-invoices-saveSearch-subflow Started *******"
+			source="implementation:get-invoices-saveSearch-subflow"
+			messageType='#[%dw 2.0&#10;output application/json&#10;---&#10;payload ++ {objectName: vars.objectName}]' />
+		<netsuite:search doc:name="Search"
+			doc:id="ef918eb8-3697-4e1a-bd08-0896a65d3583"
+			config-ref="NetSuite_Config" key="${netsuite.savesearch.invoice.key}"
+			pageSize="${invoices.pagesize}" limit="${invoices.limit}" />
+		<module-logging:log-outbound
+			doc:name="Log outbound" doc:id="6376a3a2-a9f3-4dbc-ac29-1a0a76fa325e"
+			message='#["Total number of Record received " ++ sizeOf(payload)]'
+			source="get-invoices-saveSearch-subflow" />
+		<ee:transform doc:name="Transform Message"
+			doc:id="cbff107f-c92d-40c5-96d6-134555a42cdd">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="2fc7ba3f-a995-4b69-81a2-a68030eed701"
+			source="implementation:get-invoices-saveSearch-subflow"
+			message="******** get-invoices-saveSearch-subflow Ended *******"
+			messageType='#["***********  Object Name is : " ++ vars.objectName ++ "  ***********"]' />
+	</sub-flow>
+	<sub-flow name="get-customers-saveSearch-subflow"
+		doc:id="7a47fe38-526b-4d78-859b-46c9f72c9ef2">
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="c8109f28-97c2-4d7b-8799-71372cc29447"
+			message='******** get-customers-saveSearch-subflow Started *******'
+			messageType='#[%dw 2.0&#10;output application/json&#10;---&#10;payload ++ {objectName: vars.objectName}]'
+			source="implemention:get-customers-saveSearch-subflow" />
+		<netsuite:search doc:name="Search"
+			doc:id="a06c94d2-e648-4138-8c9c-c40fbd448008"
+			config-ref="NetSuite_Config"
+			key="${netsuite.savesearch.customer.key}"
+			pageSize="${customers.pagesize}" limit="${customers.limit}" />
+		<module-logging:log-outbound
+			doc:name="Log outbound" doc:id="3c2d978a-4b36-4884-a794-713edc5cd703"
+			message='#["Total number of Record received " ++ sizeOf(payload)]'
+			source="get-customers-saveSearch-subflow" />
+		<ee:transform doc:name="Transform Message"
+			doc:id="d7fd1c1d-5b86-46a2-b194-9c3a02363fa8">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="5802b23c-3d5d-4629-9151-3a0b27ae0ec1"
+			message="******** get-customers-saveSearch-subflow Ended *******"
+			messageType='#["***********  Object Name is : " ++ vars.objectName ++ "  ***********"]'
+			source="implemention:get-customers-saveSearch-subflow" />
+	</sub-flow>
+	<sub-flow name="get-vendors-saveSearch-subflow"
+		doc:id="636c6964-b412-4b2f-9d3e-396bc6f247b4">
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="b9edadb6-1ade-4fcf-860b-5aae74837e66"
+			message="******** get-vendors-saveSearch-subflow started *******"
+			source="implementation:get-vendors-saveSearch-subflow"
+			messageType='#[%dw 2.0&#10;output application/json&#10;---&#10;payload ++ {objectName: vars.objectName}]' />
+		<netsuite:search doc:name="Search"
+			doc:id="2bf98826-df5a-4f18-b4cc-e887595becdb"
+			config-ref="NetSuite_Config" key="${netsuite.savesearch.vendor.key}"
+			pageSize="${vendors.pagesize}" limit="${vendors.limit}" />
+		<module-logging:log-outbound
+			doc:name="Log outbound" doc:id="4a5a6304-0a56-41da-a377-ce3b72be7173"
+			message='#["Total number of Record received " ++ sizeOf(payload)]'
+			source="get-vendors-saveSearch-subflow" />
+		<ee:transform doc:name="Transform Message"
+			doc:id="d4d31ad1-5cb9-4ab8-9401-6fffe3ac2db5">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="14db3ded-5ba8-42fd-b662-90abc6c65d18"
+			source="implementation:get-vendors-saveSearch-subflow"
+			message="******** get-vendors-saveSearch-subflow Ended *******"
+			messageType='#["***********  Object Name is : " ++ vars.objectName ++ "  ***********"]' />
+	</sub-flow>
+	<sub-flow name="get-contacts-saveSearch-subflow"
+		doc:id="06c6f160-4ade-4ca8-b249-5f35619c6b81">
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="be0c00d8-5ce3-4da1-bdaa-59da797034df"
+			message="******** get-contacts-saveSearch-subflow started *******"
+			source="implementation:get-contacts-saveSearch-subflow"
+			messageType='#[%dw 2.0&#10;output application/json&#10;---&#10;payload ++ {objectName: vars.objectName}]' />
+		<netsuite:search doc:name="Search"
+			doc:id="f32c4e3b-d7ed-482e-a6be-eeca0f8a88c9"
+			config-ref="NetSuite_Config" key="${netsuite.savesearch.contact.key}"
+			pageSize="${contacts.pagesize}" limit="${contacts.limit}" />
+		<module-logging:log-outbound
+			doc:name="Log outbound" doc:id="7d06b1ce-7781-430d-8d70-493d92d1adcd"
+			message='#["Total number of Record received " ++ sizeOf(payload)]'
+			source="get-contacts-saveSearch-subflow" />
+		<ee:transform doc:name="Transform Message"
+			doc:id="9cd9e243-f4bd-4c75-9ae0-65cd656f8f58">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="e4b57df3-1cf3-45ef-b06a-045b0d0156b9"
+			source="implementation:get-contacts-saveSearch-subflow"
+			message="******** get-contacts-saveSearch-subflow Ended *******"
+			messageType='#["***********  Object Name is : " ++ vars.objectName ++ "  ***********"]' />
+	</sub-flow>
+	<sub-flow name="get-invoic-by-externalId-subflow"
+		doc:id="14bf9d75-d621-482b-8125-609b604511ff">
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="8e529442-7fd4-4ab2-8386-ac54b05dafb2"
+			message="#[&quot;Get invoice from netsuite with externalId &quot; ++ attributes.uriParams.'externalId' as String]"
+			messageType="*******************  get-invoic-by-externalId-subflow started  *************"
+			source="get-invoic-by-externalId-subflow" />
+		<ee:transform doc:name="Transform Message"
+			doc:id="75e9c8a2-1287-49a2-9fef-488648d52686">
+			<ee:message>
+				<ee:set-payload
+					resource="dataweave/getInvoiceByExternalIDPayload.dwl" />
+			</ee:message>
+		</ee:transform>
+		<netsuite:search doc:name="Search"
+			doc:id="6fbdafdc-bdcc-41fe-95d3-ad7394d4d999"
+			config-ref="NetSuite_Config" key="${netsuite.invoice.search.key}" />
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="c19f9b00-db20-43d9-a53a-e4cbc44803be" message='#[%dw 2.0&#10;output application/json&#10;---&#10;"Response received from the netsuite"]' source="get-invoic-by-externalId-subflow" />
+		<ee:transform doc:name="Transform Message" doc:id="5816265c-ee9c-4ffa-a76e-7b4d223c349d">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<choice doc:name="Chech payload" doc:id="4d70af82-8ead-4c7c-868b-162c6f516fa6" >
+			<when expression="#[isEmpty(payload)]">
+				<ee:transform doc:name="Transform Message" doc:id="861ef275-10ee-4902-8517-994a322d919a" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/errorResponse.dwl" />
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable resource="dataweave/statusCode.dwl" variableName="httpStatus" />
+					</ee:variables>
+				</ee:transform>
+			</when>
+		</choice>
+
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="eb907e47-d65b-42ad-acef-33c57bf38ece"
+			message='#["Invoice received from netsuite"]'
+			messageType="***************  get-invoic-by-externalId-subflow ended  **************"
+			source="get-invoic-by-externalId-subflow" />
+	</sub-flow>
+	<sub-flow name="update-vendor-subFlow" doc:id="414c1c6b-69c6-4a07-ae7f-0b9f1dc19e16" doc:description="Updates the respective field values of a list of vendors provided in the input.">
+		<module-logging:log-entry doc:name="Log entry" doc:id="81497c4a-1a5b-4e61-acde-a0ca2851acdd" message="********** update-vendor-dpsFlag-subFlow Started ************" source="update-vendor-dpsFlag-subFlow" />
+		<netsuite:update-list doc:name="Update list" doc:id="59789d72-3438-4249-b419-18aa1b44eefe" config-ref="NetSuite_Config" type="${netsuite.update.vendor.key}"/>
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="5b6ffb25-5295-474b-8e7a-107d82f786dc" message="#[%dw 2.0
+&#10;output application/json writeAttributes=true
+&#10;---
+&#10;payload]" source="update-vendor-dpsFlag-subFlow" />
+		<ee:transform doc:name="Transform Message" doc:id="decfca16-705d-4168-81ed-18f18b2d0a8d">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-exit doc:name="Log exit" doc:id="9fb46ece-540f-4fea-ad45-63288381a901" message="********** update-vendor-dpsFlag-subFlow Ended ************" source="update-vendor-dpsFlag-subFlow" />	
+	</sub-flow>
+	<sub-flow name="update-customer-subFlow" doc:id="9fc8cd40-f613-4edf-a84f-136a50c12f15" doc:description="Updates the respective field values of a list of customers provided in the input.">
+		<module-logging:log-entry doc:name="Log entry" doc:id="2ad91a0b-091c-4af4-a503-eda5a1b9cfef" message="********** update-customer-dpsFlag-subFlow Started ************" source="update-customer-dpsFlag-subFlow" />
+		<netsuite:update-list doc:name="Update list" doc:id="25ed17d6-682e-4238-8f6f-0fae5edca1e9" config-ref="NetSuite_Config" type="${netsuite.update.customer.key}"/>
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="e2e1d547-5228-4d4a-8954-ef13e11132c8" message="#[%dw 2.0
+&#10;output application/json writeAttributes=true
+&#10;---
+&#10;payload]" source="update-customer-dpsFlag-subFlow" />
+		<ee:transform doc:name="Transform Message" doc:id="a33c1e63-fcd9-4666-b1d5-d5ae9988db63">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-exit doc:name="Log exit" doc:id="84ef93c7-9e1e-4f08-ba24-09c07aa57c92" message="********** update-customer-dpsFlag-subFlow Ended ************" source="update-customer-dpsFlag-subFlow" />
+	</sub-flow>
+	<sub-flow name="create-invoice-subflow" doc:id="94480e12-11c3-496b-b4b4-e8cce0242c64" >
+		<module-logging:log-entry doc:name="Log entry" doc:id="b5bb814c-84b7-4eb8-9efc-1db5579c280b" message="********** Create Invoice Flow Started ************" source="implementation:create-invoice-subflow" />
+		<netsuite:add-list doc:name="Add list" doc:id="e9f2935c-a240-473f-925d-f44d0c7824eb" config-ref="NetSuite_Config" type="${netsuite.create.invoice.key}" />
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="d3968500-353c-437c-a206-31afce71ae5e" message="#[%dw 2.0&#10;output application/json writeAttributes=true&#10;---&#10;payload]" source="implementation:create-invoice-subflow" />
+		<ee:transform doc:name="Transform Message" doc:id="b45a3226-5af9-4f2d-a773-e2edbffa6169" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-exit doc:name="Log exit" doc:id="048c5ea5-0e3e-4d19-99e2-872081b350c7" message="********** Create  Invoice Flow Ended ************" source="implementation:create-invoice-subflow" />
+	</sub-flow>
+    <sub-flow name="create-notes-implemetation-subflow" doc:id="952a7ed2-6abb-4d86-a156-b29ea1627d3f" doc:description="create note in netsuite for error occured during invoice and charge creatation. It will help finance team to manually resolve.">
+		<module-logging:log-entry doc:name="Log entry" doc:id="70f641a3-d908-4e74-a8fe-c539f43c17ba" source="create-notes-implemetation-subflow" message="********** create-notes-implemetation-subflow started ************" messageType="#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;    date : payload.addList.record.customFieldList.DateCustomFieldRef__custrecord_note_date__8414.value,&#10;    note : payload.addList.record.customFieldList.StringCustomFieldRef__custrecord_note__8415.value, &#10;    noteType : payload.addList.record.customFieldList.StringCustomFieldRef__custrecord_note_type__8416.value   &#10;}]"/>
+		<netsuite:add-list doc:name="Add list" doc:id="09083bf4-aa2a-4dfe-a8a7-282dac0fa38f" config-ref="NetSuite_Config" type="${netsuite.create.note.key}"/>
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="884cd542-b01c-477a-8398-b1f80f89b475" source="create-notes-implemetation-subflow" message="#[%dw 2.0&#10;output application/json&#10;---&#10;payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="48123281-fc2c-4f97-88be-7d01b4c8fbc3">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-exit doc:name="Log exit" doc:id="e7c0a304-6238-46da-b3c8-191ccebe45fc" source="create-notes-implemetation-subflow" messageType="********** create-notes-implemetation-subflow ended ************" message="#[%dw 2.0&#10;output application/json&#10;---&#10;payload]"/>
+	</sub-flow>
+	<sub-flow name="get-time-based-invoice-saveSearch-subFlow" doc:id="805a11da-f3bf-492f-9f32-e0caafaafaf4" doc:description="Flow to accept soap request for saved search for invoice object on Netsuite, and publish the result on the configured mq.">
+	<module-logging:log-entry
+			doc:name="Log entry" doc:id="78dfecc2-5a18-4e49-9c45-1b096c41c606"
+			message="******** get-time-based-invoice-subFlow started *******"
+			source="get-time-based-invoice-subFlow"
+			messageType='#[%dw 2.0&#10;output application/json&#10;---&#10;payload ++ {objectName: vars.objectName}]' />
+		<netsuite:search doc:name="Search"
+			doc:id="58fdf057-39ea-4355-8add-e920a7a9ef60"
+			config-ref="NetSuite_Config" key="${netsuite.savesearch.invoice.key}"
+			pageSize="${invoices.pagesize}" limit="${invoices.limit}" />
+		<module-logging:log-outbound
+			doc:name="Log outbound" doc:id="76515709-1108-45b1-81fc-63d75206ab0c"
+			message='#["Total number of Record received " ++ sizeOf(payload)]'
+			source="get-time-based-invoice-subFlow" />
+		<choice doc:name="Choice" doc:id="707a6022-cb25-4bc7-94b8-60425c7cc926" >
+			<when expression="#[sizeOf(payload) != 0]">
+				<ee:transform doc:name="Transform Message" doc:id="07db0959-a9a4-41be-98e1-89a3913c1200">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+import * from dw::core::Arrays
+output application/json writeAttributes=true
+---
+payload.payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+				<ee:transform doc:name="Transform Message" doc:id="b43425d6-d0e4-441e-b004-6b46d3df6f6d">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="payloadArray"><![CDATA[%dw 2.0
+import * from dw::core::Arrays
+output application/json writeAttributes=true
+---
+payload divideBy p('invoices.divideBy')]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+				<foreach doc:name="For Each" doc:id="4457930c-e49c-4200-a450-e933a3aac2bf" collection="#[vars.payloadArray]">
+			<module-logging:log-outbound doc:name="Log outbound" doc:id="badc8bd3-ac0c-4ddd-8d5a-cc57cf432e8e" message='#[output text/plain &#10;---&#10;"Number of records in iteration " ++ vars.counter ++ ": " ++ sizeOf(payload)]' source="get-time-based-invoice-subFlow" />
+			<anypoint-mq:publish doc:name="Publish" doc:id="d4a6ce56-17b8-4ac0-87a2-87d1230c45b8" config-ref="Anypoint_MQ_Config" destination="${mq.netsuite.invoice.queue}" outputMimeType="application/json" />
+		</foreach>
+				<ee:transform doc:name="Transform Message" doc:id="acfa9bf9-b8ad-4219-aa9d-2cc28c0b479a">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "Invoices successfully published to queue",
+    "externalIds" : payload.searchRow.basic.externalId.searchValue."@externalId",
+    "objectName" : vars.objectName
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise >
+				<set-payload value='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;    "message" : "Result count is 0 for the current time period",&#10;    "objectName" : vars.objectName&#10;}]' doc:name="Set Payload" doc:id="42fb98c1-dc15-4375-b25b-e152280a84d3" />
+			</otherwise>
+		</choice>
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="f0f5ff5a-8137-43b2-80a7-32a4dae88468"
+			source="get-time-based-invoice-subFlow"
+			message="******** get-time-based-invoice-subFlow Ended *******"
+			messageType='#[payload]' />
+	
+	</sub-flow>
+	<sub-flow name="get-contact-by-internal-subflow" doc:id="3803c996-39d7-4250-90a5-5903d8c35df9" >
+		<module-logging:log-entry doc:name="Log entry" doc:id="824f830c-ba60-46b4-9760-0cde904c8720" message="#[&quot;Get contact with internalId &quot; ++ attributes.uriParams.'internalId' as String]" messageType="*******************  get-contact-by-internal-subflow started  *************" source="get-contact-by-internal-subflow" />
+		<ee:transform doc:name="Transform Message" doc:id="04eee2ff-e4fa-4995-bc04-157088244dd2" >
+			<ee:message >
+				<ee:set-payload resource="dataweave/get-contact-by-internalid-soap-req.dwl" />
+			</ee:message>
+		</ee:transform>
+		<netsuite:search doc:name="Search" doc:id="cfbeca7e-7a70-4f48-baa0-5d1bd9412265" config-ref="NetSuite_Config" key="${netsuite.contact.search.key}" />
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="4356d0d9-bd3a-4da4-8aaa-256b37392162" message='#[%dw 2.0&#10;output application/json&#10;---&#10;"Response received from the netsuite"]' source="get-contact-by-internal-subflow" />
+		<ee:transform doc:name="xml to json" doc:id="69374c2c-2c16-40ff-8f26-9f8d546c280b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<choice doc:name="Chech payload" doc:id="5be7798c-3eb7-4fb9-b2d1-bb4e44f02090" >
+			<when expression="#[isEmpty(payload)]" >
+				<ee:transform doc:name="Transform Message" doc:id="4dda7f1b-e7f2-448f-a6d2-0c3a2fcd6378" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/errorResponse.dwl" />
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable resource="dataweave/statusCode.dwl" variableName="httpStatus" />
+					</ee:variables>
+				</ee:transform>
+			</when>
+		</choice>
+		<module-logging:log-exit doc:name="Log exit" doc:id="3b48c4a0-e04b-40e5-aac3-6aeb9d2fa329" message='#["Contact received from netsuite"]' messageType="***************  get-contact-by-internal-subflow ended  **************" source="get-contact-by-internal-subflow" />
+	</sub-flow>
+	<sub-flow name="saveSearch-generic-subflow" doc:id="f0105400-446b-4ba7-a064-34960365ae60" >
+		<module-logging:log-entry doc:name="Log entry" doc:id="b723b027-bca6-4188-9a53-33539526811e" message="******** saveSearch-generic-subflow Started *******" messageType="#[%dw 2.0&#10;output application/json&#10;---&#10;payload]" source="implementation:saveSearch-generic-subflow" />
+		<netsuite:search doc:name="Search" doc:id="5ccc2093-436c-4cb8-9b4e-716a8b8909c3" config-ref="NetSuite_Config" key="#[vars.searchKey]" pageSize="#[vars.pageSize]" limit="#[vars.limit]" />
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="19b460ed-65e3-4d13-ad33-41142379c300" message='#["Total number of Record received " ++ sizeOf(payload)]' source="implementation:saveSearch-generic-subflow" messageType='#["***********  SearchKey is : " ++ vars.searchKey ++ "  ***********"]'/>
+		<ee:transform doc:name="Transform Message" doc:id="6608fea8-a0a4-490d-b8b7-907ed08ff11f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-exit doc:name="Log exit" doc:id="a8008ff3-1f25-4cdd-9456-c54dd470f925" message="******** saveSearch-generic-subflow Ended *******" messageType='#["***********  SearchKey is : " ++ vars.searchKey ++ "  ***********"]' source="implementation:saveSearch-generic-subflow" />
+	</sub-flow>
+	<sub-flow name="addFile-subflow" doc:id="9ea9e41a-aeb4-4b4c-9f75-99d24e836668" >
+		<module-logging:log-entry doc:name="Log entry" doc:id="da4c281e-4414-49f3-91d3-b9d12c932f70" message="**** addFile-subflow Started ****" source="implementation:addFile-subflow" />
+		<netsuite:add doc:name="Add" doc:id="1f1d3aef-803d-4b15-82cd-179ee3e39945" config-ref="NetSuite_Config" type="${netsuite.addfile}"/>
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="17060221-e3cf-4401-ba62-7eb8d4e93b16" message="#[output application/json --- payload]" source="implementation:addFile-subflow" />
+		<module-logging:log-exit doc:name="Log exit" doc:id="d8444418-ec9f-4d50-9033-f5338c4a3523" message="**** addFile-subflow Ended ****" source="implementation:addFile-subflow" />
+	</sub-flow>
+	<sub-flow name="update-generic-subflow" doc:id="c6d7ae5d-95be-46d1-b116-8b9251b50447" >
+		<module-logging:log-entry doc:name="Log entry" doc:id="d9757ef5-381b-4ea4-a5c3-021a11bd4485" message="********** update-generic-subflow Started ************" source="implementation:update-generic-subflow" />
+		<netsuite:update-list doc:name="Update list" doc:id="962c9547-9fe2-49ce-bce8-9cc8b15c63b9" config-ref="NetSuite_Config" type="#[vars.recordType]" />
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="a6a3c6d5-cf49-4941-9e12-8ae58d7dd6a4" message="#[%dw 2.0&#10;output application/json writeAttributes=true&#10;---&#10;payload]" source="implementation:update-generic-subflow" />
+		<ee:transform doc:name="Transform Message" doc:id="e36e3044-18ac-429c-99eb-03b65de77d09" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json writeAttributes=true
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-exit doc:name="Log exit" doc:id="9ffc1942-9911-47a5-87ce-d5f3e41b6484" message="********** update-generic-subflow Ended ************" source="implementation:update-generic-subflow" />
+	</sub-flow>
+</mule>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging" xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<flow name="reconcile-report-jpm-netsuite-Flow" doc:id="c1d459d6-479f-423f-bd38-0f84d959c918" >
+		<vm:listener queueName="${vm.queue.namea.reconcile}" doc:name="Listener Reconcile" doc:id="cb2be60c-7bed-4fe2-817f-6218ff2f6d75" config-ref="VM_Config" numberOfConsumers="${vm.consumernumber}" timeout="${vm.listener.timeout}" timeoutUnit="MINUTES">
+			<redelivery-policy maxRedeliveryCount="${vm.max.redeliverycount}" />
+		</vm:listener>
+		<module-logging:log-entry doc:name="Log entry" doc:id="b9cdc6a4-84cc-4fbf-aa8f-486c264719fc" message="***** reconcile-report-jpm-netsuite-Flow Started ******" source="reconcile-report-jpm-netsuite:reconcile-report-jpm-netsuite-Flow"/>
+		<os:retrieve doc:name="Retrieve fileName" doc:id="44305129-3da4-42be-a585-e8b67b3e75cf" key="fileName" objectStore="Object_store" target="fileName">
+			<os:default-value><![CDATA[#[""]]]></os:default-value>
+		</os:retrieve>
+		<choice doc:name="Choice" doc:id="70ffb6e7-47f0-4cd5-8a73-a90f4f3efc1f" >
+			<when expression="#[vars.fileName contains (p('sftp.file.contains'))]">
+				<module-logging:log-other doc:name="Log other" doc:id="c9a4eea4-2e6a-433c-b286-538632463abe" source="reconcile-report-jpm-netsuite:reconcile-report-jpm-netsuite-Flow" message='#["Started processing file " ++ vars.fileName]' logType="Log Other"/>
+				<ee:transform doc:name="Transform Message" doc:id="f184b6c7-a92f-414a-ad2c-0c5e9922c320">
+					<ee:message>
+						<ee:set-payload resource="dataweave/namea/initial-reconcile-mapping.dwl" />
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="finalReq"><![CDATA[%dw 2.0
+output application/java
+---
+[]]]></ee:set-variable>
+						<ee:set-variable variableName="tempReq"><![CDATA[%dw 2.0
+output application/java
+---
+[]]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<foreach doc:name="For Each" doc:id="b23e1f16-66d6-46b3-9af7-df1a5b706cf0" collection="#[payload]">
+					<ee:transform doc:name="Reconcile Mapping" doc:id="7d36dfb3-539b-4859-a641-098955caa866" >
+						<ee:message />
+						<ee:variables >
+							<ee:set-variable resource="dataweave/namea/reconcile-mapping.dwl" variableName="tempReq" />
+						</ee:variables>
+					</ee:transform>
+					<ee:transform doc:name="Transform Message" doc:id="a13efe09-80c5-4c7d-a2eb-7464c8740a76" >
+						<ee:message />
+						<ee:variables >
+							<ee:set-variable variableName="finalReq" ><![CDATA[%dw 2.0
+output application/json
+---
+vars.finalReq + vars.tempReq
+]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+				</foreach>
+				<ee:transform doc:name="Transform Message" doc:id="9769b4d1-8f37-4acb-93b8-e2985342f26a">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.finalReq flatMap ((item, index) -> item) filter  ((item, index) -> item != null)]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				<choice doc:name="Choice" doc:id="0f11a572-8c72-4d8c-9e39-f8d0d11c2b4e">
+					<when expression="#[!isEmpty(payload)]">
+						<foreach doc:name="For Each" doc:id="ac4dcd20-6731-4fa2-ad50-e86c6de30cbf" collection="#[payload]" batchSize="${foreach.batch.size}">
+							<try doc:name="Try" doc:id="f3d497a5-ea04-4cb8-ac68-8847ae9da424">
+						<ee:transform doc:name="Transform Message" doc:id="2c7c9b34-2423-4593-beb7-9379fe220c4b">
+							<ee:message>
+								<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+						<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="26ee0f6c-2d17-4d01-b7c0-bbabe5a3be17" millisBetweenRetries="${https.retry.frequency}">
+							<http:request method="POST" doc:name="Request Netsuite" doc:id="17ccf582-6e12-4539-8879-bfa4934e7b20" config-ref="Http_NS__Request" path="/reconcile/report" responseTimeout="${http.response.timeout.netsuite}" />
+						</until-successful>
+						<error-handler>
+									<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="e68e92d6-c71a-44de-a86e-c10e57082601">
+										<module-logging:log-error doc:name="Log error" doc:id="1b40dd1d-d391-48ef-9110-246a5e892968" message='#["Skipping ForEach block since error while processing BAI ForEach block number: " ++ vars.counter]' source="reconcile-report-jpm-netsuite:reconcile-report-jpm-netsuite-Flow" />
+									</on-error-continue>
+								</error-handler>
+							</try>
+				</foreach>
+					</when>
+					<otherwise >
+						<module-logging:log-other doc:name="Log other" doc:id="531953cb-a17b-4910-a64a-59ed62f25cc0" message='#["*********** No Transaction detail found in file " ++ vars.fileName ++ " ************"]' logType="Log Other" source="reconcile-report-jpm-netsuite:reconcile-report-jpm-netsuite-Flow" />
+					</otherwise>
+				</choice>
+			</when>
+			<otherwise >
+				<module-logging:log-other doc:name="Log other" doc:id="0848a618-77df-4305-a51d-d3aad8843a0c" message="******Other File*******" source="reconcile-report-jpm-netsuite:reconcile-report-jpm-netsuite-Flow"/>
+			</otherwise>
+		</choice>
+		<os:remove doc:name="Remove fileName key from OS" doc:id="42ca6cc2-d577-4fca-bcc3-56b8047db1f7" key="fileName" objectStore="Object_store"/>
+		<module-logging:log-exit doc:name="Log exit" doc:id="480927f1-3751-4118-9d84-d4348b42efd8" message="***** reconcile-report-jpm-netsuite-Flow Ended ******" source="reconcile-report-jpm-netsuite:reconcile-report-jpm-netsuite-Flow"/>
+	</flow>
+</mule>

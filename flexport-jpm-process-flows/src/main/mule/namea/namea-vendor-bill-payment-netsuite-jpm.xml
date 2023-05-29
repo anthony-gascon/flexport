@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+	<sub-flow name="check-wire-mapping-subflow" doc:id="b64f34d8-9336-4f33-94b2-efbe7668d953" >
+		<choice doc:name="Choice" doc:id="f977991a-abcb-4d11-a6d4-ea91a06c0b2b">
+			<when expression="#[isEmpty(payload) == false]">
+				<set-variable value='#[uuid() replace  "-" with ""]' doc:name="uuid" doc:id="95919a81-9e43-4540-bfc5-d4b8fc0f53c4" variableName="uuid" />
+				<flow-ref doc:name="netsuite-mapping-subflow" doc:id="638889ad-1252-4001-8a9c-403fb9fc18e2" name="netsuite-mapping-subflow" />
+				<flow-ref doc:name="data-filter-subflow" doc:id="8932256a-fe5f-4a66-9d31-b9a43cf0e964" name="data-filter-subflow" />
+				<flow-ref doc:name="xml-preparation-subflow" doc:id="2ea5ab02-27c1-4f00-926a-992d1e4f7f6b" name="xml-preparation-subflow" />
+				<scatter-gather doc:name="Scatter-Gather" doc:id="20127d17-5127-408c-8ae7-fe7688f3fa55" >
+					<route >
+						<set-variable value="#[output application/json 
+&#10;--- 
+&#10;{ 
+&#10;	internalId  :payload.Document.CstmrCdtTrfInitn.*PmtInf..InstrId,
+&#10;	msgId : payload.Document.CstmrCdtTrfInitn.GrpHdr.MsgId
+&#10;}]" doc:name="netsuite update" doc:id="036158fa-06a4-4271-aa3e-4c25eaeaca5f" variableName="payloadCopy" />
+						<flow-ref doc:name="pgp-encryption-sftp-upload-subflow" doc:id="e84e7c35-5b90-4ac5-a96d-ae79c977512f" name="pgp-encryption-sftp-upload-subflow" />
+						<flow-ref doc:name="netsuite-update-subflow" doc:id="1e1de048-3cc8-4e4a-a0c7-77ed8c3f76e8" name="netsuite-update-subflow" />
+						<module-logging:log-exit doc:name="netsuite updation done" doc:id="f8091d72-a28d-4a5c-928d-f398cb169bdb" message="netsuite updation done" source="create-vendor-bill-payment-netsuite-jpm : check-wire-mapping-subflow" />
+					</route>
+					<route >
+						<try doc:name="Try" doc:id="d4cbd21a-2a89-4add-8bb8-f88d8c9ab4df" >
+							<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="68186e0e-2d00-4f29-a166-3a5ff51638cf" millisBetweenRetries="${https.retry.frequency}">
+							<http:request method="POST" doc:name="netsuite file upload" doc:id="2249b408-c723-492a-961c-5e4c5b29d9e3" config-ref="Http_NS__Request" path="${https.addfile.path.netsuite}" responseTimeout="${http.response.timeout.netsuite}">
+							<http:query-params><![CDATA[#[{
+	folderId : p('ns.folderId'),
+	fileName : p('sftp.filename') replace  "/" with "" ++  vars.uuid
+}]]]></http:query-params>
+						</http:request>
+						</until-successful>
+							<error-handler >
+								<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="dc6eee41-a4e6-4517-91be-e284a94e9ace" >
+									<module-logging:log-error doc:name="Log error" doc:id="03508af8-1e57-4438-ad7d-960536bef83c" messageType="-----------Netsuite Add File Error ------------------" source="update-vendor-bill-payment-status-netsuite-jpm-listener-flow" message="#[error.description]"/>
+								</on-error-continue>
+							</error-handler>
+						</try>
+						<module-logging:log-exit doc:name="netsuite file upload" doc:id="2a5e0a70-e862-434f-a2aa-f57917b7b910" source="create-vendor-bill-payment-netsuite-jpm : check-wire-mapping-subflow" message="file upload done in netsuite."/>
+					</route>
+				</scatter-gather>
+				<try doc:name="Try" doc:id="19782147-e154-491b-ac3c-d41e785e1af9" >
+					<vm:consume doc:name="Consume ACK or PSR" doc:id="2913127b-1e27-4158-95da-21ce1b0e55ed" config-ref="VM_Config" queueName="${vm.queue.namea.ack.psr}" timeoutUnit="MINUTES" timeout="${vm.listener.timeout}" />
+					<error-handler >
+						<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="f988be06-29d4-46eb-9967-c729f15cdc0c" >
+							<module-logging:log-error doc:name="Log error" doc:id="3d745f34-725d-4d5f-9a6f-f6fcbafd3010" message="Error While Consuming payload on VM queue. Please use failure-recover-psr-flow/failure-recover-ack-flow for updating records as per PSR or ACK file received accordingly" messageType="*******************  VM Consumer ACK/PSR ERROR  *******************" source="create-vendor-bill-payment-netsuite-jpm : check-wire-mapping-subflow"/>
+							<ee:transform doc:name="Transform Message" doc:id="2d2af615-c9ce-4d17-8baf-8beb7e433490">
+										<ee:message>
+											<ee:set-payload resource="dataweave/namea/email-vm-queue-failure.dwl" />
+										</ee:message>
+									</ee:transform>
+							<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="400a6fb7-167d-417b-8446-c1e6950efc6b" millisBetweenRetries="${https.retry.frequency}">
+										<http:request method="POST" doc:name="Email Request" doc:id="39235345-3eb4-4fec-9e4b-d9fb1152504b" config-ref="PGP_Encrpt_Request" path="${https.email.path.pgp}" outputMimeType="application/csv" />
+									</until-successful>
+						</on-error-propagate>
+					</error-handler>
+				</try>
+				<flow-ref doc:name="update-vendor-bill-payment-status-subflow" doc:id="a5f7616a-b874-46e4-b445-3bd358409639" name="update-vendor-bill-payment-status-subflow"/>
+			</when>
+			<otherwise>
+				<module-logging:log-outbound doc:name="Log outbound" doc:id="58658b15-f82f-46f1-b99b-e65a66c54b59" source="create-vendor-bill-payment-netsuite-jpm : check-wire-mapping-subflow" message="There is no data in SavedSearch" logLevel="INFO"/>
+			</otherwise>
+		</choice>
+	</sub-flow>
+	<sub-flow name="data-filter-subflow" doc:id="e6151c5e-59ef-4265-8429-503ee835b9d1" >
+		<scatter-gather doc:name="WIRE &amp; ACH " doc:id="f4f262ff-dc9f-46e5-a1d4-260cddd9bb44">
+			<route>
+				<ee:transform doc:name="remove check" doc:id="eade8817-9aa1-41cb-bedd-11b19716557d">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+(payload filter $.paidTransactionJoin == null)]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="filter ACH" doc:id="7f780099-6a50-4efb-9185-30f0bad6c42b">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+(payload filter (($..custentity_payment_method.internalId contains  "4")
+	         or ($..custentity_payment_method.internalId contains  "10") ) ) filter ($..basic != null and $..vendorJoin != null and $..vendorLineJoin != null and $..customSearchJoin != null and (isEmpty($."customSearchJoin"."customFieldList") != true ))]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<flow-ref doc:name="ach-subflow" doc:id="5778e7e1-94b9-4583-a6e6-7c3636dbe3a3" name="ach-subflow" />
+				<ee:transform doc:name="ach" doc:id="2f9fa74d-1e69-4b43-9ac1-c8d427f38f91">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[payload]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route>
+				<ee:transform doc:name="remove check" doc:id="d36d92a1-6bb8-4fb4-ae7d-43c080b651be" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+(payload filter $.paidTransactionJoin == null)]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="filter WIRE" doc:id="0c7a64a2-1f3e-4364-b6a8-335137f6459a">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+(payload filter (($..custentity_payment_method.internalId contains  "7") 
+	         or ($..custentity_payment_method.internalId contains  "8") 
+	         or ($..custentity_payment_method.internalId contains  "3")
+)) filter ($..basic != null and $..vendorJoin != null and $..vendorLineJoin != null and $..customSearchJoin != null and (isEmpty($."customSearchJoin"."customFieldList") != true ))]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<flow-ref doc:name="wire-subflow" doc:id="b72712ca-c04c-4a27-b8ff-6667cf6c6eb4" name="wire-subflow" />
+				<ee:transform doc:name="wire" doc:id="06a62317-5da4-4190-8a89-cf6153865f98">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload..payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="filter CHK" doc:id="4e5fec2b-a48d-4896-ad63-328fc041dace" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+(payload filter $.paidTransactionJoin != null)]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<flow-ref doc:name="check-filter-subflow" doc:id="9dd94a4a-6488-43b1-bdc3-8148b2e6b2c0" name="check-filter-subflow"/>
+				<ee:transform doc:name="chk" doc:id="8e44ddd3-107a-4e82-95aa-6de3a45bf73a" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[payload]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</route>
+		</scatter-gather>
+	</sub-flow>
+	<sub-flow name="netsuite-mapping-subflow" doc:id="8830224d-44f2-4984-8f82-91342f41a65e" >
+		<ee:transform doc:name="mapping NS fields" doc:id="927ff740-bd76-4458-8b41-0a36b937bfcf">
+			<ee:message>
+				<ee:set-payload resource="dataweave/namea/ns-field-mapping.dwl" />
+			
+</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="currencies mapping" doc:id="6f302122-da2c-4434-96f7-19b71db06cc0">
+			<ee:message>
+				<ee:set-payload resource="dataweave/namea/currency-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="xml-preparation-subflow" doc:id="f17524fa-d810-452c-bdf0-5d41e57f75b7" >
+		<ee:transform doc:name="preparing XML structure" doc:id="a078ec58-862e-4194-ac89-f98c65f644d0">
+			<ee:message>
+				<ee:set-payload resource="dataweave/namea/prepare-xml-structure-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="final XML" doc:id="88ce9a33-9352-4c45-9852-277e22dce69f">
+			<ee:message>
+				<ee:set-payload resource="dataweave/namea/final-xml-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+		<module-logging:log-outbound doc:name="XML mapping finished" doc:id="ed7f88b9-40ad-4450-b16f-d4ee795ace56" message="XML mapping finished" logLevel="DEBUG" source="create-vendor-bill-payment-netsuite-jpm : xml-preparation-subflow"/>
+	</sub-flow>
+	
+	
+	<flow name="vendor-bill-payment-netsuite-jpm-flow" doc:id="ac185da0-ee31-4499-9c06-5457a6803df3" maxConcurrency="${max.concurrency}">
+		<scheduler doc:name="NS-JPM Schedular" doc:id="0cc99284-c445-40aa-900c-784d0df2a282" >
+			<scheduling-strategy >
+				<cron expression="${cron.expression.namea}"/>
+			</scheduling-strategy>
+		</scheduler>
+		<module-logging:log-entry doc:name="Searching for save search item" doc:id="2f365ca8-5347-4bf5-a327-323ef17f9e3a" message="Searching for save search item" source="create-vendor-bill-payment-netsuite-jpm : create-vendor-bill-payment-netsuite-jpm-flow"/>
+		<async doc:name="Async" doc:id="4cad8eaa-15f0-41f3-aa9d-fa27f6af94b2" >
+			<scatter-gather doc:name="Scatter-Gather" doc:id="28177217-355f-4433-8cfe-b51b8928d567">
+			<route>
+				<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="896777c0-203b-4187-ae3f-85037afd5ce1" millisBetweenRetries="${https.retry.frequency}">
+					<http:request method="GET" doc:name="ns-savesearch-check-request" doc:id="88fba3fe-89fb-44e9-b19f-3267ff5003b0" config-ref="Http_NS__Request" path="${https.savesearch.path.netsuite}" responseTimeout="${http.response.timeout.netsuite}">
+					<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"searchId" : p('ns.savedsearchIdCheck')
+}]]]></http:uri-params>
+				</http:request>
+				</until-successful>
+			</route>
+			<route>
+				<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="890a4bbd-9563-4f8e-9326-f9b290ea90b1" millisBetweenRetries="${https.retry.frequency}">
+					<http:request method="GET" doc:name="ns-savesearch-request" doc:id="891977c9-843c-407c-b5b7-4971941141e8" config-ref="Http_NS__Request" path="${https.savesearch.path.netsuite}" responseTimeout="${http.response.timeout.netsuite}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"searchId" : p('ns.savedsearchId')
+}]]]></http:uri-params>
+		</http:request>
+				</until-successful>
+			</route>
+		</scatter-gather>
+			<set-payload value="#[flatten(payload..payload)]" doc:name="payload" doc:id="442077f3-a9d9-47f3-b622-06fc2ca73172" />
+			<flow-ref doc:name="check-wire-mapping-choice-subflow" doc:id="7b373a61-bb11-4467-8110-0ec1710690d9" name="check-wire-mapping-subflow" />
+		</async>
+		<module-logging:log-exit doc:name="Log exit" doc:id="f36a76a1-930e-423f-ba35-f7074681f456" message="Please keep checking logs for Complete processing. " source="create-vendor-bill-payment-netsuite-jpm : create-vendor-bill-payment-netsuite-jpm-flow"/>
+	
+</flow>
+	<sub-flow name="check-filter-subflow" doc:id="0b9d9808-b72f-4f3b-ab47-4c837a5a9ed1">
+		<ee:transform doc:name="CHK" doc:id="72981046-8cd7-4d0c-aea6-9d5b6a23530a">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload groupBy $.basic.tranDate]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="wire-subflow" doc:id="01740b8d-a38a-43f3-beff-9689faed9ec7" >
+		<scatter-gather doc:name="Scatter-Gather" doc:id="ae3e839b-75cf-4439-b31c-639f3e70c095" >
+			<route >
+				<ee:transform doc:name="FED" doc:id="6b0ddc01-ecd1-420b-9f6d-29cd07db0fc2" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/namea/fed-groupby-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="BOOK" doc:id="6f914ff7-9f98-4929-a3bc-e6f4f2abb0e2" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/namea/book-groupby-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="AUTOFX WIRE" doc:id="4d70aec9-4f55-4b6b-9e1e-7bb55c2a697b" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/namea/autofx-groupby-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route >
+				<ee:transform doc:name="CHIP" doc:id="22a31333-2774-4e95-8406-1be7a885d93c" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/namea/chip-groupby-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</route>
+		</scatter-gather>
+	</sub-flow>
+	<sub-flow name="ach-subflow" doc:id="e658415b-4ded-4cad-9db9-696a5bce5924" >
+		<ee:transform doc:name="ACH" doc:id="d07ecd88-c1c1-4df2-834f-97178be12da6">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+
+( payload  
+	groupBy ((tran, index) -> tran.basic.tranDate as DateTime as String { format: "dd-MM-yyyy" })
+)]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+	</sub-flow>
+</mule>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging" xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="listfile-subflow" doc:id="03fb54dd-fd3c-4fc4-8a57-482a79eea9cd" >
+		<ee:transform doc:name="time variable" doc:id="7cd706e0-a9fb-4cf9-8e32-2543132d1f55">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="sincetime"><![CDATA[%dw 2.0
+output application/json
+---
+((now() ) as DateTime as String {format: "YYYY-MM-dd"} ) ++ "T00:00:00+00:00"
+]]></ee:set-variable>
+				<ee:set-variable variableName="untiltime"><![CDATA[%dw 2.0
+output application/json
+---
+( (now()) as DateTime as String {format: "yyyy-MM-dd'T'HH:mm:ss'+'00:00"} )]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="71434c32-2647-4586-a6f9-a96dcf97da41" millisBetweenRetries="${https.retry.frequency}">
+			<http:request method="POST" doc:name="Request to list file" doc:id="54db64a7-009a-4229-8e08-a093ccbe747e" config-ref="HTTP_Request_configuration" path="${jpm.sftp.list.path}">
+			<http:body><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+		"sinceTime" : vars.sincetime,
+		"untilTime" : vars.untiltime,
+		"directoryPath" : p('jpm.directory.list.path')
+		}]]]></http:body>
+		</http:request>
+		</until-successful>
+	</sub-flow>
+	<flow name="failure-recover-psr-flow" doc:id="1aa64686-8053-42c2-a08e-f4af87d56317">
+		<scheduler doc:name="Failure-PSR-Recovery" doc:id="b078448f-c5fc-4db5-afee-79c8dbb9be98" >
+			<scheduling-strategy >
+				<cron expression="${schedular.psr.cron}" />
+			</scheduling-strategy>
+		</scheduler>
+		<module-logging:log-entry doc:name="Log entry" doc:id="89e323ff-a5e2-4f25-822c-1b284375da4b" message="*********Failure-PSR-Recover-Flow Started****" messageType="*********Read Operation Started*******" source="failure-recover-flow" />
+		<flow-ref doc:name="listfile-subflow" doc:id="b59706ca-f8e9-4d0e-ba0a-a5e223ce122a" name="listfile-subflow" />
+		<choice doc:name="Choice" doc:id="606847fa-7e07-45f7-ac58-04cbcbec3235" >
+			<when expression="#[!isEmpty(payload)]">
+				<ee:transform doc:name="filter PSR file" doc:id="2996a2ae-785f-4f3b-803d-e755877dc5c2">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="fileName"><![CDATA[%dw 2.0
+output application/json
+---
+(((payload filter ((item, index) -> item.attributes.name contains "PSOURCE.MRCNFRM.NAMEA")) orderBy $.attributes.timestamp)[-1 to 0]).*attributes.name[0]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+				<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="cf339693-c024-4ff2-b01e-9d6b10c7b08b" millisBetweenRetries="${https.retry.frequency}">
+					<http:request method="POST" doc:name="Request to read file" doc:id="d4f681ad-84ea-4d55-b49a-a2145f360d91" config-ref="HTTP_Request_configuration" path="${jpm.sftp.read.path}">
+					<http:body><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+			"directoryPath" : p('jpm.directory.list.path')
+}]]]></http:body>
+					<http:uri-params><![CDATA[#[{
+	"fileName": vars.fileName
+}]]]></http:uri-params>
+				</http:request>
+				</until-successful>
+				<set-payload value="#[payload]" doc:name="set mime type application/xml" doc:id="a2fa3475-39f5-48ab-afae-0fa5039a27fe" mimeType="application/xml" />
+				<flow-ref doc:name="psr-subflow" doc:id="e0d21e2f-772b-4f9e-a7b2-2e0d83a1b413" name="psr-subflow" />
+				<try doc:name="Try" doc:id="d9662260-8956-40fe-a554-8c91b41331d2">
+			<os:clear doc:name="Clear fileName" doc:id="532974f4-d3bd-4a34-adaf-58baece21a29" objectStore="Object_store" />
+					<vm:consume queueName="${vm.queue.namea.ack.psr}" doc:name="Deque" doc:id="8673934c-c6d1-4961-8d23-e2ee67e0796b" config-ref="VM_Config" timeout="${vm.listener.deque.timeout}" />
+					<error-handler>
+				<on-error-continue enableNotifications="true" logException="false" doc:name="On Error Continue" doc:id="1b78193b-f5d8-41aa-8223-c6e7a14cd5bd">
+					<module-logging:log-error doc:name="Log error" doc:id="ab2fe0bd-213e-44dd-95c8-ee8bc9474a17" message="No Message Available on Queue" source="failure-recover-psr-flow" />
+				</on-error-continue>
+			</error-handler>
+		</try>
+				<module-logging:log-exit doc:name="Log exit" doc:id="3471119f-8548-49fa-b163-14284610c965" message='#["Netsuite Update, VM deque and Object Clear Completed"]' source="failure-recover-psr-flow" messageType='#["PSR file - " ++ vars.fileName ++ " processed Successfully"]'/>
+			</when>
+			<otherwise >
+				<module-logging:log-outbound doc:name="Log outbound" doc:id="15f925c4-0341-45ca-a621-c7aa570dbb3f" message="No file availble for given time range" source="failure-recover-psr-flow"/>
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="failure-recover-ack-flow" doc:id="1364c8cb-4c38-4058-a1f5-8c4e5a42c14a">
+		<scheduler doc:name="Failure-ACK-Recovery" doc:id="548673ee-e0d3-424e-838a-9c2e25df8b94" >
+			<scheduling-strategy >
+				<cron expression="${schedular.ack.cron}" />
+			
+</scheduling-strategy>
+		</scheduler>
+		<module-logging:log-entry doc:name="Log entry" doc:id="110916ff-4c13-441e-85e9-086030ef3825" message="*********Failure-ACK-Recover-Flow Started****" messageType="*********Read Operation Started*******" source="failure-recover-ack-flow" />
+		<flow-ref doc:name="listfile-subflow" doc:id="b5f23f24-0387-489b-a180-176153bbd679" name="listfile-subflow" />
+		<choice doc:name="Choice" doc:id="380cb072-0c06-4fb8-b6c6-061be784a4cb" >
+			<when expression="#[!isEmpty(payload)]">
+				<ee:transform doc:name="filter ACK file" doc:id="992c777d-c0b2-4eec-a7ec-366a1871fe8d">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="fileName"><![CDATA[%dw 2.0
+output application/json
+---
+(((payload filter ((item, index) -> ((item.attributes.name contains "ACK") and (item.attributes.name contains "NAMEA") ) )) orderBy $.attributes.timestamp)[-1 to 0]).*attributes.name[0]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="54cd8498-56f3-41f2-9b0b-cb657926bff7" millisBetweenRetries="${https.retry.frequency}">
+					<http:request method="POST" doc:name="Request to read file" doc:id="2e9d8047-7e4c-4882-b6fd-f12416149e56" config-ref="HTTP_Request_configuration" path="${jpm.sftp.read.path}">
+					<http:body><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+			"directoryPath" : p('jpm.directory.list.path')
+}]]]></http:body>
+					<http:uri-params><![CDATA[#[{
+	"fileName": vars.fileName
+}]]]></http:uri-params>
+				</http:request>
+				</until-successful>
+				<set-payload value="#[payload]" doc:name="set mime type application/xml" doc:id="ccd0b285-53df-4986-9350-1e128a81d546" mimeType="application/xml" />
+				<flow-ref doc:name="ack-subflow" doc:id="db7f5354-8f65-4916-ad75-cc5b72f4ebad" name="ack-subflow" />
+				<try doc:name="Try" doc:id="d9575e17-7e6b-41e9-a436-1ff2e0f88f82">
+			<os:clear doc:name="Clear fileName" doc:id="2537e072-02b4-4d19-97be-1394b80b3c4a" objectStore="Object_store" />
+					<vm:consume queueName="${vm.queue.namea.ack.psr}" doc:name="Deque" doc:id="51f2ee70-cd51-4ce6-a9fb-3b36adc11858" config-ref="VM_Config" timeout="${vm.listener.deque.timeout}" />
+			<error-handler>
+				<on-error-continue enableNotifications="true" logException="false" doc:name="On Error Continue" doc:id="f40a4ecb-44a4-47f0-8ace-69111685f0a6">
+					<module-logging:log-error doc:name="Log error" doc:id="730a3a37-3d37-48b6-8aec-7adb331a314b" message="No Message Available on Queue" source="failure-recover-ack-flow" />
+				</on-error-continue>
+			</error-handler>
+		</try>
+				<module-logging:log-exit doc:name="Log exit" doc:id="fd966774-069b-4181-953f-55085b9e555e" message='#["Netsuite Update, VM deque and Object Clear Completed"]' source="failure-recover-ack-flow" messageType='#["ACK file - " ++ vars.fileName ++ " processed Successfully"]'/>
+			</when>
+			<otherwise >
+				<module-logging:log-outbound doc:name="Log outbound" doc:id="d346457d-23f8-4e13-8cc1-90d4a7287995" message="No file availble for given time range" source="failure-recover-psr-flow" />
+			</otherwise>
+		</choice>
+	
+</flow>
+</mule>

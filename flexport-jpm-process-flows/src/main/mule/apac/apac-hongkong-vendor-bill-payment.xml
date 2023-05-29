@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
+	<flow
+		name="create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow"
+		doc:id="24c99ae5-4f2a-4d04-9e71-07d049dbbf4e"
+		maxConcurrency="${max.concurrency}">
+		<scheduler
+			doc:name="APAC-HONGKONG-bill-payment-ns-jpm-scheduler"
+			doc:id="2544ed7a-3134-46fd-9c97-ee677cf4ba2c"
+			disallowConcurrentExecution="true">
+			<scheduling-strategy>
+				<cron expression="${cron.expression.apac.hongkong}" />
+			</scheduling-strategy>
+		</scheduler>
+		<module-logging:log-entry
+			doc:name="Searching for save search item"
+			doc:id="1566d9d3-4c69-412a-bf11-6abc1321ba76"
+			message="#['Searching for save search item']"
+			messageType="#['*************  started create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow   **********']"
+			source="#['create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow']" />
+		<until-successful maxRetries="${https.retry.attempt}"
+			doc:name="Until Successful"
+			doc:id="8792649d-1839-4368-a543-7746941cb06e"
+			millisBetweenRetries="${https.retry.frequency}">
+			<http:request method="GET"
+				doc:name="ns-savesearch-apac-hongkong-request"
+				doc:id="5cf2a4f6-6e83-47b8-932f-4c37545a9bbe"
+				config-ref="Http_NS__Request" path="${apac.saved.search.path}"
+				responseTimeout="${http.response.timeout.netsuite}">
+				<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"searchId" : p('ns.apac.hongkong.savedsearchId')
+}]]]></http:uri-params>
+			</http:request>
+		</until-successful>
+		<choice doc:name="Choice"
+			doc:id="5e99e3a8-3055-4e0b-af22-a95b5781cdf1">
+			<when expression="!isEmpty(payload)">
+				<flow-ref
+					doc:name="apac-vendor-bill-payment-netsuite-publish-subflow"
+					doc:id="4cb55c62-9345-4326-a242-95f4316125c5"
+					name="apac-vendor-bill-payment-netsuite-hongkong-publish-subflow" />
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Set email body" doc:id="4395a9e2-3afb-46b6-9d95-ff2fa9da48a5">
+					<ee:message>
+						<ee:set-payload resource="dataweave/apac/hongkong/empty-ns-data.dwl" />
+					</ee:message>
+				</ee:transform>
+				<until-successful
+					maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+					doc:id="7c83e2fa-22ed-4e27-8a59-1abed60762f5"
+					millisBetweenRetries="${https.retry.frequency}">
+					<http:request method="POST" doc:name="Request"
+						doc:id="5c76858e-acd5-4183-81da-af36c690afb6"
+						config-ref="PGP_Encrpt_Request" path="${email.path}"/>
+				</until-successful>
+				<module-logging:log-exit
+					doc:name="Log exit" doc:id="5e426d33-455d-42aa-b048-cbdb172fb561"
+					message="*********** No Data in SavedSearch ***********"
+					source="create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow"
+					messageType="******  create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow Ended  **********" />
+			</otherwise>
+		</choice>
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="d6a77cbd-48e3-400d-94d8-b2bb35e07451"
+			messageType="******  create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow Ended  **********"
+			source="create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow"
+			message='Message published successfully' />
+	</flow>
+	<flow name="apac-hongkong-vendor-bill-payment-listener-Flow"
+		doc:id="7a12797d-58b4-4fbf-83e4-f02178bf8001" initialState="started">
+		<vm:listener doc:name="Listener"
+			doc:id="8bfe19c3-3668-4621-9cc9-292020fd0f7a" config-ref="VM_Config"
+			queueName="${vm.queue.hongkong.savedsearch}"
+			timeout="${vm.queue.apac.hongkong.publish.timeout}" />
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="9b7e0044-af7d-4b40-b7c9-0e4f9334d036"
+			message='#["Message received from the queue"]'
+			messageType="************  apac-hongkong-vendor-bill-payment-subscriber-Flow Started ***********"
+			source="apac-hongkong-vendor-bill-payment-subscriber-Flow" />
+		<set-variable value='#["Hongkong"]'
+			doc:name="Set source variable"
+			doc:id="aa7bc9ae-11f8-4170-9581-c82040dad510" variableName="source" />
+		<flow-ref doc:name="set-common-variable"
+			doc:id="2c2f0ff0-7a3f-4d1c-a62e-16845d072670"
+			name="set-common-variable" />
+		<choice doc:name="check payload?"
+			doc:id="f8a360de-c18d-4533-a058-e549cd6987bd">
+			<when expression="#[!isEmpty(payload)]">
+				<try doc:name="Try" doc:id="81f932f6-0ebe-4302-ae8a-d4aa0cc27097" >
+					<flow-ref doc:name="wire-ach-mapping-subflow" doc:id="1ca6492a-d8bc-4e04-9b42-4bdcd9ddfa53" name="wire-ach-mapping-subflow" />
+					<error-handler >
+						<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="df4cf6e1-7865-4281-b38b-c5d303cc5986">
+							<ee:transform doc:name="Set email body" doc:id="24a56f56-6005-472d-9c81-ff1190110684" >
+								<ee:message >
+									<ee:set-payload resource="dataweave/apac/hongkong/mapping-error-email.dwl" />
+								</ee:message>
+							</ee:transform>
+							<until-successful
+								maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+								doc:id="80406c9a-d62f-4c42-a671-099e9beec658"
+								millisBetweenRetries="${https.retry.frequency}">
+								<http:request method="POST" doc:name="Request" doc:id="6d507f1a-0fa9-4f1e-91da-c559811f5553" config-ref="PGP_Encrpt_Request" path="${email.path}"/>
+							</until-successful>
+						</on-error-propagate>
+					</error-handler>
+				</try>
+				<flow-ref doc:name="apac-pgp-sftp-ns-update-subflow"
+					doc:id="3b53f4ad-feba-464d-8d9b-40f97a91250e"
+					name="apac-pgp-sftp-ns-update-subflow" />
+				<try doc:name="Try"
+					doc:id="1d1d4a87-1bc4-4f16-8d81-c41a1d70d4a4">
+					<vm:consume doc:name="APAC ACK PSR Consume"
+						doc:id="e3b6f049-dc62-4695-aeb3-9c29a8dea9dd"
+						config-ref="VM_Config" queueName="${vm.queue.hongkong.ack.psr}"
+						timeout="${vm.queue.apac.hongkong.consume.timeout}"
+						timeoutUnit="MINUTES" />
+					<error-handler>
+						<on-error-propagate enableNotifications="true"
+							logException="true" doc:name="On Error Propagate"
+							doc:id="5ccf0378-c144-458d-b6e9-60b7de669290">
+							<module-logging:log-error
+								doc:name="Log error"
+								doc:id="5f219d06-7a51-4776-8f22-330c5f2f23c8"
+								message="Error While Consuming payload on VM queue. Please use failure-recover-psr-flow/failure-recover-ack-flow for updating records as per PSR or ACK file received accordingly"
+								messageType="*******************  VM Consumer ACK/PSR ERROR  *******************"
+								source="create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow" />
+							<ee:transform doc:name="Set email"
+								doc:id="c985b6f7-7781-4646-bc99-d3254ed11e8d">
+								<ee:message>
+									<ee:set-payload
+										resource="dataweave/apac/hongkong/email-vm-queue-failure.dwl" />
+								</ee:message>
+							</ee:transform>
+							<until-successful
+								maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+								doc:id="5fab309f-e8db-433b-92ff-56ff33e352f1"
+								millisBetweenRetries="${https.retry.frequency}">
+								<http:request method="POST"
+									doc:name="Email Request"
+									doc:id="e8431cb4-323f-445c-9513-5aa9e2b39b5e"
+									config-ref="PGP_Encrpt_Request" path="/email"/>
+							</until-successful>
+						</on-error-propagate>
+					</error-handler>
+				</try>
+				<flow-ref
+					doc:name="apac-update-vendor-bill-payment-status-subflow"
+					doc:id="a5202436-e316-496d-81ca-843f44d89e63"
+					name="apac-update-vendor-bill-payment-status-subflow" />
+			</when>
+			<otherwise>
+				<module-logging:log-exit doc:name="Log exit"
+					doc:id="f26b2752-f264-4eb1-b498-1745bb8ce088"
+					message="*********** No Data in SavedSearch *********** "
+					source="create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow"
+					messageType="******  create-vendor-bill-payment-apac-hongkong-netsuite-jpm-flow Ended  **********" />
+			</otherwise>
+		</choice>
+	</flow>
+	<sub-flow name="hongkong-ach-wire-filter-subflow"
+		doc:id="28ed66e6-79ad-47c1-9705-9b3709300f87">
+		<scatter-gather doc:name="WIRE-ACH"
+			doc:id="0f68375f-afe8-461a-a2f4-49ec4f175afd">
+			<route>
+				<ee:transform doc:name="filter WIRE"
+					doc:id="e56acaf4-1a2c-4a11-a238-86441d18e5a4">
+					<ee:message>
+						<ee:set-payload
+							resource="dataweave/apac/hongkong/filter-wire.dwl" />
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="Global Wire"
+					doc:id="2eda2217-5b73-4b4b-b9af-c47405d45e95">
+					<ee:message>
+						<ee:set-payload
+							resource="dataweave/apac/hongkong/book-groupby-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</route>
+			<route>
+				<ee:transform doc:name="filter ACH"
+					doc:id="6ddbbe9d-eab3-4646-8c50-556ea094d5cf">
+					<ee:message>
+						<ee:set-payload
+							resource="dataweave/apac/hongkong/ach-filter-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="ACH"
+					doc:id="86325179-c301-4756-8b99-64cfcbb8ae8f">
+					<ee:message>
+						<ee:set-payload
+							resource="dataweave/apac/hongkong/ach-groupby-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</route>
+		</scatter-gather>
+	</sub-flow>
+</mule>

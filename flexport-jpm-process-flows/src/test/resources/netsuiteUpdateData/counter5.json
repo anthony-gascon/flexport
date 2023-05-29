@@ -1,0 +1,97 @@
+[
+  {
+    "baseRef": {
+      "externalId": null,
+      "type": "VENDOR_PAYMENT",
+      "internalId": "33806481",
+      "name": null
+    },
+    "status": {
+      "statusDetail": [
+        {
+          "code": "RCRD_LOCKED_BY_WF",
+          "message": "This record has been locked by a user defined workflow.",
+          "type": "ERROR",
+          "afterSubmitFailed": null
+        }
+      ],
+      "isSuccess": false
+    }
+  },
+  {
+    "baseRef": {
+      "externalId": null,
+      "type": "VENDOR_PAYMENT",
+      "internalId": "33806480",
+      "name": null
+    },
+    "status": {
+      "statusDetail": [
+        {
+          "code": "RCRD_LOCKED_BY_WF",
+          "message": "This record has been locked by a user defined workflow.",
+          "type": "ERROR",
+          "afterSubmitFailed": null
+        }
+      ],
+      "isSuccess": false
+    }
+  },
+  {
+    "baseRef": {
+      "externalId": null,
+      "type": "VENDOR_PAYMENT",
+      "internalId": "33806479",
+      "name": null
+    },
+    "status": {
+      "statusDetail": [
+        {
+          "code": "RCRD_LOCKED_BY_WF",
+          "message": "This record has been locked by a user defined workflow.",
+          "type": "ERROR",
+          "afterSubmitFailed": null
+        }
+      ],
+      "isSuccess": false
+    }
+  },
+  {
+    "baseRef": {
+      "externalId": null,
+      "type": "VENDOR_PAYMENT",
+      "internalId": "33806482",
+      "name": null
+    },
+    "status": {
+      "statusDetail": [
+        {
+          "code": "RCRD_LOCKED_BY_WF",
+          "message": "This record has been locked by a user defined workflow.",
+          "type": "ERROR",
+          "afterSubmitFailed": null
+        }
+      ],
+      "isSuccess": false
+    }
+  },
+  {
+    "baseRef": {
+      "externalId": null,
+      "type": "VENDOR_PAYMENT",
+      "internalId": "33806145",
+      "name": null
+    },
+    "status": {
+      "statusDetail": [
+        {
+          "code": "RCRD_LOCKED_BY_WF",
+          "message": "This record has been locked by a user defined workflow.",
+          "type": "ERROR",
+          "afterSubmitFailed": null
+        }
+      ],
+      "isSuccess": false
+    }
+  }
+]

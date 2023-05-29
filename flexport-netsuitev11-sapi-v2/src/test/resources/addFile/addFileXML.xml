@@ -1,0 +1,494 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CstmrCdtTrfInitn>
+    <GrpHdr>
+      <MsgId>655f92cf896f40ee808081fca306f8da</MsgId>
+      <CreDtTm>2023-04-18T22:40:16</CreDtTm>
+      <NbOfTxs>44</NbOfTxs>
+      <CtrlSum>651594.02</CtrlSum>
+      <InitgPty>
+        <Nm>Company Name</Nm>
+      </InitgPty>
+    </GrpHdr>
+    <PmtInf>
+      <PmtInfId>BATCHREFERENCE000001</PmtInfId>
+      <PmtMtd>TRF</PmtMtd>
+      <NbOfTxs>27</NbOfTxs>
+      <CtrlSum>496544.58</CtrlSum>
+      <PmtTpInf>
+        <SvcLvl>
+          <Cd>NURG</Cd>
+        </SvcLvl>
+        <LclInstrm>
+          <Cd>CCD</Cd>
+        </LclInstrm>
+      </PmtTpInf>
+      <ReqdExctnDt>2023-04-18</ReqdExctnDt>
+      <Dbtr>
+        <Nm>Company Name</Nm>
+        <PstlAdr>
+          <Ctry>US</Ctry>
+        </PstlAdr>
+        <Id>
+          <OrgId>
+            <Othr>
+              <Id>1538625000</Id>
+              <SchmeNm>
+                <Prtry>JPMCOID</Prtry>
+              </SchmeNm>
+            </Othr>
+          </OrgId>
+        </Id>
+      </Dbtr>
+      <DbtrAcct>
+        <Id>
+          <Othr>
+            <Id>712538625</Id>
+          </Othr>
+        </Id>
+        <Ccy>USD</Ccy>
+      </DbtrAcct>
+      <DbtrAgt>
+        <FinInstnId>
+          <BIC>CHASUS33</BIC>
+          <ClrSysMmbId>
+            <MmbId>021000021</MmbId>
+          </ClrSysMmbId>
+          <PstlAdr>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </FinInstnId>
+      </DbtrAgt>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590927</InstrId>
+          <EndToEndId>272030</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">5970.25</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>122000030</MmbId>
+            </ClrSysMmbId>
+            <Nm>Bank of America</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>ABM Janitorial Services</Nm>
+          <PstlAdr>
+            <StrtNm>600 Harrison St</StrtNm>
+            <PstCd>94107</PstCd>
+            <TwnNm>San Francisco</TwnNm>
+            <CtrySubDvsn>CA</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>1499505328</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Company invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590928</InstrId>
+          <EndToEndId>272031</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">18787.55</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>064000017</MmbId>
+            </ClrSysMmbId>
+            <Nm>Regions Bank</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>ACCELERATED INC</Nm>
+          <PstlAdr>
+            <StrtNm>P.O. BOX 116092</StrtNm>
+            <PstCd>30368</PstCd>
+            <TwnNm>ATLANTA</TwnNm>
+            <CtrySubDvsn>GA</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>0198548727</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Company invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590929</InstrId>
+          <EndToEndId>272032</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">894.55</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>111900659</MmbId>
+            </ClrSysMmbId>
+            <Nm>Wells Fargo</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>Canal Cartage Company</Nm>
+          <PstlAdr>
+            <StrtNm>11603 Wallisville Rd</StrtNm>
+            <PstCd>77013</PstCd>
+            <TwnNm>Houston</TwnNm>
+            <CtrySubDvsn>TX</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>6085484878</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Company invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590930</InstrId>
+          <EndToEndId>272033</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">509</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>064000017</MmbId>
+            </ClrSysMmbId>
+            <Nm>Regions Bank</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>Cargosprint</Nm>
+          <PstlAdr>
+            <StrtNm>21 EASTBROOK BEND SUITE 202</StrtNm>
+            <PstCd>30269</PstCd>
+            <TwnNm>PEACHTREE CITY</TwnNm>
+            <CtrySubDvsn>GA</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>0198548840</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Company invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590931</InstrId>
+          <EndToEndId>272034</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">690</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>121000358</MmbId>
+            </ClrSysMmbId>
+            <Nm>Bank</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>CDR TRANS, LLC</Nm>
+          <PstlAdr>
+            <StrtNm>1166 Cherry Ave</StrtNm>
+            <PstCd>94066</PstCd>
+            <TwnNm>San Bruno</TwnNm>
+            <CtrySubDvsn>CA</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>325111534056</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Company invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590933</InstrId>
+          <EndToEndId>272036</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">1410</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>325070760</MmbId>
+            </ClrSysMmbId>
+            <Nm>JPMORGAN CHASE</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>CONVOY</Nm>
+          <PstlAdr>
+            <StrtNm>1700 7TH AVE STE 116 # 287</StrtNm>
+            <PstCd>98101</PstCd>
+            <TwnNm>SEATTLE</TwnNm>
+            <CtrySubDvsn>WA</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>827787802</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Company invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590938</InstrId>
+          <EndToEndId>272041</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">27870.3</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>071923909</MmbId>
+            </ClrSysMmbId>
+            <Nm>Bank Name</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>Global CFS Inc</Nm>
+          <PstlAdr>
+            <StrtNm>860 Foster Ave</StrtNm>
+            <PstCd>60106</PstCd>
+            <TwnNm>Bensenville</TwnNm>
+            <CtrySubDvsn>IL</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>10466808</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Company invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590939</InstrId>
+          <EndToEndId>272042</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">58000</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>322271724</MmbId>
+            </ClrSysMmbId>
+            <Nm>CITIBANK (WEST) FSB</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>GRILEY AIR FREIGHT</Nm>
+          <PstlAdr>
+            <StrtNm>P.O. BOX 92940</StrtNm>
+            <PstCd>90009</PstCd>
+            <TwnNm>LOS ANGELES</TwnNm>
+            <CtrySubDvsn>CA</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>203983085</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Company invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590940</InstrId>
+          <EndToEndId>272043</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">58466.31</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>061000052</MmbId>
+            </ClrSysMmbId>
+            <Nm>Bank</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>Gulf Intermodal Services (GIS)</Nm>
+          <PstlAdr>
+            <StrtNm>PO Box 415000-0171</StrtNm>
+            <PstCd>37241</PstCd>
+            <TwnNm>Nashville</TwnNm>
+            <CtrySubDvsn>TN</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>334037245321</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Company invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590941</InstrId>
+          <EndToEndId>272044</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">22033.17</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>061000052</MmbId>
+            </ClrSysMmbId>
+            <Nm>BANK</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>
+        <Cdtr>
+          <Nm>H&amp;M INTERMODAL SERVICES, LLC</Nm>
+          <PstlAdr>
+            <StrtNm>3150 Lenox Park Blvd., Ste. 309</StrtNm>
+            <PstCd>38115</PstCd>
+            <TwnNm>Memphis</TwnNm>
+            <CtrySubDvsn>TN</CtrySubDvsn>
+            <Ctry>US</Ctry>
+          </PstlAdr>
+        </Cdtr>
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>334037245354</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Company invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+      <CdtTrfTxInf>
+        <PmtId>
+          <InstrId>45590942</InstrId>
+          <EndToEndId>272045</EndToEndId>
+        </PmtId>
+        <Amt>
+          <InstdAmt Ccy="USD">17648</InstdAmt>
+        </Amt>
+        <CdtrAgt>
+          <FinInstnId>
+            <ClrSysMmbId>
+              <MmbId>021000021</MmbId>
+            </ClrSysMmbId>
+            <Nm>BANK</Nm>
+            <PstlAdr>
+              <Ctry>US</Ctry>
+            </PstlAdr>
+          </FinInstnId>
+        </CdtrAgt>        
+        <CdtrAcct>
+          <Id>
+            <Othr>
+              <Id>007780000000200001841501</Id>
+            </Othr>
+          </Id>
+        </CdtrAcct>
+        <RmtInf>
+          <Ustrd>Customer invoice payment</Ustrd>
+        </RmtInf>
+      </CdtTrfTxInf>
+    </PmtInf>
+  </CstmrCdtTrfInitn>
+</Document>

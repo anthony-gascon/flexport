@@ -1,0 +1,603 @@
+[
+  {
+    "tranId": "233405",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2023-01-12T22:55:39",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "233405",
+    "externalId": "Processed43282866",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "9",
+      "name": "Flexport Hong Kong WFOE"
+    },
+    "internalId": "43282866",
+    "total": 143800.0,
+    "createdDate": "2022-09-01T22:48:33",
+    "currencyName": "HKD",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "251",
+      "name": "Sep 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "5",
+      "name": "HKD"
+    },
+    "tranDate": "2022-09-01T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1292",
+      "name": "10265 Cash : JPM HK checking x7201 -HKD"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "6955890",
+      "name": "G4S Secure Solutions (Hong Kong) Ltd"
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": true,
+          "StringCustomFieldRef__custbody_jpm_paid_amount": "143800.00",
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APACHongKong.5934d4fe159f4a21bc5afc221a375bf3",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "107",
+            "name": "JPM HKD Checking x7201",
+            "externalId": null,
+            "typeId": "896"
+          },
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbodysvbexport": true,
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_jpm_paid_currency": "HKD",
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM HK checking x7201 -HKD",
+          "StringCustomFieldRef__custbody_jpm_ack_psr_error_message": "FF01 - File Format incomplete or invalid: Line 80 Column 19 org.xml.sax.SAXParseException%3B lineNumber%3A 80%3B"
+        }
+      ]
+    },
+    "status": "Approved"
+  },
+  {
+    "tranId": "233406",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2023-01-12T22:55:33",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "233406",
+    "externalId": "Processed43282867",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "9",
+      "name": "Flexport Hong Kong WFOE"
+    },
+    "internalId": "43282867",
+    "payeeAddress": {
+      "zip": "HK",
+      "country": "HONG_KONG",
+      "addr2": "60-62 Tong Mi Road",
+      "addr1": "Rm 402, 4/F., Fuk Hong Industrial Building",
+      "city": "Kowloon",
+      "addr3": null,
+      "addrText": "Sam Hing Scales Factory Limited<br>Rm 402, 4/F., Fuk Hong Industrial Building<br>60-62 Tong Mi Road<br>Kowloon Hong Kong HK<br>Hong Kong",
+      "addrPhone": null,
+      "internalId": "10023",
+      "addressee": "Sam Hing Scales Factory Limited",
+      "attention": null,
+      "override": false,
+      "state": "Hong Kong",
+      "nullFieldList": null,
+      "customFieldList": null
+    },
+    "total": 11600.0,
+    "createdDate": "2022-09-01T22:48:35",
+    "currencyName": "HKD",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "251",
+      "name": "Sep 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "5",
+      "name": "HKD"
+    },
+    "tranDate": "2022-09-01T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1292",
+      "name": "10265 Cash : JPM HK checking x7201 -HKD"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "14514811",
+      "name": "Sam Hing Scales Factory Limited"
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": true,
+          "StringCustomFieldRef__custbody_jpm_paid_amount": "11600.00",
+          "SelectCustomFieldRef__custbody_payment_type": {
+            "internalId": "7",
+            "name": "Foreign Wire (IWI)",
+            "externalId": null,
+            "typeId": "84"
+          },
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APACHongKong.5934d4fe159f4a21bc5afc221a375bf3",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "107",
+            "name": "JPM HKD Checking x7201",
+            "externalId": null,
+            "typeId": "896"
+          },
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbodysvbexport": true,
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_jpm_paid_currency": "HKD",
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM HK checking x7201 -HKD",
+          "StringCustomFieldRef__custbody_jpm_ack_psr_error_message": "FF01 - File Format incomplete or invalid: Line 80 Column 19 org.xml.sax.SAXParseException%3B lineNumber%3A 80%3B"
+        }
+      ]
+    },
+    "status": "Approved"
+  },
+  {
+    "tranId": "233408",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2023-01-12T22:55:34",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "233408",
+    "externalId": "Processed43282869",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "9",
+      "name": "Flexport Hong Kong WFOE"
+    },
+    "internalId": "43282869",
+    "payeeAddress": {
+      "zip": "852",
+      "country": "HONG_KONG",
+      "addr2": "Harbour City, Tsim Sha Tsui, Kowloon",
+      "addr1": "8/F, Tower 6, The Gateway,",
+      "city": "Hong Kong",
+      "addr3": null,
+      "addrText": "Harbour City Estates Limited<br>8/F, Tower 6, The Gateway,<br>Harbour City, Tsim Sha Tsui, Kowloon<br>Hong Kong  852<br>Hong Kong",
+      "addrPhone": null,
+      "internalId": "156078",
+      "addressee": "Harbour City Estates Limited",
+      "attention": null,
+      "override": false,
+      "state": null,
+      "nullFieldList": null,
+      "customFieldList": null
+    },
+    "total": 203681.63,
+    "createdDate": "2022-09-01T22:48:38",
+    "currencyName": "HKD",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "251",
+      "name": "Sep 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "5",
+      "name": "HKD"
+    },
+    "tranDate": "2022-09-01T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1292",
+      "name": "10265 Cash : JPM HK checking x7201 -HKD"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "24913314",
+      "name": "Harbour City Estates Limited"
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": true,
+          "StringCustomFieldRef__custbody_jpm_paid_amount": "203681.63",
+          "SelectCustomFieldRef__custbody_payment_type": {
+            "internalId": "7",
+            "name": "Foreign Wire (IWI)",
+            "externalId": null,
+            "typeId": "84"
+          },
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APACHongKong.5934d4fe159f4a21bc5afc221a375bf3",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "107",
+            "name": "JPM HKD Checking x7201",
+            "externalId": null,
+            "typeId": "896"
+          },
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbodysvbexport": true,
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_jpm_paid_currency": "HKD",
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM HK checking x7201 -HKD",
+          "StringCustomFieldRef__custbody_jpm_ack_psr_error_message": "FF01 - File Format incomplete or invalid: Line 80 Column 19 org.xml.sax.SAXParseException%3B lineNumber%3A 80%3B"
+        }
+      ]
+    },
+    "status": "Approved"
+  },
+  {
+    "tranId": "233409",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2023-01-12T22:55:37",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "233409",
+    "externalId": "Processed43282870",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "9",
+      "name": "Flexport Hong Kong WFOE"
+    },
+    "internalId": "43282870",
+    "payeeAddress": {
+      "zip": null,
+      "country": "HONG_KONG",
+      "addr2": "30 Harbour Rd.",
+      "addr1": "45/F., Sun Hung Kai Centre",
+      "city": "Wan Chai",
+      "addr3": null,
+      "addrText": "Sun Hung Kai <br>45/F., Sun Hung Kai Centre<br>30 Harbour Rd.<br>Wan Chai HongKong <br>Hong Kong",
+      "addrPhone": null,
+      "internalId": "1993",
+      "addressee": "Sun Hung Kai",
+      "attention": null,
+      "override": false,
+      "state": "HongKong",
+      "nullFieldList": null,
+      "customFieldList": null
+    },
+    "total": 3801.65,
+    "createdDate": "2022-09-01T22:48:40",
+    "currencyName": "HKD",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "251",
+      "name": "Sep 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "5",
+      "name": "HKD"
+    },
+    "tranDate": "2022-09-01T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1292",
+      "name": "10265 Cash : JPM HK checking x7201 -HKD"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "4860501",
+      "name": "Sun Hung Kai"
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": true,
+          "StringCustomFieldRef__custbody_jpm_paid_amount": "3801.65",
+          "SelectCustomFieldRef__custbody_payment_type": {
+            "internalId": "3",
+            "name": "WIRE",
+            "externalId": null,
+            "typeId": "84"
+          },
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APACHongKong.5934d4fe159f4a21bc5afc221a375bf3",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "107",
+            "name": "JPM HKD Checking x7201",
+            "externalId": null,
+            "typeId": "896"
+          },
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbodysvbexport": true,
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_jpm_paid_currency": "HKD",
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM HK checking x7201 -HKD",
+          "StringCustomFieldRef__custbody_jpm_ack_psr_error_message": "FF01 - File Format incomplete or invalid: Line 80 Column 19 org.xml.sax.SAXParseException%3B lineNumber%3A 80%3B"
+        }
+      ]
+    },
+    "status": "Approved"
+  },
+  {
+    "tranId": "233411",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2023-01-12T22:55:38",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "233411",
+    "externalId": "Processed 43282873 notinCoupa",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "9",
+      "name": "Flexport Hong Kong WFOE"
+    },
+    "internalId": "43282873",
+    "payeeAddress": {
+      "zip": null,
+      "country": "HONG_KONG",
+      "addr2": null,
+      "addr1": "14,5/F., Kinetic Ind. Ctr., No. 7 Wang Kwong Road",
+      "city": "Kowloon Bay",
+      "addr3": null,
+      "addrText": "Foresight Logistics Management LTD.<br>14,5/F., Kinetic Ind. Ctr., No. 7 Wang Kwong Road<br>Kowloon Bay Hong Kong <br>Hong Kong",
+      "addrPhone": null,
+      "internalId": "2042",
+      "addressee": "Foresight Logistics Management LTD.",
+      "attention": null,
+      "override": false,
+      "state": "Hong Kong",
+      "nullFieldList": null,
+      "customFieldList": null
+    },
+    "total": 1320.0,
+    "createdDate": "2022-09-01T22:48:45",
+    "currencyName": "HKD",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "251",
+      "name": "Sep 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "5",
+      "name": "HKD"
+    },
+    "tranDate": "2022-09-01T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1292",
+      "name": "10265 Cash : JPM HK checking x7201 -HKD"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "5826648",
+      "name": "Foresight Logistics Management LTD."
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": true,
+          "StringCustomFieldRef__custbody_jpm_paid_amount": "1320.00",
+          "SelectCustomFieldRef__custbody_payment_type": {
+            "internalId": "3",
+            "name": "WIRE",
+            "externalId": null,
+            "typeId": "84"
+          },
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APACHongKong.5934d4fe159f4a21bc5afc221a375bf3",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "107",
+            "name": "JPM HKD Checking x7201",
+            "externalId": null,
+            "typeId": "896"
+          },
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbodysvbexport": true,
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_jpm_paid_currency": "HKD",
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM HK checking x7201 -HKD",
+          "StringCustomFieldRef__custbody_jpm_ack_psr_error_message": "FF01 - File Format incomplete or invalid: Line 80 Column 19 org.xml.sax.SAXParseException%3B lineNumber%3A 80%3B"
+        }
+      ]
+    },
+    "status": "Approved"
+  },
+  {
+    "tranId": "233412",
+    "approvalStatus": {
+      "externalId": null,
+      "type": null,
+      "internalId": "2",
+      "name": "Approved"
+    },
+    "printVoucher": false,
+    "toBePrinted": false,
+    "lastModifiedDate": "2023-01-12T22:55:35",
+    "nextApprover": {
+      "externalId": null,
+      "type": null,
+      "internalId": "-1",
+      "name": null
+    },
+    "transactionNumber": "233412",
+    "externalId": "Processed 43282874 notinCoupa",
+    "subsidiary": {
+      "externalId": null,
+      "type": null,
+      "internalId": "9",
+      "name": "Flexport Hong Kong WFOE"
+    },
+    "internalId": "43282874",
+    "payeeAddress": {
+      "zip": null,
+      "country": "HONG_KONG",
+      "addr2": "Super Terminal 1, Hong Kong International Airport",
+      "addr1": "Room 350 5/F. South Office Block",
+      "city": "Hong Kong",
+      "addr3": null,
+      "addrText": "NIPPON CARGO AIRLINES CO LTD<br>Room 350 5/F. South Office Block<br>Super Terminal 1, Hong Kong International Airport<br>Hong Kong  <br>Hong Kong",
+      "addrPhone": null,
+      "internalId": "104692",
+      "addressee": "NIPPON CARGO AIRLINES CO LTD",
+      "attention": null,
+      "override": false,
+      "state": null,
+      "nullFieldList": null,
+      "customFieldList": null
+    },
+    "total": 1500.0,
+    "createdDate": "2022-09-01T22:48:47",
+    "currencyName": "HKD",
+    "exchangeRate": 1.0,
+    "postingPeriod": {
+      "externalId": null,
+      "type": null,
+      "internalId": "251",
+      "name": "Sep 2022"
+    },
+    "currency": {
+      "externalId": null,
+      "type": null,
+      "internalId": "5",
+      "name": "HKD"
+    },
+    "tranDate": "2022-09-01T21:00:00",
+    "account": {
+      "externalId": null,
+      "type": null,
+      "internalId": "1292",
+      "name": "10265 Cash : JPM HK checking x7201 -HKD"
+    },
+    "entity": {
+      "externalId": null,
+      "type": null,
+      "internalId": "17682203",
+      "name": "NIPPON CARGO AIRLINES CO LTD"
+    },
+    "customFieldList": {
+      "customField": [
+        {
+          "BooleanCustomFieldRef__custbody_cfo_approval": false,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_is_delegated": false,
+          "BooleanCustomFieldRef__custbody_jpm_ack_failed": true,
+          "StringCustomFieldRef__custbody_jpm_paid_amount": "1500.00",
+          "SelectCustomFieldRef__custbody_payment_type": {
+            "internalId": "7",
+            "name": "Foreign Wire (IWI)",
+            "externalId": null,
+            "typeId": "84"
+          },
+          "StringCustomFieldRef__custbody_jpm_payment_file_name": "FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.APACHongKong.5934d4fe159f4a21bc5afc221a375bf3",
+          "SelectCustomFieldRef__custbody_flexport_bank_details": {
+            "internalId": "107",
+            "name": "JPM HKD Checking x7201",
+            "externalId": null,
+            "typeId": "896"
+          },
+          "BooleanCustomFieldRef__custbody_payment_sent_jpm": true,
+          "BooleanCustomFieldRef__custbody_nsts_gaw_superapp_approved": false,
+          "BooleanCustomFieldRef__custbodysvbexport": true,
+          "BooleanCustomFieldRef__custbody_jpm_psr_failed": false,
+          "StringCustomFieldRef__custbody_jpm_paid_currency": "HKD",
+          "StringCustomFieldRef__custbody_copied_from_account": "JPM HK checking x7201 -HKD",
+          "StringCustomFieldRef__custbody_jpm_ack_psr_error_message": "FF01 - File Format incomplete or invalid: Line 80 Column 19 org.xml.sax.SAXParseException%3B lineNumber%3A 80%3B"
+        }
+      ]
+    },
+    "status": "Approved"
+  }
+]

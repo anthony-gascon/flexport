@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="apac-psr-ack-failure-recovery-test-suite.xml" />
+	<munit:test name="apac-hongkong-failure-recover-psr-SuccessflowTest" doc:id="07f55a5d-35fb-4ec2-aaaf-387dc0b99e82" description="Test" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="c0b17243-817e-43e3-978c-774a043fc2a0" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/hongkong/post-file-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request : POST read file content" doc:id="9197ad5f-5ba1-4bb2-a1b5-f268ec56e161" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request to read a psr file" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="84972c65-2ce1-4c26-ac1b-f01d43cbfb55" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/xml --- readUrl(('classpath://apac/hongkong/post-read-file-content.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request : PUT Netsuite Update Request" doc:id="30e26109-2451-4ada-9404-444b92ac47a9" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="PUT" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Netsuite Update Request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="f24a189e-1798-4889-ba67-a6b8c0d416da" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/hongkong/put-netsuite-update-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Deque : Consume" doc:id="0f97aed9-9f39-4364-9f0e-290a6a3f9f98" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="${vm.queue.hongkong.ack.psr}" attributeName="queueName" />
+					<munit-tools:with-attribute whereValue="Dequeue ack psr queue" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="290135cd-52bb-4d1e-a801-0c47a450fe11" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="VM:EMPTY_QUEUE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to apac-hongkong-failure-recover-psr-flow" doc:id="6d05ea1b-780b-405e-872b-c69b7dbd4d50" name="apac-hongkong-failure-recover-psr-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="ee741184-41a8-4737-995a-26abe876e2f5" processor="module-logging:log-exit">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log exit" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="c69bdbbe-e658-47c8-a961-c1afd38fce6a" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue='#["Netsuite Update, VM deque and Object Clear Completed"]' attributeName="message" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-hongkong-failure-recover-psr-EmptyList-FailureTest" doc:id="ff918977-3a56-4ab7-a044-4573028746e0" description="Test" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="a05b9218-a780-46a4-98a1-19be3e564cfe" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[%dw 2.0 output application/json --- []]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to apac-hongkong-failure-recover-psr-flow" doc:id="521aba49-16e9-40a3-b0a2-70305b231ad2" name="apac-hongkong-failure-recover-psr-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="79ee986f-a3b0-476d-b23f-38b158af528f" processor="module-logging:log-outbound">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log outbound" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="4b3999ee-148b-4482-a84b-f16f03bed9a5" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="No file availble for given time range" attributeName="message" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-singapore-failure-recover-psr-SuccessflowTest" doc:id="0403a0eb-68d5-4ef9-8db6-04b8da408f6d" description="Test" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="9135bd1b-5725-40d3-a659-de895e7d6d37" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/post-file-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request : POST read file content" doc:id="9f0a023a-0ef4-4c72-bf8b-cb29f13d4420" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request to read a psr file" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a8f782ce-7287-49b8-a531-3fb3009142e6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/xml --- readUrl(('classpath://apac/singapore/post-read-file-content.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request: PUT Netsuite Update Request" doc:id="1dd6fb16-f12e-4a06-b36b-e4365b888c59" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="PUT" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Netsuite Update Request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="f24a189e-1798-4889-ba67-a6b8c0d416da" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/put-netsuite-update-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Deque : Consume" doc:id="89faf00e-4353-49f1-98ee-eb2152d2dd2d" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="${vm.queue.singapore.ack.psr}" attributeName="queueName" />
+					<munit-tools:with-attribute whereValue="Dequeue ack psr queue" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="290135cd-52bb-4d1e-a801-0c47a450fe11" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="VM:EMPTY_QUEUE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to apac-singapore-failure-recover-psr-flow" doc:id="641eccd3-cf78-4431-9a47-d59d11524cba" name="apac-singapore-failure-recover-psr-Failure-PSR-Recovery"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="fd26f10f-de67-4e2a-a0a6-2407587c86d4" processor="module-logging:log-exit">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log exit" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="e281e1e7-3f1b-4626-9d9a-6b0c41c26a5f" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue='#["Netsuite Update, VM deque and Object Clear Completed"]' attributeName="message" />
+					<munit-tools:with-attribute whereValue="apac-singapore-failure-recover-psr-flow" attributeName="source" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-singapore-failure-recover-psr-EmptyList-FailureTest" doc:id="220aa202-5fea-49ed-b1b9-146f08635658" description="Test" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="ae9ddcb0-07f7-4fa8-a94a-ce70e9754a5e" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[%dw 2.0 output application/json --- []]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to apac-hongkong-failure-recover-psr-flow" doc:id="4225f1c5-1e33-4084-aab1-39007ebf3d90" name="apac-singapore-failure-recover-psr-Failure-PSR-Recovery"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="aa36ba66-deaf-4418-a2ab-424b4c86a5ae" processor="module-logging:log-outbound">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log outbound" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="dc33b11c-cadc-4999-b9cf-605539cb8686" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="No file availble for given time range" attributeName="message" />
+					<munit-tools:with-attribute whereValue="apac-singapore-failure-recover-psr-flow" attributeName="source" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-china-failure-recover-psr-SuccessflowTest" doc:id="300f621a-4332-4447-8524-4e6a2b693a4e" description="Test" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="d99fb34f-f2c4-4663-bf8c-c41c2f34a37d" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/china/post-file-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request : POST read file content" doc:id="9adb05ef-26bf-47a1-926b-5a05dedfd724" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request to read a psr file" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="84972c65-2ce1-4c26-ac1b-f01d43cbfb55" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/xml --- readUrl(('classpath://apac/china/post-read-file-content.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request : PUT Netsuite Update Request" doc:id="89be9b85-faa9-404a-8122-95eb423afac8" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="PUT" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Netsuite Update Request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="f24a189e-1798-4889-ba67-a6b8c0d416da" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/china/put-netsuite-update-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Deque : Consume" doc:id="88cf8614-b5fd-44f7-8b97-07e590c6b4be" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="${vm.queue.china.ack.psr}" attributeName="queueName" />
+					<munit-tools:with-attribute whereValue="Dequeue ack psr queue" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="202974a3-3aac-4c0a-8b11-26448a88f308" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="VM:EMPTY_QUEUE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to apac-china-failure-recover-psr-flow" doc:id="a8ce191b-795e-4dc0-8cb3-eed9e012e09e" name="apac-china-failure-recover-psr-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="44b083fa-043e-44c2-a346-fce29579dbdb" processor="module-logging:log-exit">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log exit" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a52561a8-ae37-40c7-84b8-7213d32ab4a8" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue='#["Netsuite Update, VM deque and Object Clear Completed"]' attributeName="message" />
+					<munit-tools:with-attribute whereValue="apac-china-failure-recover-psr-flow" attributeName="source" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-china-failure-recover-psr-EmptyList-FailureTest" doc:id="69d132eb-017f-4b9f-ad2a-d42650972278" description="Test" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="bbe3b348-6597-405d-b774-433e3bb18fb9" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[%dw 2.0 output application/json --- []]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to apac-china-failure-recover-psr-flow" doc:id="c61b1192-2967-473f-bb31-c1c8a2e1b11f" name="apac-china-failure-recover-psr-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="08e4b513-7f55-4356-9612-2b30cf80d7dd" processor="module-logging:log-outbound">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log outbound" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="f942e2cc-06af-46ec-ba50-6b33ba08732e" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="No file availble for given time range" attributeName="message" />
+					<munit-tools:with-attribute whereValue="apac-china-failure-recover-psr-flow" attributeName="source" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-hongkong-failure-recover-ack-SuccessflowTest" doc:id="1026ced5-de2a-4d15-ae7c-6fa8e101fbad" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="00d5fa96-72c6-44a6-8149-b2ce0cf9ae60" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/hongkong/ack-post-file-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request : POST read an ack file" doc:id="f3bae24b-e688-4564-9e2b-3e841ca2b6e4" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request to read a ack file" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d290cca2-b351-4d0d-bde6-fddf8c38941a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/xml --- readUrl(('classpath://apac/hongkong/ack-post-read-file-content.xml'), &quot;application/xml&quot;)]&#10;" mediaType="application/xml" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request: Netsuite sapi: vendor payment by msgId" doc:id="6bd58a80-f1f8-4367-89b1-da1ded9507b4" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="GET" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request Netsuite sapi" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="cccd487b-68d8-4caa-b0be-bb88412c3899" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/hongkong/ack-get-vendor-payment-by-msgid-response.json'), &quot;application/json&quot;)]&#10;" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request: Netsuite sapi: PUT vendor update path" doc:id="b94907f0-4744-42c8-95e8-31eea59c17c3" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="PUT" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request Netsuite sapi update" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1fbd44c3-cb8e-4e87-ac0f-5a38e7c271f4" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/hongkong/ack-put-vendor-payment-path-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Deque: Consume" doc:id="81b194d8-741a-4ea3-8b07-bbf83ca9c998" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="${vm.queue.hongkong.ack.psr}" attributeName="queueName" />
+					<munit-tools:with-attribute whereValue="Dequeue ack psr queue" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="aca3c97f-1e97-413b-937d-96873b9870a1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="VM:EMPTY_QUEUE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="flow ref : apac-hongkong-failure-recover-ack-flow" doc:id="8e2a7677-3d1e-4f58-8eea-903f26ae2a62" name="apac-hongkong-failure-recover-ack-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="f49dfc25-7cbe-4fa3-8899-a4e8f1a267e7" processor="module-logging:log-exit">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log exit" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="5e923866-a4d6-47a4-aa6e-aca833aa438f" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="apac-hongkong-failure-recover-ack-flow" attributeName="source" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-hongkong-failure-recover-ack-FailureTest" doc:id="be049511-e928-4263-9626-f933c7f7a5be" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="d4da022c-7f43-45ed-8617-812aa73bd034" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[%dw 2.0 output application/json --- []]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="flow ref : apac-hongkong-failure-recover-ack-flow" doc:id="2844821e-af55-43fd-99b6-8adacc6aab18" name="apac-hongkong-failure-recover-ack-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="30489144-8c0d-4d09-88b5-800e99895e99" processor="module-logging:log-outbound">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log outbound" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7f176c75-5e00-461f-9679-c543e593013c" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="No file availble for given time range" attributeName="message" />
+					<munit-tools:with-attribute whereValue="apac-hongkong-failure-recover-ack-flow" attributeName="source" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-singapore-failure-recover-ack-FailureTest" doc:id="67b5d70f-7388-4195-b822-c5454ba5898a" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="6d7c93e1-95f7-424b-9163-b147ccf04f13" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[%dw 2.0 output application/json --- []]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="flow ref : apac-singapore-failure-recover-ack-flow" doc:id="0569f96d-2d52-4cc4-844b-c41d5931218e" name="apac-singapore-failure-recover-ack-Failure-ACK-Recovery"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="94796969-2045-4cc2-a4f7-82193fd2e36b" processor="module-logging:log-outbound">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log outbound" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="68581925-7e53-4559-9155-8c76f5678e65" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="No file availble for given time range" attributeName="message" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-singapore-failure-recover-ack-SuccessflowTest" doc:id="979db61a-ac70-4162-b982-7b5e34a6b8ba" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="758c2e33-2ec3-4f38-9e9f-70c1c5b07f5e" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/ack-post-file-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request : POST read an ack file" doc:id="97a6933d-8738-4a0c-9fcd-d37de810b2f3" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request to read a ack file" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1284b364-b338-405d-98ad-e27bd07e8ef7" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/xml --- readUrl(('classpath://apac/singapore/ack-post-read-file-content.xml'), &quot;application/xml&quot;)]" mediaType="application/xml" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request: Netsuite sapi: vendor payment by msgId" doc:id="f41c4639-1b4b-4ab6-b839-3cf1d480f074" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="GET" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request Netsuite sapi" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="cccd487b-68d8-4caa-b0be-bb88412c3899" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/ack-get-vendor-payment-by-msgid-response.json'), &quot;application/json&quot;)]&#10;" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request: Netsuite sapi: PUT vendor update path" doc:id="efb8ad05-3714-4ea1-9c16-9cc21ba03f69" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="PUT" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request Netsuite sapi update" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1fbd44c3-cb8e-4e87-ac0f-5a38e7c271f4" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/ack-put-vendor-payment-path-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Deque: Consume" doc:id="07ef67db-f708-4a65-83b9-0a68d22494ac" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="${vm.queue.singapore.ack.psr}" attributeName="queueName" />
+					<munit-tools:with-attribute whereValue="Dequeue ack psr queue" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="10cf8e59-a0ce-4a96-b992-7f27f1d97abc" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="VM:EMPTY_QUEUE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="flow ref : apac-singapore-failure-recover-ack-flow" doc:id="243e95a6-97db-41d7-8de0-95f0ab2b469a" name="apac-singapore-failure-recover-ack-Failure-ACK-Recovery"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="727d8395-d25e-42e6-a3c5-d2023f44c76a" processor="module-logging:log-exit">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log exit" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="e5cfa58b-bc15-4cfc-8df6-7b1d33efcbd3" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="apac-singapore-failure-recover-ack-flow" attributeName="source" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-china-failure-recover-ack-SuccessflowTest" doc:id="02df7709-3817-4aca-81e6-98e6a4a99586" timeOut="1200000">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="41c02cf5-3dc2-4eda-9f53-eb128923cbb9" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/china/ack-post-file-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request : POST read an ack file" doc:id="4ef77320-50a0-4eb8-98db-bd04c71bc00e" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request to read a ack file" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="fc9f04a7-7820-4f38-90c3-b4d6cea9d03d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/xml --- readUrl(('classpath://apac/china/ack-post-read-file-content.xml'), &quot;application/xml&quot;)]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request: Netsuite sapi: vendor payment by msgId" doc:id="0e55f42e-563d-46c7-8679-3810d311125e" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="GET" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request Netsuite sapi" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="cccd487b-68d8-4caa-b0be-bb88412c3899" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/china/ack-get-vendor-payment-by-msgid-response.json'), &quot;application/json&quot;)]&#10;" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="http request: Netsuite sapi: PUT vendor update path" doc:id="a121a8a2-f1ff-4485-8002-efca674b57e7" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="PUT" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request Netsuite sapi update" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1fbd44c3-cb8e-4e87-ac0f-5a38e7c271f4" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/china/ack-put-vendor-payment-path-response.json'), &quot;application/json&quot;)]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Deque: Consume" doc:id="cc514abf-7edb-47c6-8be1-b6a467d2fe88" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="${vm.queue.china.ack.psr}" attributeName="queueName" />
+					<munit-tools:with-attribute whereValue="Dequeue ack psr queue" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="fca21b45-3bc0-4e2b-b764-bca177941e44" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:error typeId="VM:EMPTY_QUEUE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="flow ref : apac-china-failure-recover-ack-flow" doc:id="36cf3847-7b70-4666-b16e-c17ca81e2605" name="apac-china-failure-recover-ack-flow" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify call" doc:id="77305eba-7562-46e9-a9d0-1e3d6bd71861" processor="module-logging:log-exit">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log exit" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="9f763f99-8555-42f5-af54-e2180846ca44" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="apac-china-failure-recover-ack-flow" attributeName="source" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-china-failure-recover-ack-FailureTest" doc:id="d9c4d389-a9fb-4fd4-8722-d201cbcf03ba" timeOut="1200000">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="http request: POST list files" doc:id="8e0830de-9c4b-43ae-a6f8-cb0089bca825" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="POST" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Request list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1532f3ff-c3f4-4755-b816-cecb9149547b" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value="#[%dw 2.0 output application/json --- []]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="flow ref : apac-china-failure-recover-ack-flow" doc:id="a05c6595-c855-417a-a692-8f114d8e5cab" name="apac-china-failure-recover-ack-flow" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify call" doc:id="c07f6b8e-f0c6-4e1c-9bc6-5cddc62700b4" processor="module-logging:log-outbound">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="Log outbound" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="cde90d0c-1ee8-4564-8973-3ab903abbbad" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="No file availble for given time range" attributeName="message" />
+					<munit-tools:with-attribute whereValue="apac-china-failure-recover-ack-flow" attributeName="source" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	</mule>

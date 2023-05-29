@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="apac-singapore-vendor-bill-payment-test-suite.xml" />
+	<munit:test name="create-vendor-bill-payment-apac-singapore-netsuite-jpm-flow-success-test" doc:id="6cd50e95-0318-4661-8a6a-0edee8ae4653" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to netsuite saved search" doc:id="f2c6d76d-4c99-4cb2-ad31-a2a5a432a9d5" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="145090b4-1ab2-4a73-91aa-b7c885ec50b8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/netsuiteSavedSearchDataApacChina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to publish" doc:id="fe21e3d1-e0f2-4fc8-a577-aa21e2fde334" processor="vm:publish">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7e1697d6-0c92-47f3-be6f-3e5f16acaa6e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to create-vendor-bill-payment-apac-china-netsuite-jpm-flow" doc:id="46dad750-c86f-4695-849e-078f6ea0ac11" name="create-vendor-bill-payment-apac-singapore-netsuite-jpm-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="84571dda-d178-4c72-9b7b-eb521f8d119d" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="create-vendor-bill-payment-apac-singapore-netsuite-jpm-flow-email-success-test" doc:id="d0fe0b35-da94-4d5f-814f-7ad8160e293f" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to netsuite saved search" doc:id="64db19d0-a60b-4352-8af2-2d83876c1210" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="145090b4-1ab2-4a73-91aa-b7c885ec50b8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json &#10;--- &#10;[]]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to email no data" doc:id="beb054e9-186c-4b1c-829b-93ca957d6d07" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="865e113d-3878-4b44-a088-c9f88206d3f4" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to create-vendor-bill-payment-apac-china-netsuite-jpm-flow" doc:id="ec224022-8250-4dcd-87fc-86ca0d39b9f9" name="create-vendor-bill-payment-apac-singapore-netsuite-jpm-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="7ad9b59c-41d8-4e14-bbb4-45cd7b525a02" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-singapore-vendor-bill-payment-listner-success-test-Flow" doc:id="e648fb86-c71f-499b-8eb4-05a2d9046850" description="Test" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to upload file to netsuite" doc:id="5a1fab9e-ccce-4313-8696-716fe5c61252" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="763cbcd7-b56a-45e6-b8b9-fd6868d5a8d6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/netsuiteUpdateFileChina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to pgp" doc:id="bae01e6a-9b27-4a07-9efd-53229b232a86" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7de65e8c-1c67-4e53-85d7-f8076d020e7c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output text/plain --- readUrl(('classpath://apac/singapore/pgpEncryptionResponseChina.dwl'), &quot;text/plain&quot;)]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to sftp upload" doc:id="54b4e370-cd48-4d86-b59d-e466d9dc0cd9" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4f34c9ae-5707-4c4b-a737-1741458bb194" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/sftpUploadResponsechina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to file upload" doc:id="1d479f6a-daa0-4f7f-8d24-fb71390c2a1b" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d8c3df65-99dc-4f1a-890c-cbacd0b7311f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/netsuiteFileUploadChina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when queue ack-psr" doc:id="3257a109-810a-4d97-95b3-8d72c82fafcc" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ff0a325d-de0c-4285-866a-67899c28f069" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when flow ref" doc:id="eb3a4964-2030-4a94-bb1b-5b301e938f4b" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2562fcfc-d961-4f04-94c8-1d344f702f34" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="6b652308-2349-4ba6-bf55-45123ffdf205" >
+				<munit:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/consumeNetsuiteSavedSearchApacChina.dwl'), &quot;application/json&quot;)]" encoding="UTF-8" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to apac-singapore-vendor-bill-payment-subscriber-Flow" doc:id="86b8afe3-1428-4be5-ae58-f6f71edb669e" name="apac-singapore-vendor-bill-payment-listner-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="52de554b-fb1d-486c-af17-d0b431441bf3" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="apac-singapore-vendor-bill-payment-listner-failure-email-test-Flow" doc:id="4b0fcb2e-fbc6-45c0-a469-ef9a4e74d97e" description="Test" expectedErrorType="VM:CONNECTIVITY">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to upload file to netsuite" doc:id="699a9720-3018-4535-852e-1b7fc70c80a1" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="763cbcd7-b56a-45e6-b8b9-fd6868d5a8d6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/netsuiteUpdateFileChina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to pgp" doc:id="38d7c3bb-8bc6-43f7-81ac-f4e5ef8b48f5" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7de65e8c-1c67-4e53-85d7-f8076d020e7c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output text/plain --- readUrl(('classpath://apac/singapore/pgpEncryptionResponseChina.dwl'), &quot;text/plain&quot;)]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to sftp upload" doc:id="6d7a17e7-6e30-4af3-bd34-8152f03331bc" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4f34c9ae-5707-4c4b-a737-1741458bb194" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/sftpUploadResponsechina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to file upload" doc:id="d0ac5459-9078-4124-bf35-30f4208674fb" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d8c3df65-99dc-4f1a-890c-cbacd0b7311f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/netsuiteFileUploadChina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when queue ack-psr" doc:id="13d16061-a7f0-4b24-8422-857c0f0dabd5" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ff0a325d-de0c-4285-866a-67899c28f069" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="VM:CONNECTIVITY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when email request" doc:id="f490e977-78b7-4044-b6bf-be968a6acd25" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="0586676b-4c30-4eb5-b732-835f1b0dd9cb" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="c5dca45d-c322-4d48-9a99-40f16ed33a7a" >
+				<munit:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/consumeNetsuiteSavedSearchApacChina.dwl'), &quot;application/json&quot;)]" encoding="UTF-8" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to apac-singapore-vendor-bill-payment-subscriber-Flow" doc:id="ead96eb7-4c5e-456a-9e99-02bf68cd0a6c" name="apac-singapore-vendor-bill-payment-listner-Flow"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="apac-singapore-vendor-bill-payment-listner-upload-failure-mail-test-Flow" doc:id="95b29b38-2eb0-4377-814a-4e99cfedb567" description="Test" timeOut="1200000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to upload file to netsuite" doc:id="0373c74b-a226-4da6-a7eb-419f614b1655" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="763cbcd7-b56a-45e6-b8b9-fd6868d5a8d6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/netsuiteUpdateFileChina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to pgp" doc:id="e673a7b3-3e08-4c12-ac85-3f5d464787c9" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7de65e8c-1c67-4e53-85d7-f8076d020e7c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output text/plain --- readUrl(('classpath://apac/singapore/pgpEncryptionResponseChina.dwl'), &quot;text/plain&quot;)]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to sftp upload" doc:id="5d61e635-ae70-4f02-b405-4220085e8c3f" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="4f34c9ae-5707-4c4b-a737-1741458bb194" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/sftpUploadResponsechina.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when request to file upload" doc:id="e83eb7bc-b73b-43d7-a5f8-a854fcf869fd" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d8c3df65-99dc-4f1a-890c-cbacd0b7311f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:NOT_FOUND" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when email to upload failure" doc:id="17bc6452-470a-420c-8c74-3fb7d4f593a2" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="fcb80bbb-ddb3-471f-bc61-9c33c9d0752e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when queue ack-psr" doc:id="46dad256-b17f-43c2-8f36-208dd842faad" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ff0a325d-de0c-4285-866a-67899c28f069" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when flow ref" doc:id="ac8de959-4d1f-4307-9e97-a46cf714fab0" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2562fcfc-d961-4f04-94c8-1d344f702f34" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="e210b298-81fa-4b65-925d-348b1b3078db" >
+				<munit:payload value="#[output application/json --- readUrl(('classpath://apac/singapore/consumeNetsuiteSavedSearchApacChina.dwl'), &quot;application/json&quot;)]" encoding="UTF-8" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to apac-singapore-vendor-bill-payment-subscriber-Flow" doc:id="84df51d4-dfc2-40bf-a807-6e4328fb757b" name="apac-singapore-vendor-bill-payment-listner-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="f2e8d17b-0a26-4c7f-9a17-d2cab9d04545" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+</mule>

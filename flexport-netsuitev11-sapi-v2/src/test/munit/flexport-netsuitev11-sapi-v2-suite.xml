@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config
+		name="flexport-netsuitev11-sapi-v2-suite.xml" />
+	<munit:test
+		name="get-customer-loan-invoice-by-externalId-success-test"
+		doc:id="f701fb88-e785-4016-844e-139b52594aec">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when search to netsuite" doc:id="cc182c6c-6990-40da-bee1-dc234b7311df" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="6fbdafdc-bdcc-41fe-95d3-ad7394d4d999" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getcustomerloaninvoiceexternalId/getInvoiceByExternalId.json')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:name="Set Event "
+				doc:id="feeb1b01-7f44-4b8c-af8b-ca8730258dec">
+				<munit:attributes value="#[output application/json --- readUrl('classpath://getcustomerloaninvoiceexternalId/getAttribute.json')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Get invoice by external id subflow" doc:id="90972922-5d56-4007-8c47-735b7e85b49a" name="get:\customer\loan\invoice\(externalId):flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that
+				doc:name="Assert that" doc:id="33579a30-5f9b-408c-a1ee-304d16a55f1b"
+				expression="#[payload]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-invoice-save-search-success-test"
+		doc:id="807c941b-f85a-4824-ae34-c4451d0ee9b6">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock when request to search "
+				doc:id="2c5bfc0c-55fa-463a-a25a-1ad2ae5839d7"
+				processor="netsuite:search">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="ef918eb8-3697-4e1a-bd08-0896a65d3583"
+						attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getInvoiceSaveSearch/getInvoiceSaveSearchPayload.json')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref
+				doc:name="get:\savesearch\invoices:flexport-netsuitev11-sapi-v2-config"
+				doc:id="868c3c53-b4e9-4813-a4b2-4036fe38548a"
+				name="get:\savesearch\invoices:flexport-netsuitev11-sapi-v2-config" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that
+				doc:name="Assert that" doc:id="9f694cab-c163-4d5e-98c0-f679142c09cd"
+				expression="#[payload]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-customer-save-search-success-test"
+		doc:id="3c6f38d8-05fb-4285-bd8a-66f74ec293fb">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when request to search " doc:id="867ccac0-8724-413c-8993-45c2e03a69e6" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Search" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a06c94d2-e648-4138-8c9c-c40fbd448008" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://getCustomerSaveSearch/getCustomerSaveSearchPayload.json')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="get:\savesearch\customers:flexport-netsuitev11-sapi-v2-config" doc:id="32feea3f-b54f-4341-b8ab-ad84b4d22884" name="get:\savesearch\customers:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="9c88656a-27b4-4464-b393-cf346800ed94" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-contacts-save-search-success-test" doc:id="ada00247-407d-4a37-9a06-b4b5f4a2cc8d" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to search " doc:id="2e6753f9-f2d8-427a-9915-ee5528d5810e" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f32c4e3b-d7ed-482e-a6be-eeca0f8a88c9" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://getContactsSaveSearch/getContactsSaveSearchPayload.json')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="get:\savesearch\contacts:flexport-netsuitev11-sapi-v2-config" doc:id="a3883ace-9cac-45a1-bf53-bd0312b4d68d" name="get:\savesearch\contacts:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="29eafef2-4fc1-412d-be8b-b26cb9dd2222" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-vendor-save-search-success-test" doc:id="7a434b8a-d3a4-4824-bb04-cb7ed54e65be" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to search " doc:id="a02d0292-b18e-4360-b1c2-dad96fa73ea4" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2bf98826-df5a-4f18-b4cc-e887595becdb" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://getVendorSaveSearch/getVendorSaveSearchPayload.json')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="get:\savesearch\vendors:flexport-netsuitev11-sapi-v2-config" doc:id="b788fdcf-3fe2-4971-9ba0-18943a9e1296" name="get:\savesearch\vendors:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="700a8af5-32f3-4864-9c33-9239c0ed0097" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-vendor-save-search-error-test" doc:id="8750e875-7fcb-44ab-87c3-abfa40cb4557" expectedErrorType="MULE:UNKNOWN">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to search " doc:id="b6e54e4a-243c-4ea7-a950-7a215a7edb0b" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2bf98826-df5a-4f18-b4cc-e887595becdb" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId=" MULE:UNKNOWN" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="get:\savesearch\vendors:flexport-netsuitev11-sapi-v2-config" doc:id="8bdce075-364d-471d-8c91-8944c805d740" name="get:\savesearch\vendors:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="get-contacts-save-search-error-test" doc:id="0fb1fa5f-625d-41b3-a5ac-d2204bbfd33c" expectedErrorType="NETSUITE:SESSION_TIMED_OUT">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to search " doc:id="21dcd30a-664f-4a6e-9e48-ed75315f25f7" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f32c4e3b-d7ed-482e-a6be-eeca0f8a88c9" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="NETSUITE:SESSION_TIMED_OUT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="get:\savesearch\contacts:flexport-netsuitev11-sapi-v2-config" doc:id="6d5dbfcc-d6d4-438f-97c8-55188794ebec" name="get:\savesearch\contacts:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="apikit-error-test" doc:id="830d4988-b83f-4f36-8e38-6299339eb035" expectedErrorType="APIKIT:BAD_REQUEST">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to apikit " doc:id="fdc9c703-0ebe-4ed2-8c16-31f4adffb917" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="362dbcbe-9c1f-473d-ba86-95d1e21586db" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:BAD_REQUEST" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="flexport-netsuitev11-sapi-v2-main" doc:id="99e50c0b-768a-4d75-8b0f-37c302bc230b" name="flexport-netsuitev11-sapi-v2-main"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="get-customer-save-search-error-test" doc:id="1500c68f-520b-4934-a26e-90b851bc14bd" expectedErrorType="NETSUITE:INVALID_CONTENT_TYPE">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to search " doc:id="03442b2f-a647-43a2-b1cc-5d5eadc7488b" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="a06c94d2-e648-4138-8c9c-c40fbd448008" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="NETSUITE:INVALID_CONTENT_TYPE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="get:\savesearch\customers:flexport-netsuitev11-sapi-v2-config" doc:id="75b25d9b-9a43-47cc-b5ea-d543e457dfad" name="get:\savesearch\customers:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="get-invoice-save-search-error-test" doc:id="ecdcce48-cd72-4d57-9d45-ee94d439c601" expectedErrorType="NETSUITE:NETSUITE_SOAP_FAULT">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when request to search " doc:id="fd30bf80-900c-49f2-82c9-20241758f84d" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ef918eb8-3697-4e1a-bd08-0896a65d3583" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="NETSUITE:NETSUITE_SOAP_FAULT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="get:\savesearch\invoices:flexport-netsuitev11-sapi-v2-config" doc:id="504605f1-d4fb-4537-bd78-6b91a5db8bb9" name="get:\savesearch\invoices:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test
+		name="get-customer-loan-invoice-by-externalId-error-test"
+		doc:id="d3f91fd8-4d0c-4f27-9880-d7c8688b6cfa" expectedErrorType="NETSUITE:MAX_VALUES_EXCEEDED">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when search to netsuite" doc:id="6f097842-0375-4528-ba2e-fbf396dc4885" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="6fbdafdc-bdcc-41fe-95d3-ad7394d4d999" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="NETSUITE:MAX_VALUES_EXCEEDED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:name="Set Event "
+				doc:id="a3471f8e-957b-4480-b0dd-4625bf939963">
+				<munit:attributes value="#[output application/json --- readUrl('classpath://getcustomerloaninvoiceexternalId/getAttribute.json')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Get invoice by external id subflow" doc:id="125ed76c-0bd7-4511-96d3-a4212e7da200" name="get:\customer\loan\invoice\(externalId):flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that
+				doc:name="Assert that" doc:id="ffa2e817-7629-4f99-8c11-3bc477e21627"
+				expression="#[payload]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test><munit:test
+		name="get-customer-loan-invoice-by-externalId-no-resource-success-test"
+		doc:id="683aa91a-bf4d-46b7-9c22-9c1aa7cc76aa">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when search to netsuite" doc:id="0caeb083-b256-4c4e-89d4-561830615959" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="6fbdafdc-bdcc-41fe-95d3-ad7394d4d999" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getcustomerloaninvoiceexternalId/getinvoiceNoResourceResponse.json')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:name="Set Event "
+				doc:id="12990f65-41bc-431f-a54c-8755d10983c5">
+				<munit:attributes value="#[output application/json --- readUrl('classpath://getcustomerloaninvoiceexternalId/getAttributeNoResource.json')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Get invoice by external id subflow" doc:id="fcaa146c-394e-48b6-8d06-e54406a0eb1b" name="get:\customer\loan\invoice\(externalId):flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that
+				doc:name="Assert that" doc:id="4cb08a79-4d5e-4e55-a524-faeede0215df"
+				expression="#[payload]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test>
+
+<munit:test name="update-vendor-dpsFlag-subFlow-test" doc:id="e400b366-be6b-48e1-810a-68e45fc451b6" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input Data" doc:id="6c36cc5a-eef4-4d84-bca9-326db20d355e" >
+				<munit:payload value='#[output text/xml --- readUrl("classpath://update-vendor-dpsFlag-subFlow-testData/update-vendor-dpsFlag-request.xml",  "text/xml")]' mediaType="text/xml" />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="netsuite:update-list" doc:id="9ff48e78-3884-4474-b044-bf5fedcce346" processor="netsuite:update-list">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Update list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="59789d72-3438-4249-b419-18aa1b44eefe" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- readUrl("classpath://update-vendor-dpsFlag-subFlow-testData/update-vendor-dpsFlag-response.json",  "application/json")]' mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="update-vendor-dpsFlag-subFlow" doc:id="47207261-ef44-4c06-97fd-e0477b06f5cc" name="update-vendor-subFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="fd7463d9-9910-47ec-997d-9196a7138b36" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	
+	<munit:test name="update-customer-dpsFlag-subFlow-test" doc:id="8e22a3f2-ac0e-4ddb-9477-d72d1b4a18d1" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input Data" doc:id="42a134e7-b2cc-4d2b-b153-e16dfa940ad1" >
+				<munit:payload value='#[output text/xml --- readUrl("classpath://update-customer-dpsFlag-subFlow-testData/update-customer-dpsFlag-request.xml",  "text/xml")]' mediaType="text/xml" />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="netsuite:update-list" doc:id="72e2eb75-2326-4f52-b23c-336c81c50c8d" processor="netsuite:update-list">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Update list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="59789d72-3438-4249-b419-18aa1b44eefe" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- readUrl("classpath://update-customer-dpsFlag-subFlow-testData/update-customer-dpsFlag-response.json",  "application/json")]' mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="update-customer-dpsFlag-subFlow" doc:id="d0747081-be03-4a0e-8bb5-ea5203d0f383" name="update-customer-subFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="53ea697a-b07d-4f3d-8863-0c3df5c9579d" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="update-vendor-dpsFlag-subFlow-errorTest" doc:id="528b8580-c501-4849-a36b-8c4df197534d" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set error input" doc:id="5f77d682-f2e7-4c69-8e6e-c7ddecebf67b" >
+				<munit:payload value='#[readUrl("classpath://update-vendor-dpsFlag-subFlow-testData/update-vendor-dpsFlag-errorRequest.dwl")]' />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="bf16970c-df45-46be-b600-6b3b1aec1a78" processor="netsuite:update-list">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Update list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="59789d72-3438-4249-b419-18aa1b44eefe" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="NETSUITE:NETSUITE_SOAP_FAULT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="1a825bc1-bebe-4de8-bf74-4d47cc0e9e53" >
+				<flow-ref doc:name="update-vendor-dpsFlag-subFlow" doc:id="9768bc20-893f-4d14-9f65-4c2b2a087f66" name="update-vendor-subFlow" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="d18c59bc-9024-4eb7-b86a-585357d87151" >
+						<ee:transform doc:name="Transform Message" doc:id="45fef494-679c-459c-b247-a59431e5861d" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+error.errorType.asString]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="874d3c79-20b8-466f-9c84-dffa4581f804" expression="#[payload]" is="#[MunitTools::equalTo('NETSUITE:NETSUITE_SOAP_FAULT')]"/>
+		</munit:validation>
+	</munit:test>
+	
+	<munit:test name="update-customer-dpsFlag-subFlow-errorTest" doc:id="003bf0db-1116-485b-becd-3dda57a67e59" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set error input" doc:id="c33f4a75-29cf-4ebf-a547-cbb1b3cd62ae" >
+				<munit:payload value='#[readUrl("classpath://update-customer-dpsFlag-subFlow-testData/update-customer-dpsFlag-errorRequest.dwl")]' />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="6bb7ded1-870d-4a35-9e9f-38a795f8cf62" processor="netsuite:update-list">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Update list" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="25ed17d6-682e-4238-8f6f-0fae5edca1e9" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="NETSUITE:NETSUITE_SOAP_FAULT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="c93bb2ed-efec-43dc-b6ac-2686116a9756" >
+				<flow-ref doc:name="update-customer-dpsFlag-subFlow" doc:id="fa20e1a1-0b11-4883-830e-96d73f39007e" name="update-customer-subFlow" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="74404f97-bd1b-4ede-addc-5b08345aab1e" >
+						<ee:transform doc:name="Transform Message" doc:id="3b75b839-4fb7-4c4d-896c-b8208d774678" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+error.errorType.asString]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="666f399b-3bdc-40a7-be0e-9cc75604c5c2" expression="#[payload]" is="#[MunitTools::equalTo('NETSUITE:NETSUITE_SOAP_FAULT')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="flexport-netsuitev11-sapi-v2-invoice-create-suiteTest" doc:id="536dc7b0-07ff-4ed7-907f-c447ac22a3fb" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when netsuite:add-list" doc:id="fde3cd3e-cd78-413f-9c18-13464521f0df" processor="netsuite:add-list">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="e9f2935c-a240-473f-925d-f44d0c7824eb" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://createInvoice/postInvoiceResponse-v2.json')]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event Invoice Create" doc:id="037b42b4-d33c-4cb0-9be6-6b6860a3960c" >
+				<munit:payload value="#[ output application/xml --- readUrl('classpath://createInvoice/postInvoiceRequest-v2.xml', 'application/xml')]" mediaType="application/xml" />
+			</munit:set-event>
+			<flow-ref doc:name="create-invoice-subflow" doc:id="0dee9f4d-9692-4120-ada0-7ebd5e79b173" name="create-invoice-subflow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="8ce75111-d02b-4ea8-adc4-ed954606c2b7" is="#[MunitTools::equalTo(write(readUrl('classpath://createInvoice/postInvoiceResponse-v2.json', 'application/json'), &quot;application/json&quot;))]" expression='#[output application/json --- write(payload, "application/json")]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-time-based-invoice-save-search-success-test"
+		doc:id="0b7d1e4a-1417-4826-93b8-a1eca7fa00c5">
+		<munit:behavior>
+			<munit:set-event doc:name="Set Event" doc:id="f97d69eb-1199-4fcb-8c2b-b079e3adcc3b" >
+				<munit:payload value="#[output application/xml --- readUrl('classpath://getInvoiceSaveSearch/invoicesTimeBasedSaveSearchRequest.xml', &quot;application/xml&quot;)]" />
+			</munit:set-event>
+			<munit-tools:mock-when
+				doc:name="Mock when request to search "
+				doc:id="80d17e51-36bd-41e5-bd31-37988caffae3"
+				processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Search" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="58fdf057-39ea-4355-8add-e920a7a9ef60" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getInvoiceSaveSearch/invoicesTimeBasedSaveSearchResponse.json')]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when anypoint-mq:publish" doc:id="3a0df6af-9877-4768-82fa-ae7367f25d95" processor="anypoint-mq:publish">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Publish" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d4a6ce56-17b8-4ac0-87a2-87d1230c45b8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref
+				doc:name="post:\savesearch\invoices:application\xml:flexport-netsuitev11-sapi-v2-config"
+				doc:id="d9880789-6a85-4778-aa6a-fccc86cc89d8"
+				name="post:\savesearch\invoices:application\xml:flexport-netsuitev11-sapi-v2-config" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that
+				doc:name="Assert that" doc:id="b285eda0-b3be-4b29-92d9-323ed3a35c48"
+				expression="#[payload.message]" is="#[MunitTools::equalTo('Invoices successfully published to queue')]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get-time-based-invoice-save-search-error-test" doc:id="ddd1c29c-be23-4569-81cc-f5c23a70275c" expectedErrorType="NETSUITE:NETSUITE_SOAP_FAULT">
+		<munit:behavior >
+			<munit:set-event doc:name="Set Event" doc:id="f0d89db1-c9d0-4ce0-af8f-6e414c878751" >
+				<munit:payload value='#[output application/json --- {"payload" : "errorpayload"}]' />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="Mock when request to search " doc:id="60d065c7-cc76-4c5d-bbe7-d164789228cd" processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Search" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="58fdf057-39ea-4355-8add-e920a7a9ef60" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="NETSUITE:NETSUITE_SOAP_FAULT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="get:\savesearch\invoices:flexport-netsuitev11-sapi-v2-config" doc:id="d7e224bd-88f5-49b9-8e01-5237ff151caa" name="post:\savesearch\invoices:application\xml:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="get-time-based-invoice-save-search-blank-array-success-test"
+		doc:id="3ec794ff-0b6b-4937-943e-dc31d3bfe616">
+		<munit:behavior>
+			<munit:set-event doc:name="Set Event" doc:id="bc711b23-283b-4bd5-bb98-3134e59ded93" >
+				<munit:payload value="#[output application/xml --- readUrl('classpath://getInvoiceSaveSearch/invoicesTimeBasedSaveSearchRequest.xml', &quot;application/xml&quot;)]" />
+			</munit:set-event>
+			<munit-tools:mock-when
+				doc:name="Mock when request to search "
+				doc:id="1908e636-7a77-48cd-8bdb-7e51fcd1ab25"
+				processor="netsuite:search">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Search" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="58fdf057-39ea-4355-8add-e920a7a9ef60" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- []]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when anypoint-mq:publish" doc:id="4f6787c6-bc28-45f2-a323-59836e4799c4" processor="anypoint-mq:publish">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Publish" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d4a6ce56-17b8-4ac0-87a2-87d1230c45b8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref
+				doc:name="post:\savesearch\invoices:application\xml:flexport-netsuitev11-sapi-v2-config"
+				doc:id="a9fd1f19-0c5e-4fe2-bbb6-4fdce5b4e636"
+				name="post:\savesearch\invoices:application\xml:flexport-netsuitev11-sapi-v2-config" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that
+				doc:name="Assert that" doc:id="a8de78df-4755-445d-97bf-4bfa006fe2b7"
+				expression="#[payload.message]" is="#[MunitTools::equalTo('Result count is 0 for the current time period')]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="save-search-generic-success-test"
+		doc:id="a1152e6b-afc3-46ae-8a95-0ffc3bcd7d47">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock when request to search "
+				doc:id="57d8394d-4b06-4958-977e-956bcb70e81a"
+				processor="netsuite:search">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="ef918eb8-3697-4e1a-bd08-0896a65d3583"
+						attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://saveSearchGeneric/saveSearchGeneric_ResponseCustomerRefund.json')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:name="Set Event" doc:id="4be184c4-359d-46c8-a4c4-4c75963d38bd" >
+				<munit:payload value="#[output application/xml --- readUrl('classpath://saveSearchGeneric/saveSearchGeneric_CustomerRefund.xml', &quot;application/xml&quot;)]" />
+				<munit:attributes value='#[{ "queryParams":{&#10;	"searchKey": "TransactionSearchAdvanced",&#10;	"pageSize": "100",&#10;	"limit": "-1"&#10;	}&#10;}]' />
+			</munit:set-event>
+			<flow-ref
+				doc:name="post:\savesearch:application\xml:flexport-netsuitev11-sapi-v2-config"
+				doc:id="3a46528e-78f8-43db-bdad-9a0618c6fde6"
+				name="post:\savesearch:application\xml:flexport-netsuitev11-sapi-v2-config" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that
+				doc:name="Assert that" doc:id="a8bbb021-5d13-4d62-959f-81bc7bbc10b2"
+				expression="#[payload]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test>
+	
+	<munit:test name="update-generic-test-success" doc:id="301ba92c-017b-4b29-92b9-b2f8b4519b96" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input Data" doc:id="638f0aa5-f36e-4a3d-a8b0-1e010a2ab6b1" >
+				<munit:payload value='#[output text/xml --- readUrl("classpath://updateGeneric/updateGeneric_VendorPayment.xml",  "text/xml")]' mediaType="text/xml" />
+				<munit:attributes value='#[{ "queryParams":{&#10;	"recordType": "vendorPayment"&#10;	}&#10;}]' />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="netsuite:update-list" doc:id="645393dd-aa65-4e04-aa56-e9664be69922" processor="netsuite:update-list">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Update list" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- readUrl("classpath://updateGeneric/updateGeneric_ResponseVendorPayment.json",  "application/json")]' mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="put:\record:application\xml:flexport-netsuitev11-sapi-v2-config" doc:id="285b10d5-b984-4ad4-9329-ce7b35bd9dbc" name="put:\record:application\xml:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="4cbec4ae-0358-4ab3-8349-1ede8ab6e9b4" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="addFile_Flow-test-success" doc:id="949eb264-c8d9-4302-b3d8-c3b9a9b97482" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Add file" doc:id="2d5da07d-9716-4b31-a6ce-05b589b554b7" processor="netsuite:add">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Add" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/xml --- readUrl('classpath://addFile/addFileResponse.xml', &quot;application/xml&quot;)]" encoding="UTF-8" />					
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Input" doc:id="24e8930b-025a-4e95-bd08-660fd62ce280">
+				<munit:payload value='#[output application/xml --- readUrl("classpath://addFile/addFileXML.xml","application/xml")]' />
+				<munit:attributes value='#[{ "queryParams":{&#10;	"folderId": "12345",&#10;	"fileName": "TestFile.xml"&#10;	}&#10;}]' />
+				<munit:variables >
+					<munit:variable key="content_type" value='"application/xml"' />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="post:\file:application\xml:flexport-netsuitev11-sapi-v2-config" doc:id="07cebfdf-75d1-4707-a813-68362471ac14" name="post:\file:application\xml:flexport-netsuitev11-sapi-v2-config"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="b9d22116-404c-4fb5-ae0e-1c4610825f65" actual='#[output application/java ---read(write(payload, "application/xml") replace /[\r]/ with &quot;&quot;,"application/xml")]' message="Payload doesn't match" expected='#[read(MunitTools::getResourceAsString("addFile/addFileResponse.xml") replace /[\r]/ with &quot;&quot;, "application/xml")]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="addFile_Flow-test-errorCase" doc:id="53ba8041-bd62-4255-8486-6c20dc92402f" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="a0305ba9-67b9-4fb7-9580-99d3663ad884" processor="netsuite:add">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Add" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="NETSUITE:CONNECTIVITY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="895fec6c-6e29-4e2d-be7e-8165c01b1cf6" >
+				<munit:payload value='#[output application/xml --- readUrl("classpath://addFile/addFileXML.xml","application/xml")]' />
+				<munit:attributes value='#[{ "queryParams":{&#10;	"folderId": "12345",&#10;	"fileName": "TestFile.xml"&#10;	}&#10;}]' />
+				<munit:variables >
+					<munit:variable key="content_type" value='"application/xml"' />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="08256e1e-3459-4955-ad9b-c9b8a5460f7b" >
+				<flow-ref doc:name="post:\file:application\xml:flexport-netsuitev11-sapi-v2-config" doc:id="856d6636-175d-4819-a6a9-172f54d232f7" name="post:\file:application\xml:flexport-netsuitev11-sapi-v2-config" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="0b26ea49-6d1d-4ae0-9400-3104d9461b9d" >
+						<logger level="INFO" doc:name="Logger" doc:id="918a39dd-4d5c-447f-a408-28e98fbe947b" message="CONTINUE" />
+						<set-variable value="#[error.errorType.asString]" doc:name="Set Variable" doc:id="858cbf36-4b46-4251-b6da-249bc3704f75" variableName="errorVar" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="dfe39545-bbb6-4f3d-8b41-840c1c88756d" expression="#[vars.errorVar]" is='#[MunitTools::equalTo("NETSUITE:CONNECTIVITY")]' />
+		</munit:validation>
+	</munit:test>
+	
+	
+</mule>

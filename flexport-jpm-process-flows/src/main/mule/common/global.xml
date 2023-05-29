@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:spring="http://www.mulesoft.org/schema/mule/spring"
+	xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd
+http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+
+	<apikit:config name="flexport-jpm-process-flows-config"
+		api="resource::1174f842-7d82-477a-8eaf-98e2ee952e37:flexport-jpm-process-flows:1.0.1:raml:zip:flexport-jpm-process-flows.raml"
+		outboundHeadersMapName="outboundHeaders"
+		httpStatusVarName="httpStatus" />
+
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="e833b405-6086-497b-aaf5-5491c99387dc"
+		file="properties/${env}.properties" />
+	<secure-properties:config
+		name="Secure_Properties_Config" doc:name="Secure Properties Config"
+		doc:id="c93e0390-bd8f-4a45-abc1-11a237f93b86"
+		file="properties/${env}-secure.properties" key="${key}">
+		<secure-properties:encrypt
+			algorithm="Blowfish" />
+	</secure-properties:config>
+	<file:config name="File_Config" doc:name="File Config"
+		doc:id="a161a986-c982-4555-a32d-fb58d7d279a5">
+		<file:connection workingDir="${fileConfig.path}" />
+	</file:config>
+
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="75d33e2d-d5c8-4340-be0c-ce241d3ca78c"
+		file="properties/logging.yaml" />
+	<http:request-config name="NSv11v2httpRequest"
+		doc:name="HTTP Request configuration"
+		doc:id="0fbdccea-1e01-4039-903b-453ef2fc6885"
+		responseTimeout="${http.netsuite.v11.v2.response.timeout}"
+		basePath="${https.netsuite.sapi.v11.v2.basepath}">
+		<http:request-connection
+			host="${http.netsuite.sapi.v11.v2.host}"
+			port="${http.netsuite.sapi.v11.v2.port}" protocol="HTTPS">
+			<reconnection>
+				<reconnect frequency="${reconnection.frequency}"
+					count="${reconnection.attempts}" />
+			</reconnection>
+			<http:authentication>
+				<http:basic-authentication
+					username="${secure::https.netsuite.sapi.v11.v2.username}"
+					password="${secure::https.netsuite.sapi.v11.v2.password}" />
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>
+	<http:request-config name="Http_NS__Request"
+		doc:name="HTTP Request configuration"
+		doc:id="bd8697dc-498a-40a6-add8-2a71b94d742e"
+		responseTimeout="${http.response.timeout.netsuite}"
+		basePath="${https.basepath.netsuite}">
+		<http:request-connection
+			host="${http.host.netsuite}" port="${https.port.server}"
+			protocol="HTTPS">
+			<reconnection>
+				<reconnect frequency="${reconnection.frequency}"
+					count="${reconnection.attempts}" />
+			</reconnection>
+			<http:authentication>
+				<http:basic-authentication
+					username="${authentication.name}"
+					password="${secure::authentication.password}" />
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>
+	<http:request-config name="PGP_Encrpt_Request"
+		doc:name="HTTP Request configuration"
+		doc:id="d13d408d-f113-4ff3-9d93-cbb818eee4b7"
+		responseTimeout="${http.response.timeout.pgp}"
+		basePath="${https.basepath.pgp}">
+		<http:request-connection
+			host="${https.host.pgp}" port="${https.port.pgp}" protocol="HTTPS">
+			<reconnection>
+				<reconnect frequency="${reconnection.frequency}"
+					count="${reconnection.attempts}" />
+			</reconnection>
+			<http:authentication>
+				<http:basic-authentication
+					username="${authentication.name}"
+					password="${secure::authentication.password}" />
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>
+	<vm:config name="VM_Config" doc:name="VM Config"
+		doc:id="00e3b97d-4d27-49e5-9a92-4a35fd2e5304">
+		<vm:connection>
+			<reconnection>
+				<reconnect frequency="${vm.reconnection.frequency}"
+					count="${vm.reconnection.attempts}" />
+			</reconnection>
+		</vm:connection>
+		<vm:queues>
+			<vm:queue queueName="flexport-inq-reconcile"
+				queueType="PERSISTENT" />
+			<vm:queue queueName="flexport-inq-ack-psr" />
+			<vm:queue queueName="flexport-apac-china-ack-psr-inq" />
+			<vm:queue queueName="flexport-apac-china-inq" />
+			<vm:queue queueName="flexport-apac-hongkong-ack-psr-inq" />
+			<vm:queue queueName="flexport-apac-hongkong-inq" />
+			<vm:queue queueName="flexport-namea-ack-psr-inq" />
+			<vm:queue queueName="flexport-namea-reconcile-inq" />
+			<vm:queue queueName="flexport-apac-singapore-inq" />
+			<vm:queue queueName="flexport-apac-singapore-ack-psr-inq" />
+			<vm:queue queueName="flexport-customer-refund-inq" />
+			<vm:queue queueName="flexport-customer-refund-ack-psr-inq" />
+		</vm:queues>
+	</vm:config>
+	<os:object-store name="Object_store"
+		doc:name="Object store" doc:id="3bc1f57b-7692-4b98-83ea-0b6163d2e461" />
+	<http:listener-config
+		name="HTTP_Schedular_Listener_config" doc:name="HTTP Listener config"
+		doc:id="ec208163-ea36-4914-b612-3a6b0cd83412">
+		<http:listener-connection
+			host="${https.host}" port="${https.port}"
+			connectionIdleTimeout="${http.conn.idle.timeout}" protocol="HTTPS">
+			<tls:context>
+				<tls:key-store type="jks"
+					path="sslcert/${env}-server-keystore.jks"
+					keyPassword="${secure::ssl.keystore.password}"
+					password="${secure::ssl.keystore.password}" />
+			</tls:context>
+		</http:listener-connection>
+	</http:listener-config>
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="0e1637a3-7a5e-4277-8a56-570acda9528e"
+		file="properties/error-handler.yaml" />
+	<configuration doc:name="Configuration"
+		doc:id="648727e5-4b70-4df0-aa53-63b929af0678"
+		defaultErrorHandler-ref="global_error_handler" />
+	<http:request-config
+		name="HTTP_Request_configuration"
+		doc:name="HTTP Request configuration"
+		doc:id="abf0b5c0-350b-4522-9c72-72227cb0a231" basePath="/${base.path}">
+		<http:request-connection protocol="HTTPS"
+			host="${https.jpm.sftp.sapi.host}" port="${https.jpm.sftp.sapi.port}"
+			maxConnections="${https.max.reconnection}"
+			connectionIdleTimeout="${https.connection.idle.timeout}"
+			responseBufferSize="${https.connection.response.buffer.size}">
+			<http:authentication>
+				<http:basic-authentication
+					username="${secure::flx.jpm.sftp.sapi.client_id}"
+					password="${secure::flx.jpm.sftp.sapi.client_secret}" />
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>
+	<api-gateway:autodiscovery
+		apiId="${api.autodiscovery.id}" ignoreBasePath="true"
+		doc:name="API Autodiscovery"
+		doc:id="0c5c521a-e091-4e87-b42c-d9b0f9060383"
+		flowRef="flexport-jpm-process-flows-main" />
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="aae0f174-a6ce-4865-b741-3fd198753825"
+		file="properties/apac/${env}-singapore.properties" />
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="fa6568c4-49c8-4d1a-8107-54f3f633680e"
+		file="properties/apac/${env}-china.properties" />
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="3792d747-0e10-445b-8471-f3d8f74979f9"
+		file="properties/apac/${env}-hongkong.properties" />
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="6608d50f-e270-4af1-bc92-4471acdf1f63"
+		file="properties/refund/${env}-customer-refund.properties" />
+</mule>
+

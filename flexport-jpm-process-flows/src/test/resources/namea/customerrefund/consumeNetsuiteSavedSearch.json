@@ -1,0 +1,182 @@
+[
+  {
+    "basic": {
+      "type": "_customerRefund",
+      "memo": "FINOPS-61951",
+      "postingPeriod": "FINOPS-61951",
+      "account": {
+        "@internalId": "1188"
+      },
+      "department": null,
+      "entity": "24115432",
+      "amount": 5000.0,
+      "internalId": "45588874",
+      "tranDate": "2023-04-04T21:00:00.000-07:00",
+      "tranId": "20210817580",
+      "currency": "USD",
+      "transactionNumber": "5776",
+      "custbody_flexport_bank_details": {
+        "@internalId": "2",
+        "@typeId": "896"
+      }
+    },
+    "customerMainJoin": {
+      "altName": "Gulf Coast Panama Jack, Inc.  -  US",
+      "billState": "FL",
+      "billAddress1": "1411 MOYLAN RD",
+      "billZipCode": "32407-4069",
+      "billCity": "PANAMA CITY BEACH",
+      "billCountry": "_unitedStates",
+      "billCountryCode": "US",
+      "custentity_payment_method": {
+        "@internalId": "3",
+        "@typeId": "84"
+      },
+      "custentitybankroutingswift": "65464654654",
+      "custentityaccountnumber": "546543546546",
+      "custentitybankname": "JPM Chase",
+      "custentitybankcountry": "US"
+    },
+    "customSearchJoin": {
+      "customFieldList": {
+        "custrecord_flexport_bic": "CHASUS33",
+        "custrecord_flexport_member_id": "021000021",
+        "custrecord_paying_flexport_sub_add1": "760 MARKET STREET",
+        "custrecord_paying_flexport_sub_add2": "8TH FLOOR",
+        "custrecord_flexport_company_country": "US",
+        "custrecord_paying_flexport_sub_state": "CA",
+        "custrecord_paying_flexport_sub_pcode": "94102",
+        "custrecord_flexport_ach_id": "1538625000",
+        "custrecord_flexport_bank_account_number": "712538625",
+        "custrecord_flexport_company_name": "Flexport Inc",
+        "custrecord_paying_flexport_sub": "Flexport Inc. - Operating",
+        "custrecord_flexport_bank_name": "JP Morgan Chase",
+        "custrecord_paying_flexport_sub_city": "SAN FRANCISCO",
+        "custrecord_flexport_bank_countrycode": "US",
+        "custrecord_paying_flexport_sub_country": "US",
+        "custrecord_flexport_bank_currency": "USD",
+        "custrecord_flexport_ach_sch": "JPMCOID"
+      }
+    }
+  },
+  {
+    "basic": {
+      "type": "_customerRefund",
+      "memo": "FINOPS-61976",
+      "postingPeriod": "FINOPS-61976",
+      "account": {
+        "@internalId": "1188"
+      },
+      "department": null,
+      "entity": "9873",
+      "amount": 276336.18,
+      "internalId": "45588875",
+      "tranDate": "2023-04-04T21:00:00.000-07:00",
+      "tranId": "20210817581",
+      "currency": "USD",
+      "transactionNumber": "5777",
+      "custbody_flexport_bank_details": {
+        "@internalId": "2",
+        "@typeId": "896"
+      }
+    },
+    "customerMainJoin": {
+      "altName": "Peloton Interactive Inc  -  US",
+      "billState": "NY",
+      "billAddress1": "125 W 25th St",
+      "billZipCode": "10001",
+      "billCity": "New York",
+      "billCountry": "_unitedStates",
+      "billCountryCode": "US",
+      "custentity_payment_method": {
+        "@internalId": "3",
+        "@typeId": "84"
+      },
+      "custentitybankroutingswift": "65465356",
+      "custentityaccountnumber": "6565352656",
+      "custentitybankname": "Bank Of America",
+      "custentitybankcountry": "US"
+    },
+    "customSearchJoin": {
+      "customFieldList": {
+        "custrecord_flexport_bic": "CHASUS33",
+        "custrecord_flexport_member_id": "021000021",
+        "custrecord_paying_flexport_sub_add1": "760 MARKET STREET",
+        "custrecord_paying_flexport_sub_add2": "8TH FLOOR",
+        "custrecord_flexport_company_country": "US",
+        "custrecord_paying_flexport_sub_state": "CA",
+        "custrecord_paying_flexport_sub_pcode": "94102",
+        "custrecord_flexport_ach_id": "1538625000",
+        "custrecord_flexport_bank_account_number": "712538625",
+        "custrecord_flexport_company_name": "Flexport Inc",
+        "custrecord_paying_flexport_sub": "Flexport Inc. - Operating",
+        "custrecord_flexport_bank_name": "JP Morgan Chase",
+        "custrecord_paying_flexport_sub_city": "SAN FRANCISCO",
+        "custrecord_flexport_bank_countrycode": "US",
+        "custrecord_paying_flexport_sub_country": "US",
+        "custrecord_flexport_bank_currency": "USD",
+        "custrecord_flexport_ach_sch": "JPMCOID"
+      }
+    }
+  },
+  {
+    "basic": {
+      "type": "_customerRefund",
+      "memo": "FINOPS-62053",
+      "postingPeriod": "FINOPS-62053",
+      "account": {
+        "@internalId": "1188"
+      },
+      "department": null,
+      "entity": "862931",
+      "amount": 8116.24,
+      "internalId": "45599567",
+      "tranDate": "2023-04-05T21:00:00.000-07:00",
+      "tranId": "20210817582",
+      "currency": "USD",
+      "transactionNumber": "5785",
+      "custbody_flexport_bank_details": {
+        "@internalId": "2",
+        "@typeId": "896"
+      }
+    },
+    "customerMainJoin": {
+      "altName": "Allfasteners",
+      "billState": "OH",
+      "billAddress1": "959 LAKE RD",
+      "billZipCode": "44256-2453",
+      "billCity": "MEDINA",
+      "billCountry": "_unitedStates",
+      "billCountryCode": "US",
+      "custentity_payment_method": {
+        "@internalId": "3",
+        "@typeId": "84"
+      },
+      "custentitybankroutingswift": "684646",
+      "custentityaccountnumber": "654643465465",
+      "custentitybankname": "First Bank",
+      "custentitybankcountry": "US"
+    },
+    "customSearchJoin": {
+      "customFieldList": {
+        "custrecord_flexport_bic": "CHASUS33",
+        "custrecord_flexport_member_id": "021000021",
+        "custrecord_paying_flexport_sub_add1": "760 MARKET STREET",
+        "custrecord_paying_flexport_sub_add2": "8TH FLOOR",
+        "custrecord_flexport_company_country": "US",
+        "custrecord_paying_flexport_sub_state": "CA",
+        "custrecord_paying_flexport_sub_pcode": "94102",
+        "custrecord_flexport_ach_id": "1538625000",
+        "custrecord_flexport_bank_account_number": "712538625",
+        "custrecord_flexport_company_name": "Flexport Inc",
+        "custrecord_paying_flexport_sub": "Flexport Inc. - Operating",
+        "custrecord_flexport_bank_name": "JP Morgan Chase",
+        "custrecord_paying_flexport_sub_city": "SAN FRANCISCO",
+        "custrecord_flexport_bank_countrycode": "US",
+        "custrecord_paying_flexport_sub_country": "US",
+        "custrecord_flexport_bank_currency": "USD",
+        "custrecord_flexport_ach_sch": "JPMCOID"
+      }
+    }
+  }
+]

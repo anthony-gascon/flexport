@@ -1,0 +1,52 @@
+[
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>M-ID-354065</MsgId>\n  <CreDtTm>2023-01-13T00:10:15.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>5fb5b47f7a1744a892ace953d1b685f9</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <OrgnlNbOfTxs>4</OrgnlNbOfTxs>\n  <OrgnlCtrlSum>8208.100</OrgnlCtrlSum>\n  <GrpSts>ACSP</GrpSts>\n  <NbOfTxsPerSts>\n    <DtldNbOfTxs>4</DtldNbOfTxs>\n    <DtldSts>ACSP</DtldSts>\n    <DtldCtrlSum>8208.100</DtldCtrlSum>\n  </NbOfTxsPerSts>\n  <NbOfTxsPerSts>\n    <DtldNbOfTxs>0</DtldNbOfTxs>\n    <DtldSts>RJCT</DtldSts>\n    <DtldCtrlSum>0.000</DtldCtrlSum>\n  </NbOfTxsPerSts>\n</OrgnlGrpInfAndSts><OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000001</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43018573</OrgnlInstrId>\n    <OrgnlEndToEndId>229641</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3013SIH000010000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"SGD\">2868.03</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-13</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n<OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000002</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43058316</OrgnlInstrId>\n    <OrgnlEndToEndId>230250</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3013SIH000020000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"SGD\">4122.38</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-13</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n<OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000003</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43188749</OrgnlInstrId>\n    <OrgnlEndToEndId>232070</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3013SIH000030000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"SGD\">453.66</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-13</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n<OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000004</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43231055</OrgnlInstrId>\n    <OrgnlEndToEndId>232716</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>01219094JR900001</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"SGD\">764.03</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-13</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.PSOURCE.MRCNFRM.APACSingapore.20230112191019611",
+      "size": 2762,
+      "name": "FLEXPISO.PSOURCE.MRCNFRM.APACSingapore.20230112191019611",
+      "timestamp": "2023-01-13T00:10:23"
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Document xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"urn:iso:std:iso:20022:tech:xsd:pain.002.001.03\">\n<CstmrPmtStsRpt><GrpHdr>\n  <MsgId>M-ID-354108</MsgId>\n  <CreDtTm>2023-01-13T03:39:51.0Z</CreDtTm>\n  <InitgPty>\n    <Id>\n      <OrgId>\n        <Othr>\n          <Id>JP Morgan</Id>\n          <SchmeNm>\n            <Cd>BANK</Cd>\n          </SchmeNm>\n        </Othr>\n      </OrgId>\n    </Id>\n  </InitgPty>\n</GrpHdr>\n<OrgnlGrpInfAndSts>\n  <OrgnlMsgId>d684574c37d248baa80e56aebf2555de</OrgnlMsgId>\n  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>\n  <OrgnlNbOfTxs>4</OrgnlNbOfTxs>\n  <OrgnlCtrlSum>8208.100</OrgnlCtrlSum>\n  <GrpSts>ACSP</GrpSts>\n  <NbOfTxsPerSts>\n    <DtldNbOfTxs>4</DtldNbOfTxs>\n    <DtldSts>ACSP</DtldSts>\n    <DtldCtrlSum>8208.100</DtldCtrlSum>\n  </NbOfTxsPerSts>\n  <NbOfTxsPerSts>\n    <DtldNbOfTxs>0</DtldNbOfTxs>\n    <DtldSts>RJCT</DtldSts>\n    <DtldCtrlSum>0.000</DtldCtrlSum>\n  </NbOfTxsPerSts>\n</OrgnlGrpInfAndSts><OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000001</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43018573</OrgnlInstrId>\n    <OrgnlEndToEndId>229641</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3013SIH000210000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"SGD\">2868.03</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-13</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n<OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000002</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43058316</OrgnlInstrId>\n    <OrgnlEndToEndId>230250</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3013SIH000220000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"SGD\">4122.38</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-13</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n<OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000003</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43188749</OrgnlInstrId>\n    <OrgnlEndToEndId>232070</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>3013SIH000230000</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"SGD\">453.66</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-13</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n<OrgnlPmtInfAndSts>\n  <OrgnlPmtInfId>BATCHREFERENCE000004</OrgnlPmtInfId>\n  <TxInfAndSts>\n    <OrgnlInstrId>43231055</OrgnlInstrId>\n    <OrgnlEndToEndId>232716</OrgnlEndToEndId>\n    <TxSts>ACSP</TxSts>\n    <AcctSvcrRef>01222392JR900001</AcctSvcrRef>\n    <OrgnlTxRef>\n      <Amt>\n        <InstdAmt Ccy=\"SGD\">764.03</InstdAmt>\n      </Amt>\n      <ReqdExctnDt>2023-01-13</ReqdExctnDt>\n    </OrgnlTxRef>\n  </TxInfAndSts>\n</OrgnlPmtInfAndSts>\n</CstmrPmtStsRpt>\n</Document>",
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "symbolicLink": false,
+      "regularFile": true,
+      "directory": false,
+      "path": "/Outbound/Encrypted/FLEXPISO.PSOURCE.MRCNFRM.APACSingapore.20230112223958717",
+      "size": 2762,
+      "name": "FLEXPISO.PSOURCE.MRCNFRM.APACSingapore.20230112223958717",
+      "timestamp": "2023-01-13T03:40:15"
+    }
+  }
+]

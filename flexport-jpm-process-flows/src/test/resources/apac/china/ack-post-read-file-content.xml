@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03">
+<CstmrPmtStsRpt><GrpHdr>
+  <MsgId>100000159201706000001</MsgId>
+  <CreDtTm>2023-01-13T12:29:55.0Z</CreDtTm>
+  <InitgPty>
+    <Id>
+      <OrgId>
+        <Othr>
+          <Id>JP Morgan</Id>
+          <SchmeNm>
+            <Cd>BANK</Cd>
+          </SchmeNm>
+        </Othr>
+      </OrgId>
+    </Id>
+  </InitgPty>
+</GrpHdr>
+<OrgnlGrpInfAndSts>
+  <OrgnlMsgId>52b9c43e63374eec8570d8f9cec7cdf5</OrgnlMsgId>
+  <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>
+  <GrpSts>RJCT</GrpSts>
+  <StsRsnInf>
+    <Rsn>
+      <Cd>FF01</Cd>
+    </Rsn>
+    <AddtlInf>File Format incomplete or invalid: Line 31 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 31%3B</AddtlInf>
+    <AddtlInf> columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B%2</AddtlInf>
+    <AddtlInf>2urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%3A</AddtlInf>
+    <AddtlInf>std%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>
+  </StsRsnInf>
+  <StsRsnInf>
+    <Rsn>
+      <Cd>FF01</Cd>
+    </Rsn>
+    <AddtlInf>File Format incomplete or invalid: Line 104 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 104%</AddtlInf>
+    <AddtlInf>3B columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B</AddtlInf>
+    <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%</AddtlInf>
+    <AddtlInf>3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>
+  </StsRsnInf>
+  <StsRsnInf>
+    <Rsn>
+      <Cd>FF01</Cd>
+    </Rsn>
+    <AddtlInf>File Format incomplete or invalid: Line 174 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 174%</AddtlInf>
+    <AddtlInf>3B columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B</AddtlInf>
+    <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%</AddtlInf>
+    <AddtlInf>3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>
+  </StsRsnInf>
+  <StsRsnInf>
+    <Rsn>
+      <Cd>FF01</Cd>
+    </Rsn>
+    <AddtlInf>File Format incomplete or invalid: Line 246 Column 13 org.xml.sax.SAXParseException%3B lineNumber%3A 246%</AddtlInf>
+    <AddtlInf>3B columnNumber%3A 13%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27%7B</AddtlInf>
+    <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3Aid%7D%27. One of %27%7B%22urn%3Aiso%</AddtlInf>
+    <AddtlInf>3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AId%7D%27 is expected.</AddtlInf>
+  </StsRsnInf>
+</OrgnlGrpInfAndSts>
+</CstmrPmtStsRpt>
+</Document>

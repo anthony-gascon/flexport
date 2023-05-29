@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="foreach-mock-subflow" doc:id="2cf8cd84-efc2-40d3-96ee-7fff4501be74" >
+		<choice doc:name="Choice" doc:id="33dbc6c2-0edb-47cc-8514-f19c9e62ed48">
+			<when expression="#[vars.counter == 1]">
+				<set-payload value="#[output application/json --- readUrl('classpath://netsuiteUpdateData\counter1.json')]" doc:name="counter 1" doc:id="84cf95bb-fc6b-49c1-b1ad-009da067de39" />
+			</when>
+			<otherwise>
+				<set-payload value="#[output application/json --- readUrl('classpath://netsuiteUpdateData\counter5.json')]" doc:name="counter 5" doc:id="6f2cd6d2-d33e-48ec-8e87-380066052967" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

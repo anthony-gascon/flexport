@@ -1,0 +1,42 @@
+errorCodeMessage:
+  ### APIKIT Errors ###
+  apikit:
+    badRequest:
+      code: "400"
+      description: "Request validation error"
+    notFound:
+      code: "404"
+      description: "Resource not found"
+    methodNotAllowed:
+      code: "405"
+      description: "HTTP method not allowed"
+    notAcceptable:
+      code: "406"
+      description: "Requested content type not available"
+    unsupportedMediaType:
+      code: "415"
+      description: "Payload format is in an unsupported format"
+    notImplemented:
+      code: "501"
+      description: "Requested functionality is not supported"
+
+  ### HTTP Errors ###
+  http:
+    connectivity:
+      code: "500"
+      description: "Connectivity Error, Please try later"
+    forbidden:
+      code: "403"
+      description: "Server refused to authorize the request" 
+    serviceUnavailable:
+      code: "503"
+      description: "Server not ready to handle the request"
+    timeout:
+      code: "504"
+      description: "Gateway Timeout - Server did not get a response in time" 
+    unauthorized:
+      code: "401"
+      description: "Invalid Credentials"
+    basicauth:
+      code: "401"
+      description: "Basic Authentication failed "

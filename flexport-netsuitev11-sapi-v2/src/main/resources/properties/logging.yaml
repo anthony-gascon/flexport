@@ -1,0 +1,12 @@
+maskValues: "ssn"
+fileConfig:
+  path: "${mule.home}/logs"
+
+loggingFramework:
+  logTo:
+    info: "default"
+    debug: "default"
+    warn: "default"
+    fatal: "default"
+    error: "default"
+    "trace": "default"

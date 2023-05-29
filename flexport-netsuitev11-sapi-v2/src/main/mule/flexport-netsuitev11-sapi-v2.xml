@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging" xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd">
+    <flow name="flexport-netsuitev11-sapi-v2-main" doc:id="8a5850b0-1beb-482f-8a80-128c6ee82674">
+        <http:listener config-ref="flexport-netsuitev11-sapi-v2-httpListenerConfig" path="/api/{api.version}/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="flexport-netsuitev11-sapi-v2-config" doc:id="362dbcbe-9c1f-473d-ba86-95d1e21586db" />
+    </flow>
+    <flow name="get:\savesearch\customers:flexport-netsuitev11-sapi-v2-config" doc:id="36706334-31bd-458a-a171-bf162542dff1">
+        <set-variable value="customers" doc:name="Set objectName" doc:id="ec7f2f61-217c-471d-a0f9-9da72dae2e3a" variableName="objectName" />
+        <ee:transform doc:name="Customers Savesearch SOAP Request" doc:id="3c718676-8c06-4e41-a57e-b4b4eb6e77d6">
+            <ee:message>
+                <ee:set-payload resource="dataweave/customerSavesearchSoapRequest.dwl" />
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="Get_SaveSearch_Flow" doc:id="abf4d963-a7e3-4101-902f-880568744c7b" name="get-customers-saveSearch-subflow" />
+    </flow>
+    <flow name="get:\savesearch\invoices:flexport-netsuitev11-sapi-v2-config" doc:id="6e0a8b09-1f0b-405e-80f9-cfcf6650899d">
+        <set-variable value="invoices" doc:name="Set objectName" doc:id="4ec6c5e5-99ce-493b-8dcb-f0f4f373df2b" variableName="objectName" />
+        <ee:transform doc:name="Invoices Savesearch SOAP Request" doc:id="18cccf83-80ed-43bc-8d15-d402728188aa">
+            <ee:message>
+                <ee:set-payload resource="dataweave/invoicesSavesearchRequest.dwl" />
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="Get_SaveSearch_Flow" doc:id="83ffffcf-52dc-4293-8bbb-a2805460757e" name="get-invoices-saveSearch-subflow" />
+    </flow>
+    <flow name="get:\savesearch\vendors:flexport-netsuitev11-sapi-v2-config" doc:id="065c03a1-97af-41c7-842f-7802b09cdd3f">
+        <set-variable value="vendors" doc:name="Set objectName" doc:id="432016e3-cb60-4941-8e5c-04dd8b954126" variableName="objectName" />
+        <ee:transform doc:name="Vendors Savesearch SOAP Request" doc:id="20f5e06c-b4a3-40ca-9948-647ba2788c9b">
+            <ee:message>
+                <ee:set-payload resource="dataweave/vendorsSavesearchRequest.dwl" />
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="Get_SaveSearch_Flow" doc:id="93927d1c-e8d9-4597-93c3-5df7196b5586" name="get-vendors-saveSearch-subflow" />
+    </flow>
+    <flow name="get:\savesearch\contacts:flexport-netsuitev11-sapi-v2-config" doc:id="1be1d41b-c1b4-4710-8b8f-30869e5bb789">
+        <set-variable value="contacts" doc:name="Set ObjectName" doc:id="81b6e183-af96-4997-bba3-1f985ae74f7f" variableName="objectName" />
+        <ee:transform doc:name="Contacts Savesearch SOAP Request" doc:id="6d8710c0-5169-4564-bf7d-5d7e2391bee0">
+            <ee:message>
+                <ee:set-payload resource="dataweave/contactsSavesearchSoapRequest.dwl" />
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="Get SaveSearch Flow" doc:id="bed2e43d-8224-4a47-bd6a-61a689d1e070" name="get-contacts-saveSearch-subflow" />
+    </flow>
+    <flow name="put:\vendor:application\xml:flexport-netsuitev11-sapi-v2-config">
+        <flow-ref doc:name="update-vendor-subFlow" doc:id="405675e6-c5a4-424e-99c1-6b9eaed3c0ff" name="update-vendor-subFlow" />
+    </flow>
+    <flow name="put:\customer:application\xml:flexport-netsuitev11-sapi-v2-config">
+        <flow-ref doc:name="update-customer-subFlow" doc:id="d8d01407-4382-4c86-8d10-683e84289c31" name="update-customer-subFlow" />
+    </flow>
+    <flow name="get:\customer\loan\invoice\(externalId):flexport-netsuitev11-sapi-v2-config">
+        <flow-ref doc:name="Get invoice by external id subflow" doc:id="62a277c7-741f-4616-b928-4685e00b58bc" name="get-invoic-by-externalId-subflow" />
+    </flow>
+    <flow name="post:\invoice:application\xml:flexport-netsuitev11-sapi-v2-config">
+        <flow-ref doc:name="create-invoice-subflow" doc:id="d62ba01b-5741-4c05-9e53-9eeff69126b1" name="create-invoice-subflow" />
+    </flow>
+    <flow name="post:\notes:application\xml:flexport-netsuitev11-sapi-v2-config">
+        <flow-ref doc:name="create-notes-implemetation-subflow" doc:id="3c41067d-24ee-481a-86fd-b1170c3368e6" name="create-notes-implemetation-subflow" />
+    </flow>
+    <flow name="post:\savesearch\invoices:application\xml:flexport-netsuitev11-sapi-v2-config" doc:id="14388132-c4d6-4fd5-a529-7a96898c515a">
+        <set-variable value="invoices" doc:name="Set objectName" doc:id="100b09b9-f3a9-4f9f-9d88-628f12e3823c" variableName="objectName" />
+        <flow-ref doc:name="get-time-based-invoice-saveSearch-subFlow" doc:id="0376048a-033a-4a86-8c41-774bdaa2e9d4" name="get-time-based-invoice-saveSearch-subFlow" />
+    </flow>
+    <flow name="get:\contact\(internalId):flexport-netsuitev11-sapi-v2-config">
+        <flow-ref doc:name="get-contact-by-internal-subflow" doc:id="5777c761-0c1a-4556-aa25-8fb1a0cbe1c3" name="get-contact-by-internal-subflow" />
+    </flow>
+    <flow name="put:\record:application\xml:flexport-netsuitev11-sapi-v2-config" doc:id="c69e5fcb-8cb2-47e9-9cf1-78de5e66eb4e">
+        <ee:transform doc:name="vars recordType" doc:id="5c145b15-9e93-4ef8-a95f-001867b7336f">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="recordType"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.recordType]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <flow-ref doc:name="update-generic-subflow" doc:id="51b5c37c-6b48-49b0-a94f-37ac32f9b38b" name="update-generic-subflow" />
+    </flow>
+    <flow name="post:\file:application\json:flexport-netsuitev11-sapi-v2-config">
+        <ee:transform doc:name="vars folderId, fileName,content_type" doc:id="e1f36acd-d93f-4ee9-8d1f-605dced7e0a2">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="folderId"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.folderId]]></ee:set-variable>
+                <ee:set-variable variableName="fileName"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.fileName]]></ee:set-variable>
+				<ee:set-variable variableName="content_type" ><![CDATA[%dw 2.0
+output application/java
+---
+"application/json"]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="addFile SOAP Request" doc:id="10263446-4b35-401f-98f3-ee1a65246652">
+            <ee:message>
+                <ee:set-payload resource="dataweave/addFileRequest.dwl" />
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="addFile-subflow" doc:id="3acd7e94-8b6b-4531-82e2-eebf64e6cfa5" name="addFile-subflow" />
+    </flow>
+    <flow name="post:\file:application\xml:flexport-netsuitev11-sapi-v2-config" doc:id="c3a1ac8f-26b7-4882-a0c6-bb520ac9b4c4">
+        <ee:transform doc:name="vars folderId, fileName,content_type" doc:id="d36bfd28-e5dd-4419-9eec-52cda28d4cf0">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="folderId"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.folderId]]></ee:set-variable>
+                <ee:set-variable variableName="fileName"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.fileName]]></ee:set-variable>
+				<ee:set-variable variableName="content_type" ><![CDATA[%dw 2.0
+output application/java
+---
+"application/xml"]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="addFile SOAP Request" doc:id="dfacc66b-c319-4d67-8de4-3cda0642fc47">
+            <ee:message>
+                <ee:set-payload resource="dataweave/addFileRequest.dwl" />
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="addFile-subflow" doc:id="a7ed3ca6-a18a-481c-8d3c-403b593dc84a" name="addFile-subflow" />
+    </flow>
+    <flow name="post:\savesearch:application\xml:flexport-netsuitev11-sapi-v2-config" doc:id="0ab4c604-b7f6-4f87-9f8b-4e70348c56c7">
+        <ee:transform doc:name="vars searchKey, pageSize, limit" doc:id="fc9b486a-214a-4938-a5b7-0df378670ce7">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="searchKey"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.searchKey]]></ee:set-variable>
+                <ee:set-variable variableName="pageSize"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.pageSize]]></ee:set-variable>
+                <ee:set-variable variableName="limit"><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams.limit]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <flow-ref doc:name="saveSearch-generic-subflow" doc:id="cd26ab7b-e4d0-4517-9b98-5902e07b01dc" name="saveSearch-generic-subflow" />
+    </flow>
+</mule>

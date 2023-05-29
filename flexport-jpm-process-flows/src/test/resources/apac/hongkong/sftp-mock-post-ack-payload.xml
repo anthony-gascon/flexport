@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.002.001.03">
+  <CstmrPmtStsRpt>
+    <GrpHdr>
+      <MsgId>74603e001bae40ce8c79dd6385cf2d89</MsgId>
+      <CreDtTm>2021-05-27T08:04:55.0Z</CreDtTm>
+      <InitgPty>
+        <Id>
+          <OrgId>
+            <Othr>
+              <Id>JP Morgan</Id>
+              <SchmeNm>
+                <Cd>BANK</Cd>
+              </SchmeNm>
+            </Othr>
+          </OrgId>
+        </Id>
+      </InitgPty>
+    </GrpHdr>
+    <OrgnlGrpInfAndSts>
+      <OrgnlMsgId>74603e001bae40ce8c79dd6385cf2d89</OrgnlMsgId>
+      <OrgnlMsgNmId>pain.001</OrgnlMsgNmId>
+      <GrpSts>RJCT</GrpSts>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 5 Column 58 org.xml.sax.SAXParseException%3B lineNumber%3A 5%3B c</AddtlInf>
+        <AddtlInf>olumnNumber%3A 58%3B cvc-type.3.1.3%3A The value %27e0a5aebc-8418-4a50-b394-7e79ffaa8507%27 of element %2</AddtlInf>
+        <AddtlInf>7MsgId%27 is not valid.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 17 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 17%3B</AddtlInf>
+        <AddtlInf> columnNumber%3A 16%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27NbOfT</AddtlInf>
+        <AddtlInf>xs%27. One of %27%7B%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3APmtTpInf%2C %22u</AddtlInf>
+        <AddtlInf>rn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AReqdExctnDt%7D%27 is expected.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 48 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 48%3B</AddtlInf>
+        <AddtlInf> columnNumber%3A 16%3B cvc-complex-type.2.4.d%3A Invalid content was found starting with element %27Ccy%2</AddtlInf>
+        <AddtlInf>7. No child element is expected at this point.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 804 Column 22 org.xml.sax.SAXParseException%3B lineNumber%3A 804%</AddtlInf>
+        <AddtlInf>3B columnNumber%3A 22%3B cvc-type.3.1.3%3A The value %27%27 of element %27StrtNm%27 is not valid.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 805 Column 21 org.xml.sax.SAXParseException%3B lineNumber%3A 805%</AddtlInf>
+        <AddtlInf>3B columnNumber%3A 21%3B cvc-type.3.1.3%3A The value %27%27 of element %27PstCd%27 is not valid.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 807 Column 27 org.xml.sax.SAXParseException%3B lineNumber%3A 807%</AddtlInf>
+        <AddtlInf>3B columnNumber%3A 27%3B cvc-type.3.1.3%3A The value %27%27 of element %27CtrySubDvsn%27 is not valid.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 867 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 867%</AddtlInf>
+        <AddtlInf>3B columnNumber%3A 16%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27NbO</AddtlInf>
+        <AddtlInf>fTxs%27. One of %27%7B%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3APmtTpInf%2C %2</AddtlInf>
+        <AddtlInf>2urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AReqdExctnDt%7D%27 is expected.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 898 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 898%</AddtlInf>
+        <AddtlInf>3B columnNumber%3A 16%3B cvc-complex-type.2.4.d%3A Invalid content was found starting with element %27Ccy</AddtlInf>
+        <AddtlInf>%27. No child element is expected at this point.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 997 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 997%</AddtlInf>
+        <AddtlInf>3B columnNumber%3A 16%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27NbO</AddtlInf>
+        <AddtlInf>fTxs%27. One of %27%7B%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3APmtTpInf%2C %2</AddtlInf>
+        <AddtlInf>2urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AReqdExctnDt%7D%27 is expected.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 1028 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 102</AddtlInf>
+        <AddtlInf>8%3B columnNumber%3A 16%3B cvc-complex-type.2.4.d%3A Invalid content was found starting with element %27C</AddtlInf>
+        <AddtlInf>cy%27. No child element is expected at this point.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 1087 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 108</AddtlInf>
+        <AddtlInf>7%3B columnNumber%3A 16%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27N</AddtlInf>
+        <AddtlInf>bOfTxs%27. One of %27%7B%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3APmtTpInf%2C </AddtlInf>
+        <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AReqdExctnDt%7D%27 is expected.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 1105 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 110</AddtlInf>
+        <AddtlInf>5%3B columnNumber%3A 16%3B cvc-complex-type.2.4.d%3A Invalid content was found starting with element %27C</AddtlInf>
+        <AddtlInf>cy%27. No child element is expected at this point.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 1165 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 116</AddtlInf>
+        <AddtlInf>5%3B columnNumber%3A 16%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27N</AddtlInf>
+        <AddtlInf>bOfTxs%27. One of %27%7B%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3APmtTpInf%2C </AddtlInf>
+        <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AReqdExctnDt%7D%27 is expected.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 1183 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 118</AddtlInf>
+        <AddtlInf>3%3B columnNumber%3A 16%3B cvc-complex-type.2.4.d%3A Invalid content was found starting with element %27C</AddtlInf>
+        <AddtlInf>cy%27. No child element is expected at this point.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 1243 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 124</AddtlInf>
+        <AddtlInf>3%3B columnNumber%3A 16%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27N</AddtlInf>
+        <AddtlInf>bOfTxs%27. One of %27%7B%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3APmtTpInf%2C </AddtlInf>
+        <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AReqdExctnDt%7D%27 is expected.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 1261 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 126</AddtlInf>
+        <AddtlInf>1%3B columnNumber%3A 16%3B cvc-complex-type.2.4.d%3A Invalid content was found starting with element %27C</AddtlInf>
+        <AddtlInf>cy%27. No child element is expected at this point.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 1484 Column 27 org.xml.sax.SAXParseException%3B lineNumber%3A 148</AddtlInf>
+        <AddtlInf>4%3B columnNumber%3A 27%3B cvc-type.3.1.3%3A The value %27%27 of element %27CtrySubDvsn%27 is not valid.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 1983 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 198</AddtlInf>
+        <AddtlInf>3%3B columnNumber%3A 16%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27N</AddtlInf>
+        <AddtlInf>bOfTxs%27. One of %27%7B%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3APmtTpInf%2C </AddtlInf>
+        <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AReqdExctnDt%7D%27 is expected.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 2001 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 200</AddtlInf>
+        <AddtlInf>1%3B columnNumber%3A 16%3B cvc-complex-type.2.4.d%3A Invalid content was found starting with element %27C</AddtlInf>
+        <AddtlInf>cy%27. No child element is expected at this point.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 2059 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 205</AddtlInf>
+        <AddtlInf>9%3B columnNumber%3A 16%3B cvc-complex-type.2.4.a%3A Invalid content was found starting with element %27N</AddtlInf>
+        <AddtlInf>bOfTxs%27. One of %27%7B%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3APmtTpInf%2C </AddtlInf>
+        <AddtlInf>%22urn%3Aiso%3Astd%3Aiso%3A20022%3Atech%3Axsd%3Apain.001.001.03%22%3AReqdExctnDt%7D%27 is expected.</AddtlInf>
+      </StsRsnInf>
+      <StsRsnInf>
+        <Rsn>
+          <Cd>FF01</Cd>
+        </Rsn>
+        <AddtlInf>File Format incomplete or invalid: Line 2077 Column 16 org.xml.sax.SAXParseException%3B lineNumber%3A 207</AddtlInf>
+        <AddtlInf>7%3B columnNumber%3A 16%3B cvc-complex-type.2.4.d%3A Invalid content was found starting with element %27C</AddtlInf>
+        <AddtlInf>cy%27. No child element is expected at this point.</AddtlInf>
+      </StsRsnInf>
+    </OrgnlGrpInfAndSts>
+  </CstmrPmtStsRpt>
+</Document>

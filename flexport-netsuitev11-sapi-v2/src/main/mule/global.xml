@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" 
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite"
+	xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd">
+	<http:listener-config name="flexport-netsuitev11-sapi-v2-httpListenerConfig">
+        <http:listener-connection host="${http.host}" port="${https.port}" protocol="HTTPS" connectionIdleTimeout="${http.conn.idle.timeout}">
+			<tls:context >
+				<tls:key-store type="jks" path="sslcert/${env}-server-keystore.jks" keyPassword="${secure::ssl.keystore.password}" password="${secure::ssl.keystore.password}" />
+			</tls:context>
+		</http:listener-connection>
+    </http:listener-config>
+    <apikit:config name="flexport-netsuitev11-sapi-v2-config" api="flexport-netsuite-sapi-v11.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />  
+    
+	<netsuite:config name="NetSuite_Config" doc:name="NetSuite Config" doc:id="6672eb37-69c6-4a7e-abb0-f3790a30051b" >
+		<netsuite:token-based-authentication-connection consumerKey="${secure::netsuite.consumerKey}" consumerSecret="${secure::netsuite.consumerSecret}" tokenId="${secure::netsuite.tokenId}" tokenSecret="${secure::netsuite.tokenSecret}" account="${netsuite.account}" soapPort="services/NetSuitePort_2020_2" readTimeout="${netsuite.readtimeout}" connectionTimeout="${netsuite.connectiontimeout}" maximumConnections="${netsuite.max.connection}" baseAddress="${netsuite.base.address}" wsdlVersion="V2020_2">
+			<reconnection >
+				<reconnect frequency="${netsuite.reconnection.frequency}" count="${netsuite.reconnection.attempts}" />
+			</reconnection>
+		</netsuite:token-based-authentication-connection>
+	</netsuite:config>	
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="7a078162-b3c0-4a17-863d-63714721ea25" file="properties/${env}-secure.properties" key="${key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>	
+	<configuration-properties doc:name="Configuration properties" doc:id="fce28c81-8ec1-4cf7-b790-e913c5c3a147" file="properties/${env}.properties" />
+	<configuration-properties doc:name="Configuration properties" doc:id="59b2d6e5-6065-4538-93f0-610d7b2c6132" file="properties/logging.yaml" />
+	<configuration doc:name="Configuration" doc:id="aac80f83-1bff-439b-81cb-26c649a2cb54" defaultErrorHandler-ref="global_error_handler" />
+	<file:config name="File_Config" doc:name="File Config" doc:id="aa3528e5-3595-47d1-93a5-8ce22f413d97" >
+		<file:connection workingDir="${fileConfig.path}" />
+	</file:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="8571534f-ef20-430e-a168-73346bf341df" file="properties/error-handler.yaml" />
+	<api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="0b830dee-0e8c-4840-8272-e0fd805049ad" flowRef="flexport-netsuitev11-sapi-v2-main" />
+	<anypoint-mq:config name="Anypoint_MQ_Config" doc:name="Anypoint MQ Config" doc:id="82ce5fc8-992a-415b-a14f-a6f41d7ab90f" >
+		<anypoint-mq:connection url="${mq.url}" clientId="${secure::mq.client.app.id}" clientSecret="${secure::mq.client.app.secret}" >
+			<reconnection >
+				<reconnect frequency="${mq.reconnection.freq}" count="${mq.reconnection.attempt}" />
+			</reconnection>
+			<anypoint-mq:tcp-client-socket-properties connectionTimeout="${mq.connection.timeout}" />
+		</anypoint-mq:connection>
+	</anypoint-mq:config>
+</mule>

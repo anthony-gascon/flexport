@@ -1,0 +1,158 @@
+[
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "outboundPropertyNames": [
+      
+    ],
+    "payload": {
+      "searchRow": {
+        "@type": "tranSales:TransactionSearchRow",
+        "basic": {
+          "entity": {
+            "searchValue": {
+              "@internalId": "4686192",
+              "__text": null
+            }
+          },
+          "externalId": {
+            "searchValue": {
+              "@externalId": "gid://flexport/Payments::NetsuiteInvoice/809122",
+              "__text": null
+            }
+          },
+          "fxAmount": {
+            "searchValue": "30926.83"
+          },
+          "postingPeriod": {
+            "searchValue": {
+              "@internalId": "211",
+              "__text": null
+            }
+          },
+          "tranDate": {
+            "searchValue": "2021-04-21T16:00:00.000-07:00"
+          },
+          "tranId": {
+            "searchValue": "26624-6"
+          },
+          "type": {
+            "searchValue": "_invoice"
+          }
+        }
+      }
+    },
+    "attributes": {
+      "transportHeaders": {
+        "date": "Mon, 11 Jul 2022 08:56:40 GMT",
+        "set-cookie": "NS_ROUTING_VERSION=LAGGING; path=/",
+        "content-length": "1082432",
+        "vary": "User-Agent",
+        "x-n-operationid": "4e5f7ac8-caa8-4c48-bb5f-98a365b84b6c",
+        "connection": "keep-alive",
+        "content-type": "text/xml;charset=utf-8",
+        "p3p": "CP=\"CAO PSAa OUR BUS PUR\"",
+        "strict-transport-security": "max-age=31536000",
+        "akamai-grn": "0.86a83b17.1657529794.8f20d95b",
+        "ns_rtimer_composite": "8271284:706172746E6572733033342E70726F642E7376616C652E6E65746C65646765722E636F6D:80"
+      },
+      "transportAdditionalData": {
+        "reasonPhrase": "OK",
+        "statusCode": "200"
+      },
+      "soapHeaders": {
+        "documentInfo": {
+          "documentInfo": {
+            "nsId": "WEBSERVICES_4134291_SB3_071120223275811661057393231_64d448a9"
+          }
+        }
+      }
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "outboundPropertyNames": [
+      
+    ],
+    "payload": {
+      "searchRow": {
+        "@type": "tranSales:TransactionSearchRow",
+        "basic": {
+          "entity": {
+            "searchValue": {
+              "@internalId": "24472151",
+              "__text": null
+            }
+          },
+          "externalId": {
+            "searchValue": {
+              "@externalId": "gid://flexport/Payments::NetsuiteInvoice/1012673",
+              "__text": null
+            }
+          },
+          "fxAmount": {
+            "searchValue": "4575.0"
+          },
+          "postingPeriod": {
+            "searchValue": {
+              "@internalId": "220",
+              "__text": null
+            }
+          },
+          "tranDate": {
+            "searchValue": "2021-10-31T17:00:00.000-07:00"
+          },
+          "tranId": {
+            "searchValue": "FLEX-1047679-6"
+          },
+          "type": {
+            "searchValue": "_invoice"
+          }
+        }
+      }
+    },
+    "attributes": {
+      "transportHeaders": {
+        "date": "Mon, 11 Jul 2022 08:56:40 GMT",
+        "set-cookie": "NS_ROUTING_VERSION=LAGGING; path=/",
+        "content-length": "1082432",
+        "vary": "User-Agent",
+        "x-n-operationid": "4e5f7ac8-caa8-4c48-bb5f-98a365b84b6c",
+        "connection": "keep-alive",
+        "content-type": "text/xml;charset=utf-8",
+        "p3p": "CP=\"CAO PSAa OUR BUS PUR\"",
+        "strict-transport-security": "max-age=31536000",
+        "akamai-grn": "0.86a83b17.1657529794.8f20d95b",
+        "ns_rtimer_composite": "8271284:706172746E6572733033342E70726F642E7376616C652E6E65746C65646765722E636F6D:80"
+      },
+      "transportAdditionalData": {
+        "reasonPhrase": "OK",
+        "statusCode": "200"
+      },
+      "soapHeaders": {
+        "documentInfo": {
+          "documentInfo": {
+            "nsId": "WEBSERVICES_4134291_SB3_071120223275811661057393231_64d448a9"
+          }
+        }
+      }
+    }
+  }
+]

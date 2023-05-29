@@ -1,0 +1,92 @@
+[
+  {
+    "OrgnlInstrId": "43282874",
+    "OrgnlEndToEndId": "233412",
+    "TxSts": "ACSP",
+    "AcctSvcrRef": "3012HKH004730000",
+    "OrgnlTxRef": {
+      "Amt": {
+        "InstdAmt": {
+          "@Ccy": "HKD",
+          "__text": "1500.00"
+        }
+      },
+      "ReqdExctnDt": "2023-01-12"
+    }
+  },
+  {
+    "OrgnlInstrId": "43282869",
+    "OrgnlEndToEndId": "233408",
+    "TxSts": "ACSP",
+    "AcctSvcrRef": "3012HKH004720000",
+    "OrgnlTxRef": {
+      "Amt": {
+        "InstdAmt": {
+          "@Ccy": "HKD",
+          "__text": "203681.63"
+        }
+      },
+      "ReqdExctnDt": "2023-01-12"
+    }
+  },
+  {
+    "OrgnlInstrId": "43282867",
+    "OrgnlEndToEndId": "233406",
+    "TxSts": "ACSP",
+    "AcctSvcrRef": "3012HKH004710000",
+    "OrgnlTxRef": {
+      "Amt": {
+        "InstdAmt": {
+          "@Ccy": "HKD",
+          "__text": "11600.00"
+        }
+      },
+      "ReqdExctnDt": "2023-01-12"
+    }
+  },
+  {
+    "OrgnlInstrId": "43282873",
+    "OrgnlEndToEndId": "233411",
+    "TxSts": "ACSP",
+    "AcctSvcrRef": "3012HKH004750000",
+    "OrgnlTxRef": {
+      "Amt": {
+        "InstdAmt": {
+          "@Ccy": "HKD",
+          "__text": "1320.00"
+        }
+      },
+      "ReqdExctnDt": "2023-01-12"
+    }
+  },
+  {
+    "OrgnlInstrId": "43282870",
+    "OrgnlEndToEndId": "233409",
+    "TxSts": "ACSP",
+    "AcctSvcrRef": "3012HKH004740000",
+    "OrgnlTxRef": {
+      "Amt": {
+        "InstdAmt": {
+          "@Ccy": "HKD",
+          "__text": "3801.65"
+        }
+      },
+      "ReqdExctnDt": "2023-01-12"
+    }
+  },
+  {
+    "OrgnlInstrId": "43282866",
+    "OrgnlEndToEndId": "233405",
+    "TxSts": "ACSP",
+    "AcctSvcrRef": "01204464JR900001",
+    "OrgnlTxRef": {
+      "Amt": {
+        "InstdAmt": {
+          "@Ccy": "HKD",
+          "__text": "143800.00"
+        }
+      },
+      "ReqdExctnDt": "2023-01-12"
+    }
+  }
+]

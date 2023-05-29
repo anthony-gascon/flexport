@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="reconcile-report-jpm-netsuite-suite.xml" />
+	<munit:test name="reconcile-report-jpm-netsuite-Flow-test-success" doc:id="378663d0-f329-46e7-86c5-7142566daab5">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Request Netsuite" doc:id="a8ae456a-55f6-4172-92d5-ff1e3c5d6cce" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request Netsuite" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="17ccf582-6e12-4539-8879-bfa4934e7b20" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="rootMessage" value="#[readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="counter" value="#[readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\mock_variable_1.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock retrieve" doc:id="c79c1847-c220-461d-b82f-f92639e633ad" processor="os:retrieve">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Retrieve fileName" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="fileName" value='#["FLEXPISO.IRIS.PBAI.SequenceNumber.yyyyddHHmmss.txt"]' />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Input" doc:id="bcdd1c3e-b473-4066-957b-8029f09662f4">
+				<munit:payload value="#[output text/plain --- readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="text/plain" />
+				<munit:attributes value="#[readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to reconcile-report-jpm-netsuite-Flow" doc:id="261d10ca-d15e-419b-8833-bc401c407703" name="reconcile-report-jpm-netsuite-Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="f5c16524-6d11-4911-9cbd-af070cc5a417" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import reconcilereportjpmnetsuiteFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="reconcile-report-jpm-netsuite-suiteTest-otherfile" doc:id="846c56ea-d840-4c29-a302-3723fe265d62">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Request Netsuite" doc:id="0137c9f4-8495-447a-aa80-26185d8eb215" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="17ccf582-6e12-4539-8879-bfa4934e7b20" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="rootMessage" value="#[readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="counter" value="#[readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\mock_variable_1.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="58acb04d-90d0-4b09-a633-d58b8ef5c7c7" >
+				<munit:payload value="#[output text/plain --- readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="text/plain" />
+				<munit:attributes value="#[readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\set-event_attributesother.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to reconcile-report-jpm-netsuite-Flow" doc:id="16ab4d86-1dd2-4db5-8f6d-e318ebb8a36d" name="reconcile-report-jpm-netsuite-Flow" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:verify-call doc:name="Verify call" doc:id="07bb7282-f9dc-439e-8255-97238d1d3198" processor="module-logging:log-other" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log other" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="0848a618-77df-4305-a51d-d3aad8843a0c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="reconcile-report-jpm-netsuite-suiteTest-netsuiteErrorCase" doc:id="5825ee4e-620f-4ffd-8fc8-965495edbe3a">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Request Netsuite" doc:id="36d2f3ca-b88e-416d-9c73-466f64cac537" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="17ccf582-6e12-4539-8879-bfa4934e7b20" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:CONNECTIVITY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock retrieve" doc:id="48f3f286-ee3e-4994-8f9b-d18a0ca8cca3" processor="os:retrieve">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="Retrieve fileName" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:variables>
+						<munit-tools:variable key="fileName" value='#["FLEXPISO.IRIS.PBAI.SequenceNumber.yyyyddHHmmss.txt"]' />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="5ae08887-dd04-48b9-a3d1-6ef2fe3310eb" >
+				<munit:payload value="#[output text/plain --- readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="text/plain" />
+				<munit:attributes value="#[readUrl('classpath://reconcilereportjpmnetsuiteFlowtest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="1bee498f-3e77-4eb3-a324-cc4b5ed02d06" >
+				<flow-ref doc:name="Flow-ref to reconcile-report-jpm-netsuite-Flow" doc:id="1ee3de67-701a-4b5f-9479-e1fec838ad90" name="reconcile-report-jpm-netsuite-Flow" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="Error Continue" doc:id="0a2ba93b-d485-4bb6-b93a-ab650cf48996" >
+						<set-variable value="#[error.errorType.asString]" doc:name="Set Variable" doc:id="1d0bdc97-4630-4933-9366-c088e41ef328" variableName="errorType" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="c6e9f5a9-eea3-4d7c-a50c-40a66fdc67ad" processor="module-logging:log-error" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Log error" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1b40dd1d-d391-48ef-9110-246a5e892968" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

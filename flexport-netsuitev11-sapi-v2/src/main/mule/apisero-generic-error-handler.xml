@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub"
+	xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/cloudhub http://www.mulesoft.org/schema/mule/cloudhub/current/mule-cloudhub.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+">
+
+	<error-handler name="global_error_handler">
+		<on-error-propagate type="APIKIT:BAD_REQUEST"
+			enableNotifications="true" logException="true">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="26988405-1f9b-4162-9a11-4c0ce24b1bf7"
+				message='In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]' /> -->
+			<set-variable
+				value='${errorCodeMessage.apikit.badRequest.code}'
+				doc:name="httpStatus" doc:id="4d429c61-22e0-4c42-90ec-c8cc742c21f1"
+				variableName="httpStatus" />
+			<set-variable
+				value='${errorCodeMessage.apikit.badRequest.description}'
+				doc:name="errorDescription"
+				doc:id="ce4903b2-d1ed-46c5-9761-40de706356ab"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="46b52060-fdea-45dd-9947-f45ef8f972c0"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:NOT_FOUND"
+			enableNotifications="true" logException="true">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="b122e17f-d61a-4d68-af9b-108622d15b24"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='${errorCodeMessage.apikit.notFound.code}'
+				doc:name="httpStatus" doc:id="0ef56ba5-ad40-4708-aa3a-43f500ac45e4"
+				variableName="httpStatus" />
+			<set-variable
+				value='${errorCodeMessage.apikit.notFound.description}'
+				doc:name="errorDescription"
+				doc:id="e3465e10-34e5-4c6d-b728-32361931871e"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="c9428e1d-4f1a-4781-be58-e21c9b41705d"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate
+			type="APIKIT:METHOD_NOT_ALLOWED">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="e533dbb6-3f4f-4fa6-b370-0b97ccaa79c9"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='${errorCodeMessage.apikit.methodNotAllowed.code}'
+				doc:name="httpStatus" doc:id="1afe9152-8bb5-49ae-a40e-31593f609530"
+				variableName="httpStatus" />
+			<set-variable
+				value='${errorCodeMessage.apikit.methodNotAllowed.description}'
+				doc:name="errorDescription"
+				doc:id="c985d4e5-b882-4de6-b264-c48c430832d4"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="95316c2a-343d-4b31-8633-b03210e22ab1"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:NOT_ACCEPTABLE"
+			enableNotifications="true" logException="true">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="a38ed9ae-dea7-4261-962e-fd4ca39a0c33"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='${errorCodeMessage.apikit.notAcceptable.code}'
+				doc:name="httpStatus" doc:id="0ff54116-0c60-4ffa-b480-88d7527c4504"
+				variableName="httpStatus" />
+			<set-variable
+				value='${errorCodeMessage.apikit.notAcceptable.description}'
+				doc:name="errorDescription"
+				doc:id="61083cbd-5c19-490d-be08-6660222c0abb"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="9a1a871a-c85f-4594-861f-749562fec67b"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate
+			type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="6b5c4eec-6bd2-478d-a6b8-697851615c88"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='${errorCodeMessage.apikit.unsupportedMediaType.code}'
+				doc:name="httpStatus" doc:id="6498229b-7b7b-452a-b56f-ab77a8c2fdc8"
+				variableName="httpStatus" />
+			<set-variable
+				value='${errorCodeMessage.apikit.unsupportedMediaType.description}'
+				doc:name="errorDescription"
+				doc:id="144651a3-7bc0-40f3-811f-4fb048ce4a0f"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="13c1163a-8a77-4e89-abfa-37341baeb556"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:NOT_IMPLEMENTED"
+			enableNotifications="true" logException="true">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="b7f843b9-c70f-4340-8c83-0d5238030dc4"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='${errorCodeMessage.apikit.notImplemented.code}'
+				doc:name="httpStatus" doc:id="17e4f9ed-ea2c-473a-8cff-2ebe71aab8cc"
+				variableName="httpStatus" />
+			<set-variable
+				value='${errorCodeMessage.apikit.notImplemented.description}'
+				doc:name="errorDescription"
+				doc:id="8b1b2b9f-00f9-4257-ad7c-b3ece6924d40"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="a7c55d30-6de6-43bb-a8b2-08ef428f36dc"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="637f8f17-ad0e-44bf-ab22-0fd6ec9e6c24"
+			type="HTTP:CONNECTIVITY">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="16fd00e0-9653-4d61-8716-bdb51165650f"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler" doc:id="cee23289-a4da-4ef2-91bd-30103255c298" 
+				message='#["From parent flow" ++ (vars.apiLayer default "")]'/> <logger level="INFO" 
+				doc:name="Entering Generic Error Handler" doc:id="6b7d1b23-5cba-4599-901e-abaaf552f214" 
+				message="From Properties file #[p('globalErrorHandler.api-layer')]"/> -->
+			<set-variable
+				value='${errorCodeMessage.http.connectivity.code}'
+				doc:name="httpStatus" doc:id="c1020fba-cadd-40af-982f-a20926f47e1c"
+				variableName="httpStatus" />
+			<set-variable
+				value="#[if(p('globalErrorHandler.api-layer') == &quot;experience&quot; or p('globalErrorHandler.api-layer') == &quot;exp&quot;)
+p('errorCodeMessage.http.connectivity.description') default &quot;&quot;
+ else
+ error.description default &quot;&quot;]"
+				doc:name="errorDescription"
+				doc:id="442c9814-9c46-44ee-bfca-64693182e3c1"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="738f9845-cae4-485b-8fa7-4fd455b3f517"
+				name="common-error-sub-flow" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="20d0385e-0175-4365-8a93-ae4091afb36d" type="HTTP:FORBIDDEN">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="daeea6b3-8a16-4318-8c59-0d858299104d"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='${errorCodeMessage.http.forbidden.code}'
+				doc:name="httpStatus" doc:id="c1cfb546-c467-4cd5-b31b-21d782c23468"
+				variableName="httpStatus" />
+			<set-variable
+				value="#[if(p('globalErrorHandler.api-layer') == &quot;experience&quot; or p('globalErrorHandler.api-layer') == &quot;exp&quot;)
+p('errorCodeMessage.http.forbidden.description') default &quot;&quot;
+ else
+ error.description default &quot;&quot;]"
+				doc:name="errorDescription"
+				doc:id="02fcc349-4a50-44b1-a86f-b87160d8df00"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="7199d909-edd2-4b09-993d-6f9fbbbc9ec5"
+				name="common-error-sub-flow" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="02310122-6e7b-43d5-aaac-e5ed792c24ee"
+			type="HTTP:SERVICE_UNAVAILABLE">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="03d2e400-2754-42b7-aff4-dc2239588639"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='${errorCodeMessage.http.serviceUnavailable.code}'
+				doc:name="httpStatus" doc:id="8ee351e9-2888-4dff-81d6-109b7a5f070e"
+				variableName="httpStatus" />
+			<set-variable
+				value="#[if(p('globalErrorHandler.api-layer') == &quot;experience&quot; or p('globalErrorHandler.api-layer') == &quot;exp&quot;)
+p('errorCodeMessage.http.serviceUnavailable.description') default &quot;&quot;
+ else
+ error.description default &quot;&quot;]"
+				doc:name="errorDescription"
+				doc:id="8b9a67dc-5e3c-4e4c-a953-fc1c7c3d542f"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="99006d33-0347-4686-99cf-309c4c2abb0c"
+				name="common-error-sub-flow" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="7e251389-20b0-40d8-b1a0-792743c98dd6" type="HTTP:TIMEOUT">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="418937c6-c87e-48d4-85c5-12e6a71d09e9"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='${errorCodeMessage.http.timeout.code}' doc:name="httpStatus"
+				doc:id="fa23135a-7f71-415c-8bf3-89a84a75d03e"
+				variableName="httpStatus" />
+			<set-variable
+				value="#[if(p('globalErrorHandler.api-layer') == &quot;experience&quot; or p('globalErrorHandler.api-layer') == &quot;exp&quot;)
+p('errorCodeMessage.http.timeout.description') default &quot;&quot;
+ else
+ error.description default &quot;&quot;]"
+				doc:name="errorDescription"
+				doc:id="2fe18d46-9d54-4461-beb1-46c88ae62187"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="ac16d76b-4a43-4429-b25b-20b96197e625"
+				name="common-error-sub-flow" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="feec0131-f74f-48f7-9f6f-30d8d9e1a8a7"
+			type="HTTP:UNAUTHORIZED">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="b2af819e-7c80-476c-865a-686e3ee8c836"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='${errorCodeMessage.http.unauthorized.code}'
+				doc:name="httpStatus" doc:id="951b73fc-a7d7-4388-9998-bb4be426d1ef"
+				variableName="httpStatus" />
+			<set-variable
+				value="#[if(p('globalErrorHandler.api-layer') == &quot;experience&quot; or p('globalErrorHandler.api-layer') == &quot;exp&quot;)
+p('errorCodeMessage.http.unauthorized.description') default &quot;&quot;
+ else
+ error.description default &quot;&quot;]"
+				doc:name="errorDescription"
+				doc:id="06f8b58c-93ad-4d9c-b16d-adbf7faef637"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="7bfcea5b-9070-4d55-a8b0-e92487653f25"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="88877a5b-bc87-4d9e-83b5-a2029bda5a47"
+			type="HTTP:BASIC_AUTHENTICATION">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="fde246fb-e936-457e-b7ae-be177d08a7d5"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='${errorCodeMessage.http.basicauth.code}'
+				doc:name="httpStatus" doc:id="99ddc428-a737-4452-94ba-43829aa21199"
+				variableName="httpStatus" />
+			<set-variable value='#["HTTP - " ++ (vars.httpStatus as String)]' doc:name="errorCode" doc:id="e73fd1a7-d492-4db7-af9f-779bce261677" variableName="errorCode" />
+			<set-variable
+				value="#[if(p('globalErrorHandler.api-layer') == &quot;experience&quot; or p('globalErrorHandler.api-layer') == &quot;exp&quot;)
+&#10;p('errorCodeMessage.http.basicauth.description') default &quot;&quot;
+&#10; else
+&#10; error.description default &quot;&quot;]"
+				doc:name="errorDescription"
+				doc:id="65739245-2459-4a16-b75d-b9e1c4d3688f"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="3dfaa33a-b391-44d1-a2eb-dba8a702c81a"
+				name="common-error-sub-flow" />
+		</on-error-propagate>		
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="fc9fc86b-708b-435d-b4dd-c34caec3ccc2" type="MULE:VALIDATION">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="73e392f9-895b-4718-a917-bc9a6b01c7f7"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='#[attributes.statusCode default 500]' doc:name="httpStatus"
+				doc:id="436132b2-dd89-4831-9697-440b1e0c1909"
+				variableName="httpStatus" />
+			<set-variable value="#[error.description]"
+				doc:name="errorDescription"
+				doc:id="8de90339-0178-4c90-a239-15a5cc5b0714"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="7158dab3-3a47-4300-961e-49ecf8d05d94"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="effbc197-ca3e-4c5f-89f7-a2d00e817a7e"
+			type="NETSUITE:CONNECTIVITY, NETSUITE:INVALID_VERSION, NETSUITE:NETSUITE_ERROR, NETSUITE:NETSUITE_SOAP_FAULT, NETSUITE:RETRY_EXHAUSTED, NETSUITE:SESSION_TIMED_OUT, NETSUITE:USER_ERROR, NETSUITE:MAX_RCRDS_EXCEEDED">
+			<set-variable
+				value='#[vars.httpStatus default 500]'
+				doc:name="httpStatus" doc:id="b7688ae2-9275-4563-833c-aa15c3914694"
+				variableName="httpStatus" />
+			<set-variable value='#["NETSUITE - " ++ (vars.httpStatus as String)]' doc:name="errorCode" doc:id="3f95aa8c-52e4-4b15-8cf1-d7792ab0618f" variableName="errorCode"/>
+			<set-variable value="#[error.description]"
+				doc:name="errorDescription"
+				doc:id="66c320a7-182c-4497-83e5-42337d3d431f"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="af2e1c5d-4cb9-4305-9194-57bff91d809c"
+				name="common-error-sub-flow" />
+		</on-error-propagate>	
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="b7057085-24fd-4d2b-9acd-6055307c4a01" type="EXPRESSION">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="4c52a94d-3221-4b0a-97c9-2add9a465d74"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='#[attributes.statusCode default "500"]' doc:name="httpStatus"
+				doc:id="b277308b-d2b6-4bb0-a264-9cc1e6037332"
+				variableName="httpStatus" />
+			<set-variable value="#[error.description]"
+				doc:name="errorDescription"
+				doc:id="5bb9f3ef-6a4f-4307-82f1-3ac7500d8bd3"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="2a41d690-d1cb-4659-bef2-1e10f8b85374"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="6711fc65-c269-4a41-968e-6a058ee2ed26" type="ANY">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="78e0b045-6a34-4202-b948-60e03923e1c1"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<set-variable
+				value='#[attributes.statusCode default "500"]' doc:name="httpStatus"
+				doc:id="e0338963-3487-4890-a2cc-ff22b6ad3423"
+				variableName="httpStatus" />
+			<set-variable value="#[error.description]"
+				doc:name="errorDescription"
+				doc:id="9cc05974-5bad-44d9-98ea-f7578909a461"
+				variableName="errorDescription" />
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="4e07af63-7256-4051-834b-d88b5cc2f457"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+	</error-handler>
+	<sub-flow name="common-error-sub-flow"
+		doc:id="07b37fba-0f43-4495-a6b3-20c259e8a9cc">
+		<set-payload
+			value="#[%dw 2.0
+&#10;output application/json
+&#10;---
+&#10;{
+&#10;        errorCode: vars.errorCode default 500,
+&#10;        errorMessage: vars.errorDescription,
+&#10;        timestamp: now()
+&#10;}]"
+			doc:name="Final Error Response"
+			doc:id="49cfadb8-abcc-4107-9f8d-4a7b244d8c62" />
+		<module-logging:log-error doc:name="Log error" doc:id="cda27ceb-5959-4be6-8306-013b39f9395f"/>
+	</sub-flow>
+</mule>

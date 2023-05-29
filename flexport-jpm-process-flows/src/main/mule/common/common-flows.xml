@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd">
+
+	<sub-flow name="email-filename-csv-subflow"
+		doc:id="a535fbcb-974d-4600-a524-65795c6163fd">
+		<ee:transform doc:name="error internalId csv"
+			doc:id="fc8e5d8c-bcf4-49d5-ae24-cb272505927c">
+			<ee:message>
+				<ee:set-payload
+					resource="dataweave/customerrefund/email-netsuite-payment-csv.dwl" />
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="email payload"
+			doc:id="1a23d0bd-6dde-4895-ac02-47d2bcbc967b">
+			<ee:message>
+				<ee:set-payload
+					resource="dataweave/customerrefund/email-netsuite.dwl" />
+			</ee:message>
+		</ee:transform>
+		<until-successful maxRetries="${https.retry.attempt}"
+			doc:name="Until Successful"
+			doc:id="68199b33-1f58-444c-9144-b0f8fc62fe47"
+			millisBetweenRetries="${https.retry.frequency}">
+			<http:request method="POST" doc:name="Request"
+				doc:id="97d47487-f858-4cf2-9770-f23de0fa805f"
+				config-ref="PGP_Encrpt_Request" path="${email.path}" />
+		</until-successful>
+		<module-logging:log-outbound
+			doc:name="Log outbound" doc:id="7905a7a8-30ca-4426-9bee-d772db65a4d5"
+			message="******Email Sent*************"
+			source="netsuite-update-common-subflow" />
+	</sub-flow>
+	<sub-flow name="netsuite-mapping-apac-china-subflow"
+		doc:id="33580fa5-17a9-48d9-8b14-6fb990b05e56">
+		<ee:transform doc:name="mapping NS fields"
+			doc:id="580a1e4f-90bc-4e2e-ba4f-65a049e9740c">
+			<ee:message>
+				<ee:set-payload
+					resource="dataweave/apac/china/ns-field-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="currencies mapping"
+			doc:id="5b8bd42f-b0a4-46d2-a37c-69aec01d05f0">
+			<ee:message>
+				<ee:set-payload
+					resource="dataweave/apac/china/currency-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+
+	<sub-flow name="pgp-encryption-sftp-upload-subflow"
+		doc:id="398da71b-3937-4726-bdcf-3107091667d3">
+		<until-successful maxRetries="${https.retry.attempt}"
+			doc:name="Until Successful"
+			doc:id="a1e77f52-5b51-40a0-9caf-9c10d2e6455f"
+			millisBetweenRetries="${https.retry.frequency}">
+			<http:request method="POST" doc:name="pgp request"
+				doc:id="cacf4d58-ad01-441b-a8dd-f7b0af4244ad"
+				config-ref="PGP_Encrpt_Request" path="${https.sign.path.pgp}"
+				responseTimeout="${http.response.timeout.pgp}">
+			</http:request>
+		</until-successful>
+		<module-logging:log-entry
+			doc:name="pgp encryption done"
+			doc:id="74e06fa4-58aa-4673-a164-d57f6d159992"
+			message="pgp encryption done" logLevel="DEBUG"
+			source="create-vendor-bill-payment-netsuite-jpm : pgp-encryption-sftp-upload-subflow" />
+		<until-successful maxRetries="${https.retry.attempt}"
+			doc:name="Until Successful"
+			doc:id="bb507c2c-a7e1-48ae-b820-2cfc4a070f91"
+			millisBetweenRetries="${https.retry.frequency}">
+			<http:request method="POST" doc:name="sftp upload"
+				doc:id="0311a8a2-df84-4e1b-8d4b-925daf91e7df"
+				path="${https.upload.path.pgp}" config-ref="PGP_Encrpt_Request"
+				responseTimeout="${http.response.timeout.pgp}">
+				<http:query-params><![CDATA[#[{
+	"path" : p('sftp.inbound.directory'),
+	"fileName" : p('sftp.filename') ++ vars.uuid ++ ".xml.pgp"
+}]]]></http:query-params>
+			</http:request>
+		</until-successful>
+		<module-logging:log-outbound
+			doc:name="sftp upload completed"
+			doc:id="398f5f33-f662-42f8-a3f4-4d9ab3bc1cfb"
+			message="sftp upload completed" logLevel="DEBUG"
+			source="create-vendor-bill-payment-netsuite-jpm : pgp-encryption-sftp-upload-subflow" />
+	</sub-flow>
+	<sub-flow name="netsuite-update-subflow"
+		doc:id="f1037dc9-e706-4b05-a05c-6e81431bcc79">
+		<ee:transform doc:name="prepare list"
+			doc:id="697f7a7c-a62a-4e55-9cf7-5f2b8a03e221">
+			<ee:message>
+				<ee:set-payload
+					resource="dataweave/namea/prepare-netsuite-list-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each Updation"
+			doc:id="de76b710-0052-4f70-9c78-e77f86f16c46"
+			collection="#[output application/json
+&#10;---
+&#10;payload]"
+			batchSize="${batch.size}">
+			<try doc:name="Try" doc:id="ff39b21f-1490-4dde-bc98-2b5ae36987c3">
+				<until-successful
+					maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+					doc:id="e58dd804-4151-4592-9864-be9dfa8ee298"
+					millisBetweenRetries="${https.retry.frequency}">
+					<http:request method="PUT"
+						doc:name="update netsuite update"
+						doc:id="7c47bfd1-5d10-443a-b952-1f653cba07f8"
+						config-ref="Http_NS__Request"
+						path="${https.update.payments.path.netsuite}"
+						responseTimeout="${http.response.timeout.netsuite}">
+						<http:body><![CDATA[#[output application/json
+---
+payload]]]></http:body>
+					</http:request>
+				</until-successful>
+				<module-logging:log-outbound
+					doc:name="Log outbound"
+					doc:id="f1239879-fd2c-41f1-a445-3bbdbcd23218"
+					message='#["Netsuite update done for block number: " ++ vars.counter]' />
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="4af7e28f-ac97-45ef-b5c2-30470fd129f9">
+						<module-logging:log-error
+							doc:name="Log error"
+							doc:id="9005d9f0-c799-4aeb-a0d6-42e78b1d5212"
+							message='#[%dw 2.0
+&#10;output application/json
+&#10;---
+&#10;{
+&#10;	"Netsuite Update Error Ids": payload.*internalId
+&#10;}]'
+							source="create-vendor-bill-payment-netsuite-jpm:netsuite-update-subflow"
+							messageType="-----------Netsuite Update Error ------------------" />
+						<try doc:name="Try"
+							doc:id="a06444c4-504d-4218-9959-2a5ba1a79581">
+							<ee:transform doc:name="error internalId csv"
+								doc:id="d4949fbe-b600-4816-86d2-aaf60d047d85">
+								<ee:message>
+									<ee:set-payload
+										resource="dataweave/namea/email-netsuite-payment-csv.dwl" />
+								</ee:message>
+							</ee:transform>
+							<ee:transform doc:name="email payload"
+								doc:id="885f300e-c165-4204-81ce-c8acd21770e0">
+								<ee:message>
+									<ee:set-payload
+										resource="dataweave/namea/email-netsuite.dwl" />
+
+								</ee:message>
+								<ee:variables>
+									<ee:set-variable variableName="attachment"><![CDATA[%dw 2.0
+output application/csv
+---
+payload]]></ee:set-variable>
+								</ee:variables>
+
+							</ee:transform>
+							<until-successful
+								maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+								doc:id="ff2e0bb0-0db4-4961-933f-af328e640fbd"
+								millisBetweenRetries="${https.retry.frequency}">
+								<http:request method="POST" doc:name="Request"
+									doc:id="5ea76321-2145-452e-9904-e61947760066"
+									config-ref="PGP_Encrpt_Request" path="/email" />
+							</until-successful>
+							<module-logging:log-outbound
+								doc:name="Log outbound"
+								doc:id="8d81706b-29d9-42cd-a826-d0ebaa0384da"
+								message="******Email Sent*************"
+								source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+							<error-handler>
+								<on-error-continue enableNotifications="true"
+									logException="true" doc:name="On Error Continue"
+									doc:id="1a944de9-8d30-4e01-82c2-8724a1ba067d">
+									<module-logging:log-error
+										doc:name="Log error"
+										doc:id="fd8bca2e-5c2e-48be-9c12-a506d556f3d0"
+										message='#[%dw 2.0&#10;output application/json&#10;---&#10;{
+&#10;&#10;   "Sending Mail Error -- Netsuite Update Error Ids" : payload.*internalId
+&#10;&#10;}]'
+										messageType="-----------Sending Mail Error ------------------"
+										source="create-vendor-bill-payment-netsuite-jpm:netsuite-update-subflow" />
+								</on-error-continue>
+							</error-handler>
+						</try>
+
+
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</foreach>
+	</sub-flow>
+
+	<sub-flow name="update-vendor-bill-payment-status-subflow"
+		doc:id="6720055d-5416-4009-983a-ba2e5fed11ad">
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="ed321997-27ec-40ad-a087-a4cbf508c538"
+			message="*********update-vendor-bill-payment-status started**********"
+			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+		<os:retrieve doc:name="Retrieve fileName"
+			doc:id="4ca7ec22-de8f-4232-9927-0e8a9bacbebe" key="fileName"
+			objectStore="Object_store" target="fileName">
+			<os:default-value><![CDATA[#[""]]]></os:default-value>
+		</os:retrieve>
+		<choice doc:name="Choice : ACK or PSR file"
+			doc:id="f24aa2c4-6fe9-452b-aed0-c4a2715118fc">
+			<when expression="#[vars.fileName contains ('ACK')]">
+				<flow-ref doc:name="ack-subflow"
+					doc:id="bba6e5ba-fe01-4d28-ab99-6fa6e81c956c" name="ack-subflow" />
+			</when>
+			<when expression='#[vars.fileName contains ("PSOURCE")]'>
+				<flow-ref doc:name="psr-subflow"
+					doc:id="e88603e9-8f8d-4413-83f9-430e0e338d5a" name="psr-subflow" />
+			</when>
+			<otherwise>
+				<module-logging:log-other
+					doc:name="Log other" doc:id="99b7102d-490f-427a-9773-74fe35a02214"
+					message="******Other File*******"
+					source="update-vendor-bill-payment-status-netsuite-jpm-schedular-flow" />
+			</otherwise>
+		</choice>
+		<os:remove doc:name="Remove fileName key from OS"
+			doc:id="b0ea6e4d-6050-4d85-aa7a-9c8d6327b2ca" key="fileName"
+			objectStore="Object_store" />
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="cc837d56-71ac-42e0-8d67-471e944b6fc1"
+			message="****************update-vendor-bill-payment-status ends**************"
+			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+	</sub-flow>
+	<sub-flow
+		name="apac-update-vendor-bill-payment-status-subflow"
+		doc:id="ac2a2120-5b65-4ad7-a752-9e2c4df79218">
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="7af0e7a9-490e-43e1-8bc3-955ac2282394"
+			message="*********apac-update-vendor-bill-payment-status started**********"
+			source="apac-update-vendor-bill-payment-status-subflow" />
+		<ee:transform doc:name="Transform Message"
+			doc:id="d551f767-3075-44df-8f10-682aeb9e9843">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable
+					resource="dataweave/apac/sourceCountryFileMapping.dwl"
+					variableName="sourceCountryFile" />
+			</ee:variables>
+		</ee:transform>
+		<os:retrieve doc:name="Retrieve fileName"
+			doc:id="47454b1c-d989-40f4-bb22-dbbde31601ac"
+			key="#[vars.sourceCountryFile]" objectStore="Object_store"
+			target="fileName">
+			<os:default-value><![CDATA[#[""]]]></os:default-value>
+		</os:retrieve>
+		<module-logging:log-other
+			doc:name="Log other" doc:id="f1d9c225-518d-4555-a9d9-897899485f5d"
+			messageType="Object Store Key value retrieved" logType="Log Other"
+			message='#[%dw 2.0&#10;output application/json&#10;---&#10;vars.sourceCountryFile ++ ":" ++ vars.fileName]'
+			source="apac-update-vendor-bill-payment-status-subflow" />
+		<choice doc:name="Choice : ACK or PSR file"
+			doc:id="d7770b43-15a4-4fe7-abca-c8c43e7ed701">
+			<when expression="#[vars.fileName contains ('ACK')]">
+				<ee:transform doc:name="Set email body"
+					doc:id="2a925dfd-d1ba-43ef-9575-c48e26bdeca0">
+					<ee:message>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable
+							resource="dataweave/apac/email-ack-file.dwl"
+							variableName="emailPayload" />
+					</ee:variables>
+				</ee:transform>
+				<until-successful
+					maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+					doc:id="f19d4f04-d36c-4a3b-9eda-a01e474f4d1d"
+					millisBetweenRetries="${https.retry.frequency}">
+					<http:request method="POST" doc:name="Email Request"
+						doc:id="db45ff9a-f775-417d-8850-82df5ac9ddc8"
+						config-ref="PGP_Encrpt_Request" path="/email"
+						target="AckEmailResp">
+						<http:body><![CDATA[#[vars.emailPayload]]]></http:body>
+					</http:request>
+				</until-successful>
+				<flow-ref doc:name="apac-ack-subflow"
+					doc:id="61dabd8b-e91b-4f35-8f59-215f9f68f510"
+					name="apac-ack-subflow" />
+			</when>
+			<when expression='#[vars.fileName contains ("PSOURCE")]'>
+				<flow-ref doc:name="apac-psr-subflow"
+					doc:id="8e0b8689-6e7e-4c91-b728-ef4a09f8c3fa"
+					name="apac-psr-subflow" />
+			</when>
+			<otherwise>
+				<module-logging:log-other
+					doc:name="Log other" doc:id="f8ee494c-416e-4f0a-81dc-6c72f355de1e"
+					message="******Other File*******"
+					source="apac-update-vendor-bill-payment-status-subflow" />
+			</otherwise>
+		</choice>
+		<os:remove doc:name="Remove fileName key from OS"
+			doc:id="06db744f-2976-48f0-b49a-eb71b7bc05a5"
+			key="#[vars.sourceCountryFile]" objectStore="Object_store" />
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="5550ca08-de52-4e67-8865-0823c7c4c9f8"
+			message="**************** apac  update-vendor-bill-payment-status ends**************"
+			source="apac-update-vendor-bill-payment-status-subflow" />
+	</sub-flow>
+	<sub-flow name="netsuite-update-common-subflow"
+		doc:id="25dbabfb-35b0-4a2d-9398-488b97b45169">
+		<ee:transform doc:name="prepare list"
+			doc:id="c1e54e72-4de5-44b0-9adc-dc526772c809">
+			<ee:message>
+				<ee:set-payload
+					resource="dataweave/customerrefund/prepare-netsuite-list-mapping.dwl" />
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable
+					resource="dataweave/customerrefund/prepare-netsuite-list-mapping.dwl"
+					variableName="prepareListEmail" />
+			</ee:variables>
+		</ee:transform>
+		<foreach doc:name="For Each Updation"
+			doc:id="dad0a4bb-af33-4e66-aab5-a138ee35aeb2"
+			collection="#[output application/json&#10;---&#10;payload]"
+			batchSize="${batch.size}">
+			<try doc:name="Try" doc:id="67f0bf55-55a6-4d01-b181-74c6a96b7f71">
+				<module-logging:log-inbound
+					doc:name="Log inbound"
+					doc:id="aaf53911-cc78-4046-a77d-b68790387199"
+					message="#[%dw 2.0&#10;output application/json&#10;---&#10;payload.internalId]"
+					messageType='#["Netsuite update started for file "]'
+					source="netsuite-update-common-subflow" />
+				<ee:transform
+					doc:name="Update CustomerRefund SOAP Request"
+					doc:id="0ad37154-849e-4139-a9ec-f6693f1877a4">
+					<ee:message>
+						<ee:set-payload
+							resource="dataweave/customerrefund/updateList-customer-refund.dwl" />
+					</ee:message>
+				</ee:transform>
+
+				<http:request method="PUT"
+					doc:name="Netsuite Customer Refund Update Request"
+					doc:id="2ab3d299-7441-4658-b594-3d1be63a9675"
+					config-ref="NSv11v2httpRequest"
+					path="${https.netsuite.sapi.v11.v2.update.path}">
+					<http:query-params><![CDATA[#[output application/java
+---
+{
+	"recordType" : p('customer.refund.savesearch.recordType')
+}]]]></http:query-params>
+				</http:request>
+				<ee:transform doc:name="XML to JSON Conversion"
+					doc:id="90a69a2f-3c82-4c6a-8867-4bbd73ebf28d">
+					<ee:message>
+						<ee:set-payload
+							resource="dataweave/customerrefund/updateList-response-customer-refund.dwl" />
+					</ee:message>
+				</ee:transform>
+				<module-logging:log-outbound
+					doc:name="Log Output" doc:id="4bce8fb7-1aae-4773-a6c4-3d3c5c957ebe"
+					message='#["Netsuite update done for block number: " ++ vars.counter]'
+					messageType="#[output application/json --- payload]"
+					source="netsuite-update-common-subflow" />
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="97db8dc4-3189-451a-9101-5908c6c0d0e6">
+						<module-logging:log-error
+							doc:name="Log error"
+							doc:id="cf766a98-5262-49d0-8ff9-3058fc1c4a66"
+							message='#[%dw 2.0&#10;&#10;output application/json&#10;&#10;---&#10;&#10;{&#10;&#10;	"Netsuite Update Error Ids": payload.*internalId&#10;&#10;}]'
+							messageType="-----------Netsuite Update Error ------------------"
+							source="netsuite-update-common-subflow" />
+						<try doc:name="Try"
+							doc:id="d7017e18-526e-4a53-8db9-e6c2873867af">
+							<flow-ref doc:name="email-filename-csv-subflow"
+								doc:id="d8f7b308-1f5d-4836-a6b7-9fe7cbc62c77"
+								name="email-filename-csv-subflow" />
+							<error-handler>
+								<on-error-continue enableNotifications="true"
+									logException="true" doc:name="On Error Continue"
+									doc:id="ae2bea7e-2969-4294-b535-2d5059fb9927">
+									<module-logging:log-error
+										doc:name="Log error"
+										doc:id="fd2c2100-1957-4106-8f38-dbd94bb5b494"
+										message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;&#10;&#10;   "Sending Mail Error -- Netsuite Update Error Ids" : payload.*internalId&#10;&#10;&#10;}]'
+										messageType="-----------Sending Mail Error ------------------"
+										source="netsuite-update-common-subflow" />
+								</on-error-continue>
+							</error-handler>
+						</try>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</foreach>
+	</sub-flow>
+</mule>

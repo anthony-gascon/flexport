@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:addList xmlns:ns0="urn:messages_2020_2.platform.webservices.netsuite.com">
+  <ns0:record xmlns:ns0="urn:messages_2020_2.platform.webservices.netsuite.com" xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns01:Invoice">
+    <ns01:entity xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com" externalId="gid://flexport/Payments::NetsuiteCustomer/36131"/>
+    <ns01:tranDate xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">2022-08-04T10:19:05Z</ns01:tranDate>
+    <ns01:department xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>104</internalId>
+    </ns01:department>
+    <ns01:class xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>16</internalId>
+    </ns01:class>
+    <ns01:subsidiary xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>17</internalId>
+    </ns01:subsidiary>
+    <ns01:currency xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>1</internalId>
+    </ns01:currency>
+    <ns01:dueDate xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">2022-08-05T10:44:10.468+05:30</ns01:dueDate>
+    <ns01:memo xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">ch_2JmFPRVOXmLTEyWf1ILb5A08</ns01:memo>
+    <ns01:account xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <internalId>334</internalId>
+    </ns01:account>
+    <ns01:customFieldList xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <StringCustomFieldRef__custbodydelivdate__537>
+        <ns02:value xmlns:ns02="urn:core_2020_2.platform.webservices.netsuite.com">2022-09-05T10:44:10.468+05:30</ns02:value>
+      </StringCustomFieldRef__custbodydelivdate__537>
+    </ns01:customFieldList>
+    <ns01:itemList xmlns:ns01="urn:sales_2020_2.transactions.webservices.netsuite.com">
+      <ns01:item>
+        <ns01:item>
+          <internalId>43762</internalId>
+        </ns01:item>
+        <amount>1000.0</amount>
+        <description>Principal</description>
+      </ns01:item>
+	  <ns01:item>
+        <ns01:item>
+          <internalId>43742</internalId>
+        </ns01:item>
+        <amount>120.0</amount>
+        <description>Interest</description>
+      </ns01:item>
+	  <ns01:item>
+        <ns01:item>
+          <internalId>43766</internalId>
+        </ns01:item>
+        <amount>180.0</amount>
+        <description>Amount Not Financed</description>
+      </ns01:item>
+    </ns01:itemList>
+  </ns0:record>
+</ns0:addList>

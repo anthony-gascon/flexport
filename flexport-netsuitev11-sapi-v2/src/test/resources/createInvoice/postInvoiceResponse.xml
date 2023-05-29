@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<addResponse xmlns="urn:messages_2020_2.platform.webservices.netsuite.com">
+    <writeResponse>
+        <platformCore:status xmlns:platformCore="urn:core_2020_2.platform.webservices.netsuite.com" isSuccess="true">
+            <platformCore:statusDetail>
+                <platformCore:afterSubmitFailed>false</platformCore:afterSubmitFailed>
+            </platformCore:statusDetail>
+            <platformCore:statusDetail type="WARN">
+                <platformCore:code>WARNING</platformCore:code>
+                <platformCore:message>Transaction number FLEX-123456T-2 is already used.</platformCore:message>
+            </platformCore:statusDetail>
+        </platformCore:status>
+        <baseRef internalId="38696789" type="invoice" xmlns:platformCore="urn:core_2020_2.platform.webservices.netsuite.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="platformCore:RecordRef"/>
+    </writeResponse>
+</addResponse>

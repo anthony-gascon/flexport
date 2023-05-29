@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:netsuite="http://www.mulesoft.org/schema/mule/netsuite"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:module-logging="http://www.mulesoft.org/schema/mule/module-logging"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/netsuite http://www.mulesoft.org/schema/mule/netsuite/current/mule-netsuite.xsd">
+	<sub-flow name="apac-pgp-sftp-ns-update-subflow"
+		doc:id="323b3f14-e3d3-490c-890a-1de278c27cb0">
+		<scatter-gather doc:name="Scatter-Gather"
+			doc:id="4eb05505-eeb7-41a4-a30b-caf1142fbd00">
+			<route>
+				<set-variable
+					value="#[output application/json&#10;---&#10;{&#10;	internalId  :payload.Document.CstmrCdtTrfInitn.*PmtInf..InstrId,&#10;	msgId : payload.Document.CstmrCdtTrfInitn.GrpHdr.MsgId&#10;}]"
+					doc:name="netsuite update"
+					doc:id="7fda67c1-1fc2-48b6-9047-e7e75a39cce8"
+					variableName="payloadCopy" />
+				<flow-ref
+					doc:name="pgp-encryption-sftp-upload-apac-subflow"
+					doc:id="4f9db042-c1c5-43b1-bd9a-652a988717fb"
+					name="pgp-encryption-sftp-upload-apac-subflow" />
+				<flow-ref doc:name="netsuite-update-subflow"
+					doc:id="f09b471c-b0a4-46c8-8033-63b73ffd098d"
+					name="netsuite-update-apac-subflow" />
+				<module-logging:log-exit
+					doc:name="netsuite updation done"
+					doc:id="a5e92cd4-89bf-4f21-8242-d2610e7b3e6c"
+					message="netsuite updation done"
+					source="apac-pgp--sftp-ns-subflow" />
+			</route>
+			<route>
+				<until-successful
+					maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+					doc:id="9aa6499d-839a-4e9a-b560-84d7a6fdc610"
+					millisBetweenRetries="${https.retry.frequency}">
+					<http:request method="POST"
+						doc:name="netsuite file upload"
+						doc:id="763cbcd7-b56a-45e6-b8b9-fd6868d5a8d6"
+						config-ref="Http_NS__Request" path="${ns.addfile.path}"
+						responseTimeout="${http.response.timeout.netsuite}">
+						<http:query-params><![CDATA[#[{
+	folderId : vars.setFolderId,
+	fileName : vars.setFileName replace  "/" with "" ++  vars.uuid
+}]]]></http:query-params>
+					</http:request>
+				</until-successful>
+				<module-logging:log-exit
+					doc:name="netsuite file upload"
+					doc:id="c5903b81-26c7-4a40-bddb-f44e129d3a41"
+					message="file upload done in netsuite."
+					source="apac-pgp--sftp-ns-subflow" />
+			</route>
+		</scatter-gather>
+	</sub-flow>
+	<sub-flow name="wire-ach-mapping-subflow"
+		doc:id="21028a32-4b8a-4f8a-b529-782a8978e962">
+		<choice doc:name="Choice"
+			doc:id="43ae283f-7bf0-4ab2-9f49-f263a77f6b2d">
+			<when
+				expression="#[isEmpty(payload) == false and (vars.source == 'China')]">
+				<set-variable value='#[uuid() replace  "-" with ""]'
+					doc:name="uuid" doc:id="8559562e-3124-4b65-875d-6eddb5a3fc9c"
+					variableName="uuid" />
+				<flow-ref doc:name="ach-wire-filter-china-subflow"
+					doc:id="a0462752-86a0-4583-ae89-5a26169f49cc"
+					name="ach-wire-filter-subflow" />
+				<flow-ref doc:name="apac-china-xml-preparation-subflow"
+					doc:id="7a4368e3-b242-4bc2-a776-c5ec0c9a8ad0"
+					name="apac-xml-preparation-subflow" />
+			</when>
+			<when
+				expression="#[isEmpty(payload) == false and (vars.source == 'Singapore')]">
+				<set-variable value='#[uuid() replace  "-" with ""]'
+					doc:name="uuid" doc:id="0e0b0c15-c99d-47d3-b54f-4da07682edb6"
+					variableName="uuid" />
+				<flow-ref doc:name="ach-wire-filter-singapore-subflow"
+					doc:id="e7c92705-1107-4bbe-a08a-15b265577f27"
+					name="ach-wire-filter-singapore-subflow" />
+				<flow-ref doc:name="apac-singapore-xml-preparation-subflow"
+					doc:id="51fbc7f2-15e8-43df-aa8d-84e20135c399"
+					name="apac-xml-preparation-subflow" />
+			</when>
+			<when
+				expression="#[isEmpty(payload) == false and (vars.source == 'Hongkong')]">
+				<set-variable value='#[uuid() replace  "-" with ""]'
+					doc:name="uuid" doc:id="cbf0494a-2600-4011-bcab-efea05c46c27"
+					variableName="uuid" />
+				<flow-ref doc:name="hongkong-ach-wire-filter-subflow"
+					doc:id="612a8c2a-ebe6-4c71-80cb-f1184171be17"
+					name="hongkong-ach-wire-filter-subflow" />
+				<flow-ref doc:name="apac-xml-preparation-subflow"
+					doc:id="2db273c9-f82c-4db3-87eb-41cf39e1aa44"
+					name="apac-xml-preparation-subflow" />
+			</when>
+			<when expression="#[isEmpty(payload) == false and (vars.source == 'CustomerRefund')]">
+				<set-variable value='#[uuid() replace  "-" with ""]' doc:name="uuid" doc:id="798cf795-cbe1-48b2-8c10-b0c26c667532" variableName="uuid" />
+				<flow-ref doc:name="customer-refund-ach-wire-filter-subflow" doc:id="6909f408-9ab6-4b41-a4fd-3cd855a11b54" name="customer-refund-ach-wire-filter-subflow" />
+				<flow-ref doc:name="customer-refund-xml-preparation-subflow" doc:id="c5219a51-9526-4279-89ba-23924ab54752" name="apac-xml-preparation-subflow" />
+			</when>
+			<otherwise>
+				<module-logging:log-outbound
+					doc:name="Log outbound"
+					doc:id="4d248738-4dff-4664-a448-f5f0f2dcd099" logLevel="INFO"
+					message="There is no data in SavedSearch"
+					source="wire-ach-mapping-subflow" />
+			</otherwise>
+		</choice>
+	</sub-flow>
+
+
+	<sub-flow name="apac-xml-preparation-subflow"
+		doc:id="07b4b6b4-9237-402b-a2ef-a5b73e87c116">
+		<ee:transform doc:name="preparing XML structure"
+			doc:id="426d66b4-0b92-41f3-bc6b-b6b105d79384">
+			<ee:message>
+				<ee:set-payload
+					resource="dataweave/apac/china/prepare-xml-structure-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+
+		<flow-ref doc:name="source final xml subFlow"
+			doc:id="cd8ceb81-3d55-4020-b6d2-c8a87e218238"
+			name="source-final-xml-subFlow" />
+		<module-logging:log-outbound
+			doc:name="XML mapping finished"
+			doc:id="55c1d351-d512-441e-ac7f-be0349e140ae"
+			message="XML mapping finished"
+			source="apac-xml-preparation-subflow" messageType="******************* Create XML file done *******************"/>
+	</sub-flow>
+	<sub-flow name="source-final-xml-subFlow" doc:id="9e6b8ee3-c192-4e26-b9ac-84bd3cdcba1c" >
+	<choice doc:name="Choice" doc:id="f0ca08f0-e25f-41f5-a38b-5b12e01ff598" >
+			<when expression='#[vars.source == "China"]'>
+			<ee:transform doc:name="final xml" doc:id="eea49b66-4819-46ce-9355-bc6678649f00" >
+			<ee:message >
+				<ee:set-payload resource="dataweave/apac/china/final-xml-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+					</when>
+			<when expression='#[vars.source == "Singapore"]'>
+				<ee:transform doc:name="final xml" doc:id="f1c04b56-4dfe-4116-861d-147e07d0f3b0" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/apac/singapore/final-xml-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression='#[vars.source == "Hongkong"]'>
+				<ee:transform doc:name="final xml" doc:id="8c3ba648-27b2-46c0-b04f-cde1b75a0ff9" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/apac/hongkong/final-xml-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression='#[vars.source == "CustomerRefund"]'>
+				<ee:transform doc:name="final XML CustomerRefund" doc:id="c3d13614-b2f9-4641-a178-790f3cf82bdf" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/final-xml-mapping.dwl" />
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise>
+				<module-logging:log-other doc:name="Log other" doc:id="b880f1c0-bb56-4539-8ddf-001c1efa9ab8" message='#["Source is not correct"]'/>
+			</otherwise>
+		</choice>
+	</sub-flow>
+	<sub-flow name="pgp-encryption-sftp-upload-apac-subflow"
+		doc:id="c83ce42c-76d0-4b3c-9c58-d38670558b88">
+		<until-successful maxRetries="${https.retry.attempt}"
+			doc:name="Until Successful"
+			doc:id="5e472ce0-f744-46a8-b1b8-b61f2ffabd62"
+			millisBetweenRetries="${https.retry.frequency}">
+			<http:request method="POST" doc:name="pgp request"
+				doc:id="7de65e8c-1c67-4e53-85d7-f8076d020e7c"
+				config-ref="PGP_Encrpt_Request" path="${https.sign.path.pgp}"
+				responseTimeout="${http.response.timeout.pgp}">
+			</http:request>
+		</until-successful>
+		<module-logging:log-entry
+			doc:name="pgp encryption done"
+			doc:id="4f621b50-723c-41ff-b0df-f3dee9e84693"
+			message="pgp encryption done" logLevel="DEBUG"
+			source="pgp-encryption-sftp-upload-apac-subflow" />
+		<until-successful maxRetries="${https.retry.attempt}"
+			doc:name="Until Successful"
+			doc:id="9f474cc2-27d6-4e33-b06b-02d0f34467b8"
+			millisBetweenRetries="${https.retry.frequency}">
+			<http:request method="POST" doc:name="sftp upload"
+				doc:id="4f34c9ae-5707-4c4b-a737-1741458bb194" path="${https.upload.path.pgp}"
+				config-ref="PGP_Encrpt_Request"
+				responseTimeout="${http.response.timeout.pgp}">
+				<http:query-params><![CDATA[#[{
+	"path" : p('sftp.inbound.directory'),
+	"fileName" : "/" ++ vars.setFileName ++ vars.uuid ++ ".xml.pgp"
+}]]]></http:query-params>
+			</http:request>
+		</until-successful>
+		<module-logging:log-outbound
+			doc:name="sftp upload completed"
+			doc:id="05403a82-96cf-4e14-ab86-13b3dd683522"
+			message="sftp upload completed" source="pgp-encryption-sftp-upload-apac-subflow" />
+	</sub-flow>
+	<sub-flow name="netsuite-update-apac-subflow"
+		doc:id="abaa45c4-c524-4557-a668-d21ed7fd1241">
+		<ee:transform doc:name="prepare list" doc:id="311df161-0ddf-44fa-bc70-b8e8d7722e18" >
+			<ee:message >
+				<ee:set-payload resource="dataweave/apac/china/prepare-netsuite-list-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each Updation"
+			doc:id="e40d2bd7-8cc3-45d4-a465-fc29e3e24a3a"
+			collection="#[output application/json&#10;---&#10;payload]"
+			batchSize="${batch.size}">
+			<try doc:name="Try" doc:id="67444fe1-a7fe-4556-a1a4-c4af5925c834">
+				<module-logging:log-inbound doc:name="Log inbound" doc:id="628c4d25-2217-4457-8fb0-fc6dad3184a2" message="#[%dw 2.0&#10;output application/json&#10;---&#10;payload.internalId]" messageType='#["Netsuite update started for file "]' source="netsuite-update-apac-subflow"/>
+				<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="247c399f-1b49-4cdf-a1d0-62fed2ae2680" millisBetweenRetries="${https.retry.frequency}">
+					<http:request method="PUT" doc:name="update netsuite update" doc:id="d8c3df65-99dc-4f1a-890c-cbacd0b7311f" config-ref="Http_NS__Request" path="${apac.file.update.path}" responseTimeout="${http.response.timeout.netsuite}" sendCorrelationId="AUTO">
+						<http:body><![CDATA[#[output application/json
+---
+payload]]]></http:body>
+					</http:request>
+				</until-successful>
+				<module-logging:log-outbound
+					doc:name="Log outbound"
+					doc:id="700df93a-5a1f-42e7-9cb8-b4e95b72d376"
+					message='#["Netsuite update done for block number: " ++ vars.counter]' source="netsuite-update-apac-subflow" messageType="#[%dw 2.0&#10;output application/json&#10;---&#10;payload map ((item, index) -&gt; &#10;{&#10;internalId : item.baseRef.internalId,&#10;status: item.status.isSuccess&#10;}&#10;)]"/>
+				<error-handler>
+					<on-error-continue enableNotifications="true"
+						logException="true" doc:name="On Error Continue"
+						doc:id="de0209bf-6e35-4594-9683-530895b59188">
+						<module-logging:log-error
+							doc:name="Log error"
+							doc:id="9099bc4f-5a08-4aa2-9790-a8fbb26e6b01"
+							message='#[%dw 2.0
+&#10;output application/json
+&#10;---
+&#10;{
+&#10;	"Netsuite Update Error Ids": payload.*internalId
+&#10;}]'
+							source="netsuite-update-apac-subflow"
+							messageType="-----------Netsuite Update Error ------------------" />
+						<try doc:name="Try"
+							doc:id="221eb505-30bb-49d1-931f-028554b99ada">
+							<ee:transform doc:name="error internalId csv" doc:id="4436d412-23a9-4504-980f-2a574640d0f5" >
+								<ee:message >
+									<ee:set-payload resource="dataweave/apac/china/email-netsuite-payment-csv.dwl" />
+								</ee:message>
+							</ee:transform>
+							<ee:transform doc:name="email payload" doc:id="00571b35-434e-4aac-aaa9-f8d152b64b94" >
+								<ee:message >
+									<ee:set-payload resource="dataweave/apac/email-netsuite.dwl" />
+								</ee:message>
+							</ee:transform>
+							<until-successful
+								maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+								doc:id="120a68b8-9517-4a9a-8694-fc2834bd0332"
+								millisBetweenRetries="${https.retry.frequency}">
+								<http:request method="POST" doc:name="Request"
+									doc:id="fcb80bbb-ddb3-471f-bc61-9c33c9d0752e"
+									config-ref="PGP_Encrpt_Request" path="${email.path}"/>
+							</until-successful>
+							<module-logging:log-outbound
+								doc:name="Log outbound"
+								doc:id="84a79206-ab97-4d32-9451-dbfeda25b16a"
+								message="******Email Sent*************"
+								source="netsuite-update-apac-subflow" />
+							<error-handler>
+								<on-error-continue enableNotifications="true"
+									logException="true" doc:name="On Error Continue"
+									doc:id="4b5102a9-e965-46db-9979-24620d7e4e6e">
+									<module-logging:log-error
+										doc:name="Log error"
+										doc:id="04f11b62-9a6e-40ad-bd3c-dabf9b957ed6"
+										message='#[%dw 2.0&#10;output application/json&#10;---&#10;{
+&#10;&#10;   "Sending Mail Error -- Netsuite Update Error Ids" : payload.*internalId
+&#10;&#10;}]'
+										messageType="-----------Sending Mail Error ------------------"
+										source="netsuite-update-apac-subflow" />
+								</on-error-continue>
+							</error-handler>
+						</try>
+
+
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</foreach>
+	</sub-flow>
+	<sub-flow name="set-common-variable" doc:id="d93c697f-18e1-42b6-ba6d-0a7e8df61929" >
+		<ee:transform doc:name="Set Variable" doc:id="735f33d3-334d-432d-93fb-d7e7fab003ca" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dataweave/setFileName.dwl" variableName="setFileName" />
+				<ee:set-variable resource="dataweave/setFolderId.dwl" variableName="setFolderId" />
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="apac-netsuite-mapping-subflow" doc:id="4d5dbcf2-8cce-42fa-880f-c4f28ca19396" >
+		<ee:transform doc:name="NS field mapping" doc:id="cfa5145f-861d-4d4c-a766-b8e05e336ac3" >
+			<ee:message >
+				<ee:set-payload resource="dataweave/apac/china/ns-field-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Currency mapping" doc:id="9fea540f-c2b7-4547-b951-de9cbb246db9" >
+			<ee:message >
+				<ee:set-payload resource="dataweave/apac/china/currency-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="apac-vendor-bill-payment-netsuite-china-publish-subflow" doc:id="6104bcd4-7f5c-4e11-bdf1-9412fb799989" >
+		<flow-ref doc:name="apac-netsuite-mapping-subflow" doc:id="769aaa60-47ac-4674-83ef-b46f3296e1ef" name="apac-netsuite-mapping-subflow"/>
+		<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="2bac6c55-5253-4a62-a880-8d306cafc109" millisBetweenRetries="${https.retry.frequency}">
+			<vm:publish doc:name="Publish netsuite saved search" doc:id="e010bfac-cfda-4fcd-b9e1-4dd90531602c" config-ref="VM_Config" sendCorrelationId="ALWAYS" queueName="${vm.queue.china.savedsearch}" timeout="${vm.queue.apac.china.publish.timeout}" />
+		</until-successful>
+	</sub-flow>
+	<sub-flow name="apac-vendor-bill-payment-netsuite-hongkong-publish-subflow" doc:id="1ca24961-7e5d-4fc5-9ec4-6b0f58c9ea4c" >
+		<flow-ref doc:name="apac-netsuite-mapping-subflow" doc:id="acefeef0-fb89-492b-8a39-a285fa57bea5" name="apac-netsuite-mapping-subflow"/>
+		<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="24f8c711-b6cb-494a-b884-6cafb46ef9c4" millisBetweenRetries="${https.retry.frequency}">
+			<vm:publish doc:name="Publish netsuite saved search" doc:id="f2702edb-92bc-4802-9bed-2b6b7e236d96" config-ref="VM_Config" sendCorrelationId="ALWAYS" queueName="${vm.queue.hongkong.savedsearch}" timeout="${vm.queue.apac.hongkong.publish.timeout}" />
+		</until-successful>
+	</sub-flow>
+	<sub-flow name="apac-vendor-bill-payment-netsuite-singapore-publish-subflow" doc:id="1061b8e7-055c-40db-9954-98ebe9f9b9f7" >
+		<flow-ref doc:name="apac-netsuite-mapping-subflow" doc:id="429ef27e-0272-458e-af40-815867f516b8" name="apac-netsuite-mapping-subflow"/>
+		<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="40a9553f-0275-4b23-a31e-0c8ee4501f5c" millisBetweenRetries="${https.retry.frequency}">
+			<vm:publish doc:name="Publish netsuite saved search" doc:id="7e1697d6-0c92-47f3-be6f-3e5f16acaa6e" config-ref="VM_Config" sendCorrelationId="ALWAYS" queueName="${vm.queue.singapore.savedsearch}" timeout="${vm.queue.apac.singapore.publish.timeout}" />
+		</until-successful>
+	</sub-flow>
+</mule>

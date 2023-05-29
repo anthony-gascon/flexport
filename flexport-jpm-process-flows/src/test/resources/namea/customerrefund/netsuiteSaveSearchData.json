@@ -1,0 +1,962 @@
+[
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": {
+      "searchRow": {
+        "@type": "tranSales:TransactionSearchRow",
+        "basic": {
+          "account": {
+            "searchValue": {
+              "@internalId": "1188",
+              "__text": null
+            }
+          },
+          "currency": {
+            "searchValue": {
+              "@internalId": "1",
+              "__text": null
+            }
+          },
+          "entity": {
+            "searchValue": {
+              "@internalId": "24115432",
+              "__text": null
+            }
+          },
+          "fxAmount": {
+            "searchValue": "-5000.0"
+          },
+          "internalId": {
+            "searchValue": {
+              "@internalId": "45588874",
+              "__text": null
+            }
+          },
+          "memo": {
+            "searchValue": "FINOPS-61951"
+          },
+          "postingPeriod": {
+            "searchValue": {
+              "@internalId": "262",
+              "__text": null
+            }
+          },
+          "tranDate": {
+            "searchValue": "2023-04-04T21:00:00.000-07:00"
+          },
+          "tranId": {
+            "searchValue": "20210817580"
+          },
+          "transactionNumber": {
+            "searchValue": "5776"
+          },
+          "type": {
+            "searchValue": "_customerRefund"
+          },
+          "customFieldList": {
+            "SearchColumnSelectCustomField__custbody_flexport_bank_details": {
+              "@internalId": "7147",
+              "@scriptId": "custbody_flexport_bank_details",
+              "@type": "platformCore:SearchColumnSelectCustomField",
+              "searchValue": {
+                "@internalId": "2",
+                "@typeId": "896",
+                "__text": null
+              }
+            }
+          }
+        },
+        "customerMainJoin": {
+          "altName": {
+            "searchValue": "Gulf Coast Panama Jack, Inc.  -  US"
+          },
+          "billAddress": {
+            "searchValue": "59868 - 787930 - Gulf Coast Panama Jack, Inc. - US\n1411 MOYLAN RD\nPANAMA CITY BEACH FL 32407-4069\nUnited States"
+          },
+          "billAddress1": {
+            "searchValue": "1411 MOYLAN RD"
+          },
+          "billCity": {
+            "searchValue": "PANAMA CITY BEACH"
+          },
+          "billCountry": {
+            "searchValue": "_unitedStates"
+          },
+          "billCountryCode": {
+            "searchValue": "US"
+          },
+          "billState": {
+            "searchValue": "FL"
+          },
+          "billZipCode": {
+            "searchValue": "32407-4069"
+          },
+          "customFieldList": {
+            "SearchColumnSelectCustomField__custentity_payment_method": {
+              "@internalId": "525",
+              "@scriptId": "custentity_payment_method",
+              "@type": "platformCore:SearchColumnSelectCustomField",
+              "searchValue": {
+                "@internalId": "3",
+                "@typeId": "84",
+                "__text": null
+              }
+            },
+            "SearchColumnStringCustomField__custentitybankroutingswift": {
+              "@internalId": "534",
+              "@scriptId": "custentitybankroutingswift",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "65464654654"
+            },
+            "SearchColumnStringCustomField__custentityaccountnumber": {
+              "@internalId": "535",
+              "@scriptId": "custentityaccountnumber",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "546543546546"
+            },
+            "SearchColumnStringCustomField__custentitybankname": {
+              "@internalId": "528",
+              "@scriptId": "custentitybankname",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "JPM Chase"
+            },
+            "SearchColumnStringCustomField__custentitybankcountry": {
+              "@internalId": "532",
+              "@scriptId": "custentitybankcountry",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "US"
+            }
+          }
+        },
+        "customSearchJoin": {
+          "customizationRef": {
+            "@internalId": "7147",
+            "@scriptId": "custbody_flexport_bank_details",
+            "__text": null
+          },
+          "searchRowBasic": {
+            "@type": "platformCommon:CustomRecordSearchRowBasic",
+            "recType": {
+              "@internalId": "896",
+              "__text": null
+            },
+            "created": {
+              "searchValue": "2021-07-06T20:13:00.000-07:00"
+            },
+            "id": {
+              "searchValue": "2"
+            },
+            "internalId": {
+              "searchValue": {
+                "@internalId": "2",
+                "__text": null
+              }
+            },
+            "isInactive": {
+              "searchValue": "false"
+            },
+            "lastModified": {
+              "searchValue": "2021-07-06T20:13:00.000-07:00"
+            },
+            "lastModifiedBy": {
+              "searchValue": {
+                "@internalId": "23055479",
+                "__text": null
+              }
+            },
+            "name": {
+              "searchValue": "Flexport Bank Ending 625"
+            },
+            "owner": {
+              "searchValue": {
+                "@internalId": "23055479",
+                "__text": null
+              }
+            },
+            "customFieldList": {
+              "SearchColumnStringCustomField__custrecord_flexport_bic": {
+                "@internalId": "7131",
+                "@scriptId": "custrecord_flexport_bic",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "CHASUS33"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_member_id": {
+                "@internalId": "7130",
+                "@scriptId": "custrecord_flexport_member_id",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "021000021"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_add1": {
+                "@internalId": "7124",
+                "@scriptId": "custrecord_paying_flexport_sub_add1",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "760 MARKET STREET"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_add2": {
+                "@internalId": "7123",
+                "@scriptId": "custrecord_paying_flexport_sub_add2",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "8TH FLOOR"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_company_country": {
+                "@internalId": "7128",
+                "@scriptId": "custrecord_flexport_company_country",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "US"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_state": {
+                "@internalId": "7121",
+                "@scriptId": "custrecord_paying_flexport_sub_state",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "CA"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_pcode": {
+                "@internalId": "7119",
+                "@scriptId": "custrecord_paying_flexport_sub_pcode",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "94102"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_ach_id": {
+                "@internalId": "7127",
+                "@scriptId": "custrecord_flexport_ach_id",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "1538625000"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_account_number": {
+                "@internalId": "7117",
+                "@scriptId": "custrecord_flexport_bank_account_number",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "712538625"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_company_name": {
+                "@internalId": "7129",
+                "@scriptId": "custrecord_flexport_company_name",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "Flexport Inc"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub": {
+                "@internalId": "7125",
+                "@scriptId": "custrecord_paying_flexport_sub",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "Flexport Inc. - Operating"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_name": {
+                "@internalId": "7118",
+                "@scriptId": "custrecord_flexport_bank_name",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "JP Morgan Chase"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_city": {
+                "@internalId": "7122",
+                "@scriptId": "custrecord_paying_flexport_sub_city",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "SAN FRANCISCO"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_countrycode": {
+                "@internalId": "7132",
+                "@scriptId": "custrecord_flexport_bank_countrycode",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "US"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_country": {
+                "@internalId": "7120",
+                "@scriptId": "custrecord_paying_flexport_sub_country",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "US"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_currency": {
+                "@internalId": "7116",
+                "@scriptId": "custrecord_flexport_bank_currency",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "USD"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_ach_sch": {
+                "@internalId": "7126",
+                "@scriptId": "custrecord_flexport_ach_sch",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "JPMCOID"
+              }
+            }
+          }
+        }
+      }
+    },
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "transportHeaders": {
+        "date": "Tue, 25 Apr 2023 08:53:41 GMT",
+        "content-length": "29250",
+        "vary": "User-Agent",
+        "x-n-operationid": "40f69bea-2d12-42e8-ba7d-fa35e4f8b0a4",
+        "connection": "keep-alive",
+        "content-type": "text/xml;charset=utf-8",
+        "p3p": "CP=\"CAO PSAa OUR BUS PUR\"",
+        "strict-transport-security": "max-age=31536000",
+        "akamai-grn": "0.5ef63717.1682412820.70829cd",
+        "ns_rtimer_composite": "26925390:706172746E6572733031372E70726F642E7376616C652E6E65746C65646765722E636F6D:80"
+      },
+      "transportAdditionalData": {
+        "reasonPhrase": "OK",
+        "statusCode": "200"
+      },
+      "soapHeaders": {
+        "documentInfo": {
+          "documentInfo": {
+            "nsId": "WEBSERVICES_4134291_SB1_042520231214359159211459086_38201a30"
+          }
+        }
+      }
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": {
+      "searchRow": {
+        "@type": "tranSales:TransactionSearchRow",
+        "basic": {
+          "account": {
+            "searchValue": {
+              "@internalId": "1188",
+              "__text": null
+            }
+          },
+          "currency": {
+            "searchValue": {
+              "@internalId": "1",
+              "__text": null
+            }
+          },
+          "entity": {
+            "searchValue": {
+              "@internalId": "9873",
+              "__text": null
+            }
+          },
+          "fxAmount": {
+            "searchValue": "-276336.18"
+          },
+          "internalId": {
+            "searchValue": {
+              "@internalId": "45588875",
+              "__text": null
+            }
+          },
+          "memo": {
+            "searchValue": "FINOPS-61976"
+          },
+          "postingPeriod": {
+            "searchValue": {
+              "@internalId": "262",
+              "__text": null
+            }
+          },
+          "tranDate": {
+            "searchValue": "2023-04-04T21:00:00.000-07:00"
+          },
+          "tranId": {
+            "searchValue": "20210817581"
+          },
+          "transactionNumber": {
+            "searchValue": "5777"
+          },
+          "type": {
+            "searchValue": "_customerRefund"
+          },
+          "customFieldList": {
+            "SearchColumnSelectCustomField__custbody_flexport_bank_details": {
+              "@internalId": "7147",
+              "@scriptId": "custbody_flexport_bank_details",
+              "@type": "platformCore:SearchColumnSelectCustomField",
+              "searchValue": {
+                "@internalId": "2",
+                "@typeId": "896",
+                "__text": null
+              }
+            }
+          }
+        },
+        "customerMainJoin": {
+          "altName": {
+            "searchValue": "Peloton Interactive Inc  -  US"
+          },
+          "billAddress": {
+            "searchValue": "3360 - 527940 - Peloton Interactive Inc - US\n125 W 25th St\nNew York NY 10001\nUnited States"
+          },
+          "billAddress1": {
+            "searchValue": "125 W 25th St"
+          },
+          "billCity": {
+            "searchValue": "New York"
+          },
+          "billCountry": {
+            "searchValue": "_unitedStates"
+          },
+          "billCountryCode": {
+            "searchValue": "US"
+          },
+          "billState": {
+            "searchValue": "NY"
+          },
+          "billZipCode": {
+            "searchValue": "10001"
+          },
+          "customFieldList": {
+            "SearchColumnSelectCustomField__custentity_payment_method": {
+              "@internalId": "525",
+              "@scriptId": "custentity_payment_method",
+              "@type": "platformCore:SearchColumnSelectCustomField",
+              "searchValue": {
+                "@internalId": "3",
+                "@typeId": "84",
+                "__text": null
+              }
+            },
+            "SearchColumnStringCustomField__custentitybankroutingswift": {
+              "@internalId": "534",
+              "@scriptId": "custentitybankroutingswift",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "65465356"
+            },
+            "SearchColumnStringCustomField__custentityaccountnumber": {
+              "@internalId": "535",
+              "@scriptId": "custentityaccountnumber",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "6565352656"
+            },
+            "SearchColumnStringCustomField__custentitybankname": {
+              "@internalId": "528",
+              "@scriptId": "custentitybankname",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "Bank Of America"
+            },
+            "SearchColumnStringCustomField__custentitybankcountry": {
+              "@internalId": "532",
+              "@scriptId": "custentitybankcountry",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "US"
+            }
+          }
+        },
+        "customSearchJoin": {
+          "customizationRef": {
+            "@internalId": "7147",
+            "@scriptId": "custbody_flexport_bank_details",
+            "__text": null
+          },
+          "searchRowBasic": {
+            "@type": "platformCommon:CustomRecordSearchRowBasic",
+            "recType": {
+              "@internalId": "896",
+              "__text": null
+            },
+            "created": {
+              "searchValue": "2021-07-06T20:13:00.000-07:00"
+            },
+            "id": {
+              "searchValue": "2"
+            },
+            "internalId": {
+              "searchValue": {
+                "@internalId": "2",
+                "__text": null
+              }
+            },
+            "isInactive": {
+              "searchValue": "false"
+            },
+            "lastModified": {
+              "searchValue": "2021-07-06T20:13:00.000-07:00"
+            },
+            "lastModifiedBy": {
+              "searchValue": {
+                "@internalId": "23055479",
+                "__text": null
+              }
+            },
+            "name": {
+              "searchValue": "Flexport Bank Ending 625"
+            },
+            "owner": {
+              "searchValue": {
+                "@internalId": "23055479",
+                "__text": null
+              }
+            },
+            "customFieldList": {
+              "SearchColumnStringCustomField__custrecord_flexport_bic": {
+                "@internalId": "7131",
+                "@scriptId": "custrecord_flexport_bic",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "CHASUS33"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_member_id": {
+                "@internalId": "7130",
+                "@scriptId": "custrecord_flexport_member_id",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "021000021"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_add1": {
+                "@internalId": "7124",
+                "@scriptId": "custrecord_paying_flexport_sub_add1",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "760 MARKET STREET"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_add2": {
+                "@internalId": "7123",
+                "@scriptId": "custrecord_paying_flexport_sub_add2",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "8TH FLOOR"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_company_country": {
+                "@internalId": "7128",
+                "@scriptId": "custrecord_flexport_company_country",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "US"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_state": {
+                "@internalId": "7121",
+                "@scriptId": "custrecord_paying_flexport_sub_state",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "CA"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_pcode": {
+                "@internalId": "7119",
+                "@scriptId": "custrecord_paying_flexport_sub_pcode",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "94102"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_ach_id": {
+                "@internalId": "7127",
+                "@scriptId": "custrecord_flexport_ach_id",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "1538625000"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_account_number": {
+                "@internalId": "7117",
+                "@scriptId": "custrecord_flexport_bank_account_number",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "712538625"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_company_name": {
+                "@internalId": "7129",
+                "@scriptId": "custrecord_flexport_company_name",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "Flexport Inc"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub": {
+                "@internalId": "7125",
+                "@scriptId": "custrecord_paying_flexport_sub",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "Flexport Inc. - Operating"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_name": {
+                "@internalId": "7118",
+                "@scriptId": "custrecord_flexport_bank_name",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "JP Morgan Chase"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_city": {
+                "@internalId": "7122",
+                "@scriptId": "custrecord_paying_flexport_sub_city",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "SAN FRANCISCO"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_countrycode": {
+                "@internalId": "7132",
+                "@scriptId": "custrecord_flexport_bank_countrycode",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "US"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_country": {
+                "@internalId": "7120",
+                "@scriptId": "custrecord_paying_flexport_sub_country",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "US"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_currency": {
+                "@internalId": "7116",
+                "@scriptId": "custrecord_flexport_bank_currency",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "USD"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_ach_sch": {
+                "@internalId": "7126",
+                "@scriptId": "custrecord_flexport_ach_sch",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "JPMCOID"
+              }
+            }
+          }
+        }
+      }
+    },
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "transportHeaders": {
+        "date": "Tue, 25 Apr 2023 08:53:41 GMT",
+        "content-length": "29250",
+        "vary": "User-Agent",
+        "x-n-operationid": "40f69bea-2d12-42e8-ba7d-fa35e4f8b0a4",
+        "connection": "keep-alive",
+        "content-type": "text/xml;charset=utf-8",
+        "p3p": "CP=\"CAO PSAa OUR BUS PUR\"",
+        "strict-transport-security": "max-age=31536000",
+        "akamai-grn": "0.5ef63717.1682412820.70829cd",
+        "ns_rtimer_composite": "26925390:706172746E6572733031372E70726F642E7376616C652E6E65746C65646765722E636F6D:80"
+      },
+      "transportAdditionalData": {
+        "reasonPhrase": "OK",
+        "statusCode": "200"
+      },
+      "soapHeaders": {
+        "documentInfo": {
+          "documentInfo": {
+            "nsId": "WEBSERVICES_4134291_SB1_042520231214359159211459086_38201a30"
+          }
+        }
+      }
+    }
+  },
+  {
+    "inboundAttachmentNames": [
+      
+    ],
+    "exceptionPayload": null,
+    "inboundPropertyNames": [
+      
+    ],
+    "outboundAttachmentNames": [
+      
+    ],
+    "payload": {
+      "searchRow": {
+        "@type": "tranSales:TransactionSearchRow",
+        "basic": {
+          "account": {
+            "searchValue": {
+              "@internalId": "1188",
+              "__text": null
+            }
+          },
+          "currency": {
+            "searchValue": {
+              "@internalId": "1",
+              "__text": null
+            }
+          },
+          "entity": {
+            "searchValue": {
+              "@internalId": "862931",
+              "__text": null
+            }
+          },
+          "fxAmount": {
+            "searchValue": "-8116.24"
+          },
+          "internalId": {
+            "searchValue": {
+              "@internalId": "45599567",
+              "__text": null
+            }
+          },
+          "memo": {
+            "searchValue": "FINOPS-62053"
+          },
+          "postingPeriod": {
+            "searchValue": {
+              "@internalId": "262",
+              "__text": null
+            }
+          },
+          "tranDate": {
+            "searchValue": "2023-04-05T21:00:00.000-07:00"
+          },
+          "tranId": {
+            "searchValue": "20210817582"
+          },
+          "transactionNumber": {
+            "searchValue": "5785"
+          },
+          "type": {
+            "searchValue": "_customerRefund"
+          },
+          "customFieldList": {
+            "SearchColumnSelectCustomField__custbody_flexport_bank_details": {
+              "@internalId": "7147",
+              "@scriptId": "custbody_flexport_bank_details",
+              "@type": "platformCore:SearchColumnSelectCustomField",
+              "searchValue": {
+                "@internalId": "2",
+                "@typeId": "896",
+                "__text": null
+              }
+            }
+          }
+        },
+        "customerMainJoin": {
+          "altName": {
+            "searchValue": "Allfasteners"
+          },
+          "billAddress": {
+            "searchValue": "18126 - 576333 - Allfasteners - US\n959 LAKE RD\nMEDINA OH 44256-2453\nUnited States"
+          },
+          "billAddress1": {
+            "searchValue": "959 LAKE RD"
+          },
+          "billCity": {
+            "searchValue": "MEDINA"
+          },
+          "billCountry": {
+            "searchValue": "_unitedStates"
+          },
+          "billCountryCode": {
+            "searchValue": "US"
+          },
+          "billState": {
+            "searchValue": "OH"
+          },
+          "billZipCode": {
+            "searchValue": "44256-2453"
+          },
+          "customFieldList": {
+            "SearchColumnSelectCustomField__custentity_payment_method": {
+              "@internalId": "525",
+              "@scriptId": "custentity_payment_method",
+              "@type": "platformCore:SearchColumnSelectCustomField",
+              "searchValue": {
+                "@internalId": "3",
+                "@typeId": "84",
+                "__text": null
+              }
+            },
+            "SearchColumnStringCustomField__custentitybankroutingswift": {
+              "@internalId": "534",
+              "@scriptId": "custentitybankroutingswift",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "684646"
+            },
+            "SearchColumnStringCustomField__custentityaccountnumber": {
+              "@internalId": "535",
+              "@scriptId": "custentityaccountnumber",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "654643465465"
+            },
+            "SearchColumnStringCustomField__custentitybankname": {
+              "@internalId": "528",
+              "@scriptId": "custentitybankname",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "First Bank"
+            },
+            "SearchColumnStringCustomField__custentitybankcountry": {
+              "@internalId": "532",
+              "@scriptId": "custentitybankcountry",
+              "@type": "platformCore:SearchColumnStringCustomField",
+              "searchValue": "US"
+            }
+          }
+        },
+        "customSearchJoin": {
+          "customizationRef": {
+            "@internalId": "7147",
+            "@scriptId": "custbody_flexport_bank_details",
+            "__text": null
+          },
+          "searchRowBasic": {
+            "@type": "platformCommon:CustomRecordSearchRowBasic",
+            "recType": {
+              "@internalId": "896",
+              "__text": null
+            },
+            "created": {
+              "searchValue": "2021-07-06T20:13:00.000-07:00"
+            },
+            "id": {
+              "searchValue": "2"
+            },
+            "internalId": {
+              "searchValue": {
+                "@internalId": "2",
+                "__text": null
+              }
+            },
+            "isInactive": {
+              "searchValue": "false"
+            },
+            "lastModified": {
+              "searchValue": "2021-07-06T20:13:00.000-07:00"
+            },
+            "lastModifiedBy": {
+              "searchValue": {
+                "@internalId": "23055479",
+                "__text": null
+              }
+            },
+            "name": {
+              "searchValue": "Flexport Bank Ending 625"
+            },
+            "owner": {
+              "searchValue": {
+                "@internalId": "23055479",
+                "__text": null
+              }
+            },
+            "customFieldList": {
+              "SearchColumnStringCustomField__custrecord_flexport_bic": {
+                "@internalId": "7131",
+                "@scriptId": "custrecord_flexport_bic",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "CHASUS33"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_member_id": {
+                "@internalId": "7130",
+                "@scriptId": "custrecord_flexport_member_id",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "021000021"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_add1": {
+                "@internalId": "7124",
+                "@scriptId": "custrecord_paying_flexport_sub_add1",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "760 MARKET STREET"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_add2": {
+                "@internalId": "7123",
+                "@scriptId": "custrecord_paying_flexport_sub_add2",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "8TH FLOOR"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_company_country": {
+                "@internalId": "7128",
+                "@scriptId": "custrecord_flexport_company_country",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "US"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_state": {
+                "@internalId": "7121",
+                "@scriptId": "custrecord_paying_flexport_sub_state",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "CA"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_pcode": {
+                "@internalId": "7119",
+                "@scriptId": "custrecord_paying_flexport_sub_pcode",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "94102"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_ach_id": {
+                "@internalId": "7127",
+                "@scriptId": "custrecord_flexport_ach_id",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "1538625000"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_account_number": {
+                "@internalId": "7117",
+                "@scriptId": "custrecord_flexport_bank_account_number",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "712538625"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_company_name": {
+                "@internalId": "7129",
+                "@scriptId": "custrecord_flexport_company_name",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "Flexport Inc"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub": {
+                "@internalId": "7125",
+                "@scriptId": "custrecord_paying_flexport_sub",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "Flexport Inc. - Operating"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_name": {
+                "@internalId": "7118",
+                "@scriptId": "custrecord_flexport_bank_name",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "JP Morgan Chase"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_city": {
+                "@internalId": "7122",
+                "@scriptId": "custrecord_paying_flexport_sub_city",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "SAN FRANCISCO"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_countrycode": {
+                "@internalId": "7132",
+                "@scriptId": "custrecord_flexport_bank_countrycode",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "US"
+              },
+              "SearchColumnStringCustomField__custrecord_paying_flexport_sub_country": {
+                "@internalId": "7120",
+                "@scriptId": "custrecord_paying_flexport_sub_country",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "US"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_bank_currency": {
+                "@internalId": "7116",
+                "@scriptId": "custrecord_flexport_bank_currency",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "USD"
+              },
+              "SearchColumnStringCustomField__custrecord_flexport_ach_sch": {
+                "@internalId": "7126",
+                "@scriptId": "custrecord_flexport_ach_sch",
+                "@type": "platformCore:SearchColumnStringCustomField",
+                "searchValue": "JPMCOID"
+              }
+            }
+          }
+        }
+      }
+    },
+    "outboundPropertyNames": [
+      
+    ],
+    "attributes": {
+      "transportHeaders": {
+        "date": "Tue, 25 Apr 2023 08:53:41 GMT",
+        "content-length": "29250",
+        "vary": "User-Agent",
+        "x-n-operationid": "40f69bea-2d12-42e8-ba7d-fa35e4f8b0a4",
+        "connection": "keep-alive",
+        "content-type": "text/xml;charset=utf-8",
+        "p3p": "CP=\"CAO PSAa OUR BUS PUR\"",
+        "strict-transport-security": "max-age=31536000",
+        "akamai-grn": "0.5ef63717.1682412820.70829cd",
+        "ns_rtimer_composite": "26925390:706172746E6572733031372E70726F642E7376616C652E6E65746C65646765722E636F6D:80"
+      },
+      "transportAdditionalData": {
+        "reasonPhrase": "OK",
+        "statusCode": "200"
+      },
+      "soapHeaders": {
+        "documentInfo": {
+          "documentInfo": {
+            "nsId": "WEBSERVICES_4134291_SB1_042520231214359159211459086_38201a30"
+          }
+        }
+      }
+    }
+  }
+]

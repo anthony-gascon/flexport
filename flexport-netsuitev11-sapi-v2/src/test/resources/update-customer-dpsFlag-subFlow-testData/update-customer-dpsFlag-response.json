@@ -1,0 +1,25 @@
+{
+    "updateListResponse": {
+        "writeResponseList": {
+            "status": {
+                "@isSuccess": "true",
+                "__text": null
+            },
+            "writeResponse": {
+                "status": {
+                    "@isSuccess": "true",
+                    "statusDetail": {
+                        "afterSubmitFailed": "false"
+                    }
+                },
+                "baseRef": {
+                    "@externalId": "gid://flexport/Payments::NetsuiteCustomer/21131",
+                    "@internalId": "11601871",
+                    "@type": "customer",
+                    "@type": "platformCore:RecordRef",
+                    "__text": null
+                }
+            }
+        }
+    }
+}

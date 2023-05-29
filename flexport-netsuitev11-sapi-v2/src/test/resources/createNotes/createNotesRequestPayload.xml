@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:addList xmlns:ns0="urn:messages.platform.webservices.netsuite.com">
+  <ns0:record xmlns:ns0="urn:messages.platform.webservices.netsuite.com" xmlns:ns01="urn:customization.setup.webservices.netsuite.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns01:CustomRecord">
+    <ns01:customFieldList xmlns:ns01="urn:customization.setup.webservices.netsuite.com">
+      <DateCustomFieldRef__custrecord_note_date__8414>
+        <ns02:value xmlns:ns02="urn:core.platform.webservices.netsuite.com">2022-08-17T00:55:01.217+05:30</ns02:value>
+      </DateCustomFieldRef__custrecord_note_date__8414>
+      <StringCustomFieldRef__custrecord_note__8415>
+        <ns02:value xmlns:ns02="urn:core.platform.webservices.netsuite.com">Error While Creating Invoice</ns02:value>
+      </StringCustomFieldRef__custrecord_note__8415>
+      <StringCustomFieldRef__custrecord_note_type__8416>
+        <ns02:value xmlns:ns02="urn:core.platform.webservices.netsuite.com">Invoice-Error</ns02:value>
+      </StringCustomFieldRef__custrecord_note_type__8416>
+    </ns01:customFieldList>
+  </ns0:record>
+</ns0:addList>

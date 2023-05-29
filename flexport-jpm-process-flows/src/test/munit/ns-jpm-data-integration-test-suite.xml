@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="ns-jpm-data-integration-test-suite.xml" />
+	<munit:test name="ns-jpm-data-integration-test-suiteTest" doc:id="9f2e8375-6321-4b55-ae2c-e6fa3483561f">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="4069fbbb-df31-45ed-9645-bedad062de83" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ns-savesearch-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="891977c9-843c-407c-b5b7-4971941141e8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://savedSearchData\savedSearch.json')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="efc46bf2-fffb-40e3-9c6f-cc9b3bc9240d" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ns-savesearch-check-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="88fba3fe-89fb-44e9-b19f-3267ff5003b0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://savedSearchData\savesearchCheck.json')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="b6651308-f89b-4c1b-82d5-c4100a1d2f38" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="netsuite file upload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="2249b408-c723-492a-961c-5e4c5b29d9e3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json 
+&#10;---
+&#10; {
+&#10;  "externalId": null,
+&#10;  "type": "FILE",
+&#10;  "internalId": "593771",
+&#10;  "name": null
+&#10;}
+&#10;]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="e374873e-ec74-486b-b1dc-42736bb154cc" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="pgp request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="21299b7f-161c-4a85-8ca3-3b505646fd82" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output text/plain --- readUrl('classpath://pgpData\pgp-signresponse.dwl')]" mediaType="text/plain" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="688b75a8-f6db-47cf-a8cf-f8a1fc93e412" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="sftp upload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="5c13494f-0f2b-4fda-b97f-ff32b5aca5f3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- {&#10;  "message": "Successfully Upload /Inbound/Encrypted/FLEXPISO.PAYMENTS.ISO20022_PAIN_01Ver3.645c9bf6c5e8484cb0252b1421874c57.xml.pgp to jpm sftp"&#10;}]' mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="8688cbe5-c641-420e-9cdf-8ad5c3b0c727" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="update netsuite update" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="fdf761a0-c60b-4a37-be27-e14e6d9ff7ab" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-call flow="foreach-mock-subflow" />
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock vm:consume" doc:id="dc3e59c6-73a1-4a3e-b5cc-d71c3c7771c1" processor="vm:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Consume ACK or PSR" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="2913127b-1e27-4158-95da-21ce1b0e55ed" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock flow-ref" doc:id="e3a64f22-6739-4f2c-b2a6-01d0cc6dac75" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="update-vendor-bill-payment-status-netsuite-jpm-schedular-flow" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a5f7616a-b874-46e4-b445-3bd358409639" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="vendor-bill-payment-netsuite-jpm-flow" doc:id="0acd28a8-1e1a-4a6b-bcfd-8e99cd4557f6" name="vendor-bill-payment-netsuite-jpm-flow"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="ns-jpm-data-integration-no-record-test-suiteSub_Flow" doc:id="9b4dc99c-6d90-442b-9f12-f65935c04741">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock http: ns savesearch request" doc:id="5dbcd913-f0e7-4588-aa98-9c7386fbd7b1" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ns-savesearch-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="891977c9-843c-407c-b5b7-4971941141e8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[[]]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http: ns savesearch request" doc:id="ebf026a8-ce97-48ad-bdc9-df92ef89f481" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ns-savesearch-check-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="88fba3fe-89fb-44e9-b19f-3267ff5003b0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[[]]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="vendor-bill-payment-netsuite-jpm-flow" doc:id="a5299feb-cdd7-49a6-bab2-870513acc7c8" name="vendor-bill-payment-netsuite-jpm-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="c6357d08-b2ce-4a04-940c-03432020e36b" expression="#[payload]" is="#[MunitTools::notNullValue()]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="ns-jpm-data-integration-error-savedsearch-error-test-suiteTest" doc:id="f3f04042-12b5-498b-9488-111af344b289">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock http: ns savesearch request" doc:id="6c7dfa49-9dac-4614-bda2-fa02dfbb6872" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ns-savesearch-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="891977c9-843c-407c-b5b7-4971941141e8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:CONNECTIVITY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="b3c03d8b-d841-4252-885b-749b647d448b" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ns-savesearch-check-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="88fba3fe-89fb-44e9-b19f-3267ff5003b0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[readUrl('classpath://savedSearchData\savesearchCheck.json')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="12796642-680a-487d-ae0d-fabec5cad3de" >
+				<flow-ref doc:name="vendor-bill-payment-netsuite-jpm-flow" doc:id="1bc18789-1f68-4089-8f63-d133d02a5537" name="vendor-bill-payment-netsuite-jpm-flow"/>
+				<error-handler>
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="cadb9021-b64f-405b-88b1-565e1995db60" >
+						<set-variable value="#[error.errorType.asString]" doc:name="errorType" doc:id="2229c93a-ff86-4f04-b217-2d4c300232c0" variableName="errorType" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="05aa9292-8533-4d2d-8a53-0a312af60a14" expression="#[vars.errorType]" is='#[MunitTools::equalTo("MULE:COMPOSITE_ROUTING")]' />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="ns-jpm-data-integration-error-pgp-request-test-suiteTest" doc:id="c488fdbb-7085-4105-adbc-bf9d98ff2fc5">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="137b6fb7-f7fe-48c0-8b6f-e40ce24e8ac3" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="ns-savesearch-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="891977c9-843c-407c-b5b7-4971941141e8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value="#[readUrl('classpath://savedSearchData\savedSearch.json')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="82ed9361-fc8a-4f47-a95d-0bdaf0a4e756" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="ns-savesearch-check-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="88fba3fe-89fb-44e9-b19f-3267ff5003b0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value="#[readUrl('classpath://savedSearchData\savesearchCheck.json')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="fd61d383-a700-4c39-8887-72d077a86db3" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="netsuite file upload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="2249b408-c723-492a-961c-5e4c5b29d9e3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value='#[output application/json 
+&#10;---
+&#10; {
+&#10;  "externalId": null,
+&#10;  "type": "FILE",
+&#10;  "internalId": "593771",
+&#10;  "name": null
+&#10;}
+&#10;]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:pgp request" doc:id="3cbcb56f-a57c-4acc-b1c0-a2e221ae2a07" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="pgp request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="21299b7f-161c-4a85-8ca3-3b505646fd82" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:CONNECTIVITY" />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="4d28c876-edb5-4e94-b64d-b0ea920711aa" >
+				<flow-ref doc:name="vendor-bill-payment-netsuite-jpm-flow" doc:id="06ab71fd-8f18-48c8-aaf5-03d56b372cae" name="vendor-bill-payment-netsuite-jpm-flow"/>
+				<error-handler>
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="284a5819-2766-4e8a-a7ad-9bfa36255d9c" >
+						<set-variable value="#[error.errorType.asString]" doc:name="errorType" doc:id="aa1ea458-0e63-49fa-b593-1505406e9abc" variableName="errorType" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="336198a0-b261-4b00-bfba-bae3f94878cf" expression="#[vars.errorType]" is='#[MunitTools::equalTo("MULE:COMPOSITE_ROUTING")]' />
+		</munit:validation>
+	
+</munit:test>
+	<munit:test name="ns-jpm-data-integration-error-sftp-request-test-suiteTest" doc:id="f10628c4-d7eb-4266-8feb-414cb123f865">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="5bdd8089-239e-417c-93d1-c6f66ead811a" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="ns-savesearch-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="891977c9-843c-407c-b5b7-4971941141e8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value="#[readUrl('classpath://savedSearchData\savedSearch.json')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="62d4a9f4-2f82-4510-8a9d-0146082ca676" processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="ns-savesearch-check-request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="88fba3fe-89fb-44e9-b19f-3267ff5003b0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value="#[readUrl('classpath://savedSearchData\savesearchCheck.json')]" mediaType="application/java" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="f3dda45a-3fd7-4b51-8571-2aead364bdd7" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="netsuite file upload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="2249b408-c723-492a-961c-5e4c5b29d9e3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value='#[output application/json 
+&#10;---
+&#10; {
+&#10;  "externalId": null,
+&#10;  "type": "FILE",
+&#10;  "internalId": "593771",
+&#10;  "name": null
+&#10;}
+&#10;]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="664c5ce2-b575-4afb-bf9e-cdbf1abbce79" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="pgp request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="21299b7f-161c-4a85-8ca3-3b505646fd82" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value="#[output text/plain --- readUrl('classpath://pgpData\pgp-signresponse.dwl')]" mediaType="text/plain" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock http:request" doc:id="c6061aa4-a684-40d8-a62c-7487bb39df5e" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="sftp upload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="5c13494f-0f2b-4fda-b97f-ff32b5aca5f3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:CONNECTIVITY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution>
+			<try doc:name="Try" doc:id="67a0e95d-47a9-43e0-ba42-27d095dd9e49" >
+				<flow-ref doc:name="vendor-bill-payment-netsuite-jpm-flow" doc:id="4c961f2c-af73-4a59-8992-c36dcd6ef9c7" name="vendor-bill-payment-netsuite-jpm-flow"/>
+				<error-handler>
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="5bad619a-16c2-461e-bac4-6df51f620eed" >
+						<set-variable value="#[error.errorType.asString]" doc:name="errorType" doc:id="136f37bb-1c16-4fe4-911a-451472070928" variableName="errorType" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="f18feac5-58e3-4984-aa94-cb03660cb943" expression="#[vars.errorType]" is='#[MunitTools::equalTo("MULE:COMPOSITE_ROUTING")]' />
+		</munit:validation>
+	
+</munit:test>
+</mule>
