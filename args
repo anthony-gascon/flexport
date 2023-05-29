@@ -1,0 +1,1 @@
+-Dkey=flexportapi -Denv=dev -Danypoint.platform.gatekeeper=disabled -Dmunit.disable.lazy.initialization=true
