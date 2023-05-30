@@ -8,5 +8,8 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
 http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<sub-flow name="vendor-payment-netsuite-mapping-subflow" doc:id="5cf95a2e-1ce8-4063-83b9-ece526c184b7" >
+		<set-payload value="#[payload..searchRow]" doc:name="Set Payload" doc:id="c4a540e0-fa3a-4f9b-98cd-64bd32213955" />
+	</sub-flow>
 	
 </mule>
