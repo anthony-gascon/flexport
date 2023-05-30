@@ -195,5 +195,10 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		doc:name="Configuration properties"
 		doc:id="6608d50f-e270-4af1-bc92-4471acdf1f63"
 		file="properties/refund/${env}-customer-refund.properties" />
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="cd42ec32-4fc7-4bce-adec-7b6da665c5ee"
+		file="properties/vendor/${env}-vendor-payment.properties" />
+	
 </mule>
 
