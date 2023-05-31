@@ -71,91 +71,11 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 			</otherwise>
 		</choice>
 	</sub-flow>
-	<sub-flow name="data-filter-subflow" doc:id="e6151c5e-59ef-4265-8429-503ee835b9d1" >
-		<scatter-gather doc:name="WIRE &amp; ACH " doc:id="f4f262ff-dc9f-46e5-a1d4-260cddd9bb44">
-			<route>
-				<ee:transform doc:name="remove check" doc:id="eade8817-9aa1-41cb-bedd-11b19716557d">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-(payload filter $.paidTransactionJoin == null)]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-				<ee:transform doc:name="filter ACH" doc:id="7f780099-6a50-4efb-9185-30f0bad6c42b">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-(payload filter (($..custentity_payment_method.internalId contains  "4")
-	         or ($..custentity_payment_method.internalId contains  "10") ) ) filter ($..basic != null and $..vendorJoin != null and $..vendorLineJoin != null and $..customSearchJoin != null and (isEmpty($."customSearchJoin"."customFieldList") != true ))]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-				<flow-ref doc:name="ach-subflow" doc:id="5778e7e1-94b9-4583-a6e6-7c3636dbe3a3" name="ach-subflow" />
-				<ee:transform doc:name="ach" doc:id="2f9fa74d-1e69-4b43-9ac1-c8d427f38f91">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[payload]]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</route>
-			<route>
-				<ee:transform doc:name="remove check" doc:id="d36d92a1-6bb8-4fb4-ae7d-43c080b651be" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-(payload filter $.paidTransactionJoin == null)]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-				<ee:transform doc:name="filter WIRE" doc:id="0c7a64a2-1f3e-4364-b6a8-335137f6459a">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-(payload filter (($..custentity_payment_method.internalId contains  "7") 
-	         or ($..custentity_payment_method.internalId contains  "8") 
-	         or ($..custentity_payment_method.internalId contains  "3")
-)) filter ($..basic != null and $..vendorJoin != null and $..vendorLineJoin != null and $..customSearchJoin != null and (isEmpty($."customSearchJoin"."customFieldList") != true ))]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-				<flow-ref doc:name="wire-subflow" doc:id="b72712ca-c04c-4a27-b8ff-6667cf6c6eb4" name="wire-subflow" />
-				<ee:transform doc:name="wire" doc:id="06a62317-5da4-4190-8a89-cf6153865f98">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-payload..payload]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</route>
-			<route >
-				<ee:transform doc:name="filter CHK" doc:id="4e5fec2b-a48d-4896-ad63-328fc041dace" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-(payload filter $.paidTransactionJoin != null)]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-				<flow-ref doc:name="check-filter-subflow" doc:id="9dd94a4a-6488-43b1-bdc3-8148b2e6b2c0" name="check-filter-subflow"/>
-				<ee:transform doc:name="chk" doc:id="8e44ddd3-107a-4e82-95aa-6de3a45bf73a" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-[payload]]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</route>
-		</scatter-gather>
-	</sub-flow>
+	
 	<sub-flow name="netsuite-mapping-subflow" doc:id="8830224d-44f2-4984-8f82-91342f41a65e" >
 		<ee:transform doc:name="mapping NS fields" doc:id="927ff740-bd76-4458-8b41-0a36b937bfcf">
 			<ee:message>
-				<ee:set-payload resource="dataweave/namea/ns-field-mapping.dwl" />
+				<ee:set-payload resource="dataweave/vendorpayment/ns-field-mapping.dwl" />
 			
 </ee:message>
 		</ee:transform>
@@ -165,19 +85,7 @@ output application/json
 			</ee:message>
 		</ee:transform>
 	</sub-flow>
-	<sub-flow name="xml-preparation-subflow" doc:id="f17524fa-d810-452c-bdf0-5d41e57f75b7" >
-		<ee:transform doc:name="preparing XML structure" doc:id="a078ec58-862e-4194-ac89-f98c65f644d0">
-			<ee:message>
-				<ee:set-payload resource="dataweave/namea/prepare-xml-structure-mapping.dwl" />
-			</ee:message>
-		</ee:transform>
-		<ee:transform doc:name="final XML" doc:id="88ce9a33-9352-4c45-9852-277e22dce69f">
-			<ee:message>
-				<ee:set-payload resource="dataweave/namea/final-xml-mapping.dwl" />
-			</ee:message>
-		</ee:transform>
-		<module-logging:log-outbound doc:name="XML mapping finished" doc:id="ed7f88b9-40ad-4450-b16f-d4ee795ace56" message="XML mapping finished" logLevel="DEBUG" source="create-vendor-bill-payment-netsuite-jpm : xml-preparation-subflow"/>
-	</sub-flow>
+	
 	
 	
 	<flow name="vendor-bill-payment-netsuite-jpm-flow" doc:id="ac185da0-ee31-4499-9c06-5457a6803df3" maxConcurrency="${max.concurrency}">
@@ -218,59 +126,4 @@ output application/json
 		<module-logging:log-exit doc:name="Log exit" doc:id="f36a76a1-930e-423f-ba35-f7074681f456" message="Please keep checking logs for Complete processing. " source="create-vendor-bill-payment-netsuite-jpm : create-vendor-bill-payment-netsuite-jpm-flow"/>
 	
 </flow>
-	<sub-flow name="check-filter-subflow" doc:id="0b9d9808-b72f-4f3b-ab47-4c837a5a9ed1">
-		<ee:transform doc:name="CHK" doc:id="72981046-8cd7-4d0c-aea6-9d5b6a23530a">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-payload groupBy $.basic.tranDate]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-	</sub-flow>
-	<sub-flow name="wire-subflow" doc:id="01740b8d-a38a-43f3-beff-9689faed9ec7" >
-		<scatter-gather doc:name="Scatter-Gather" doc:id="ae3e839b-75cf-4439-b31c-639f3e70c095" >
-			<route >
-				<ee:transform doc:name="FED" doc:id="6b0ddc01-ecd1-420b-9f6d-29cd07db0fc2" >
-					<ee:message >
-						<ee:set-payload resource="dataweave/namea/fed-groupby-mapping.dwl" />
-					</ee:message>
-				</ee:transform>
-			</route>
-			<route >
-				<ee:transform doc:name="BOOK" doc:id="6f914ff7-9f98-4929-a3bc-e6f4f2abb0e2" >
-					<ee:message >
-						<ee:set-payload resource="dataweave/namea/book-groupby-mapping.dwl" />
-					</ee:message>
-				</ee:transform>
-			</route>
-			<route >
-				<ee:transform doc:name="AUTOFX WIRE" doc:id="4d70aec9-4f55-4b6b-9e1e-7bb55c2a697b" >
-					<ee:message >
-						<ee:set-payload resource="dataweave/namea/autofx-groupby-mapping.dwl" />
-					</ee:message>
-				</ee:transform>
-			</route>
-			<route >
-				<ee:transform doc:name="CHIP" doc:id="22a31333-2774-4e95-8406-1be7a885d93c" >
-					<ee:message >
-						<ee:set-payload resource="dataweave/namea/chip-groupby-mapping.dwl" />
-					</ee:message>
-				</ee:transform>
-			</route>
-		</scatter-gather>
-	</sub-flow>
-	<sub-flow name="ach-subflow" doc:id="e658415b-4ded-4cad-9db9-696a5bce5924" >
-		<ee:transform doc:name="ACH" doc:id="d07ecd88-c1c1-4df2-834f-97178be12da6">
-					<ee:message>
-						<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-
-( payload  
-	groupBy ((tran, index) -> tran.basic.tranDate as DateTime as String { format: "dd-MM-yyyy" })
-)]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-	</sub-flow>
 </mule>

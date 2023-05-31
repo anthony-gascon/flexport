@@ -111,7 +111,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 			</http:authentication>
 		</http:request-connection>
 	</http:request-config>
-	<vm:config name="VM_Config" doc:name="VM Config"
+	<vm:config name="VM_Config" doc:name="VM_Config"
 		doc:id="00e3b97d-4d27-49e5-9a92-4a35fd2e5304">
 		<vm:connection>
 			<reconnection>
@@ -133,6 +133,8 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 			<vm:queue queueName="flexport-apac-singapore-ack-psr-inq" />
 			<vm:queue queueName="flexport-customer-refund-inq" />
 			<vm:queue queueName="flexport-customer-refund-ack-psr-inq" />
+			<vm:queue queueName="flexport-vendor-payment-inq" />
+			<vm:queue queueName="flexport-vendor-payment-ack-psr-inq" />
 		</vm:queues>
 	</vm:config>
 	<os:object-store name="Object_store"

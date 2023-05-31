@@ -23,5 +23,130 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
 http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
 
+<flow name="namea-vendor-payment-impl-flow"
+		doc:id="ecd6697a-6e1c-4dee-b213-db4c98517cfc"
+		doc:description="">
+		<scheduler doc:name="NAMEA-Vendor-Payment-Scheduler"
+			doc:id="a4dd89c2-ac09-465b-a1a6-0385aa2efa6e">
+			<scheduling-strategy>
+				<cron expression="${cron.expression.namea.vendor.payment}" />
+			</scheduling-strategy>
+		</scheduler>
+		<module-logging:log-entry
+			doc:name="Vendor Payment flow started"
+			doc:id="4f90ce26-bbb7-4647-bbd9-29b58e0572b5"
+			message="Vendor Payment NAMEA flow started"
+			messageType="***********   Vendor Payment NAMEA flow started   ************"
+			source="namea-vendor-payment-impl-flow" />
+		<flow-ref doc:name="vendor-payment-save-search-sub-flow" doc:id="dedc6a57-103b-41a2-861b-f1eba301290d" name="vendor-payment-save-search-sub-flow"/>
+
+		<choice doc:name="Choice"
+			doc:id="35bdc629-19df-4088-b03c-ef691e357c23">
+			<when expression="#[!isEmpty(payload)]">
+				<flow-ref
+					doc:name="vendor-payment-netsuite-mapping-subflow"
+					doc:id="c164059f-1b84-46f0-8e5c-c7e91685b805"
+					name="vendor-payment-netsuite-mapping-subflow" />
+				<vm:publish
+					queueName="${vm.queue.namea.vendor.payment.savedsearch}"
+					doc:name="Publish netsuite saved search"
+					doc:id="90ecf31b-2726-4e04-83ea-2e530fd121da"
+					config-ref="VM_Config" sendCorrelationId="ALWAYS"
+					timeout="${vm.queue.namea.vendor.payment.publish.timeout}" />
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Set email body"
+					doc:id="6271bd3b-4dab-48ce-ab41-65b2ad6293e8">
+					<ee:message>
+						<ee:set-payload resource="dataweave/vendorpayment/empty-ns-data.dwl" />
+					</ee:message>
+				</ee:transform>
+				<http:request method="POST"
+					doc:name="Request Send Email"
+					doc:id="21156d3c-084e-4fd7-846e-deaad577681a"
+					config-ref="PGP_Encrpt_Request" path="${email.path}" />
+				<module-logging:log-exit doc:name="Log exit"
+					doc:id="508275a5-fcba-4323-ae0f-577925d8ea32"
+					message="*********** No Data in SavedSearch *********** "
+					source="namea-vendor-payment-impl-flow"
+					messageType="Empty SavedSearch" />
+			</otherwise>
+		</choice>
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="2496f894-d800-4c83-87f2-b18f9633500c"
+			message="#[&quot;Message published to VM Queue successfully &quot; ++ p('vm.queue.namea.vendor.payment.savedsearch')]"
+			messageType="******  NAMEA-Vendor-Payment-impl-flow Ended  **********"
+			source="namea-vendor-payment-impl-flow" logLevel="WARN" />
+	</flow>
+	<flow name="namea-vendor-payment-listener-flow" doc:id="9bb98cc8-4369-425a-934a-1c36a0d84714" >
+		<vm:listener
+			queueName="${vm.queue.namea.vendor.payment.savedsearch}"
+			doc:name="Listener" doc:id="96e5abd9-e483-40c9-9498-4425a1b1366d"
+			config-ref="VM_Config"
+			timeout="${vm.queue.namea.vendor.payment.consume.timeout}" />
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="11994b07-1c66-4694-a78f-a7d3e5f22e01"
+			message="#[&quot;Message received from the VM Queue &quot; ++ p('vm.queue.namea.vendor.payment.savedsearch')]"
+			messageType="************  namea-vendor-payment-listener-flow started ***********"
+			source="namea-vendor-payment-listener-flow" />
+		<set-variable value='#[uuid() replace  "-" with ""]' doc:name="uuid" doc:id="abc0b223-ffb4-47ba-ad47-87b201b7509a" variableName="uuid" />
+		<flow-ref doc:name="data-filter-subflow" doc:id="aefa4aed-b899-4250-a685-72976f96cc93" name="data-filter-subflow" />
+		
+		<choice doc:name="check payload?"
+			doc:id="3b21411d-8a8f-4a36-bf74-a0eb1e96a876">
+			<when expression="#[!isEmpty(payload)]">
+				<try doc:name="Try" doc:id="55e8a197-ded2-4344-879b-a745aa588d3c">
+					<flow-ref doc:name="xml-preparation-subflow" doc:id="21284fdb-25e0-4c6e-97a8-a40696bccec4" name="xml-preparation-subflow" />
+					<error-handler>
+						<on-error-propagate enableNotifications="true"
+							logException="true" doc:name="On Error Propagate"
+							doc:id="dbcfd33b-7885-43d5-803c-bba3f0c00808">
+							<ee:transform doc:name="Set email body"
+								doc:id="4013fabc-21c3-444b-abb9-e0d7fc43b53c">
+								<ee:message>
+									<ee:set-payload
+										resource="dataweave/vendorpayment/mapping-error-email.dwl" />
+								</ee:message>
+							</ee:transform>
+							<until-successful
+								maxRetries="${https.retry.attempt}" doc:name="Until Successful"
+								doc:id="7f1aa0e3-b3e5-42cb-bdc3-608f13c0f43d"
+								millisBetweenRetries="${https.retry.frequency}">
+								<http:request method="POST"
+									doc:name="Request Send Email"
+									doc:id="131251c4-18f5-43cb-8a47-e1547910a2f7"
+									config-ref="PGP_Encrpt_Request" path="${email.path}" />
+							</until-successful>
+						</on-error-propagate>
+					</error-handler>
+				</try>
+				<flow-ref doc:name="jpm-netsuite-file-upload" doc:id="190e598c-dad2-483d-81f1-74b9e77e942d" name="jpm-netsuite-file-upload"/>		
+				<try doc:name="Try" doc:id="c8e1a3b3-d903-4d44-8e94-da5e18216a3a" >
+					<vm:consume doc:name="Consume ACK or PSR" doc:id="3e04e22a-fda4-48f4-8af9-6580af0cb93c" config-ref="VM_Config" queueName="${vm.queue.namea.ack.psr}" timeoutUnit="MINUTES" timeout="${vm.listener.timeout}" />
+					<error-handler >
+						<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="09474ea5-0a7a-4c91-8bf9-269f3992ae7f" >
+							<module-logging:log-error doc:name="Log error" doc:id="f76e75f0-e034-4976-9540-65dd425952b6" message="Error While Consuming payload on VM queue. Please use failure-recover-psr-flow/failure-recover-ack-flow for updating records as per PSR or ACK file received accordingly" messageType="*******************  VM Consumer ACK/PSR ERROR  *******************" source="create-vendor-bill-payment-netsuite-jpm : check-wire-mapping-subflow"/>
+							<ee:transform doc:name="Transform Message" doc:id="15b49ac0-9831-463d-99e1-9297c2b6e56d">
+										<ee:message>
+											<ee:set-payload resource="dataweave/namea/email-vm-queue-failure.dwl" />
+										</ee:message>
+									</ee:transform>
+							<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="80fca25a-05a7-4746-9b6f-43886d962bf7" millisBetweenRetries="${https.retry.frequency}">
+										<http:request method="POST" doc:name="Email Request" doc:id="6da45f4a-1048-4469-a89f-ff691df33644" config-ref="PGP_Encrpt_Request" path="${https.email.path.pgp}" outputMimeType="application/csv" />
+									</until-successful>
+						</on-error-propagate>
+					</error-handler>
+				</try>
+				<flow-ref doc:name="update-vendor-bill-payment-status-subflow" doc:id="1cfa1310-2a21-479d-85eb-664114189283" name="update-vendor-bill-payment-status-subflow"/>
+			</when>
+			<otherwise>
+				<module-logging:log-exit doc:name="Log exit"
+					doc:id="2b6a0af3-2174-4acf-aee1-40436a3c77cf"
+					message="*********** No Data in SavedSearch *********** "
+					messageType="******  namea-vendor-payment-listener-flow Ended  **********"
+					source="namea-vendor-payment-listener-flow" />
+			</otherwise>
+		</choice>
+	</flow>
 	
 </mule>
