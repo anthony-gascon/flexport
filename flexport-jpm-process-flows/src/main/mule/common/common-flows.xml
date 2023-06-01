@@ -209,42 +209,7 @@ payload]]></ee:set-variable>
 		</foreach>
 	</sub-flow>
 
-	<sub-flow name="update-vendor-bill-payment-status-subflow"
-		doc:id="6720055d-5416-4009-983a-ba2e5fed11ad">
-		<module-logging:log-entry
-			doc:name="Log entry" doc:id="ed321997-27ec-40ad-a087-a4cbf508c538"
-			message="*********update-vendor-bill-payment-status started**********"
-			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
-		<os:retrieve doc:name="Retrieve fileName"
-			doc:id="4ca7ec22-de8f-4232-9927-0e8a9bacbebe" key="fileName"
-			objectStore="Object_store" target="fileName">
-			<os:default-value><![CDATA[#[""]]]></os:default-value>
-		</os:retrieve>
-		<choice doc:name="Choice : ACK or PSR file"
-			doc:id="f24aa2c4-6fe9-452b-aed0-c4a2715118fc">
-			<when expression="#[vars.fileName contains ('ACK')]">
-				<flow-ref doc:name="ack-subflow"
-					doc:id="bba6e5ba-fe01-4d28-ab99-6fa6e81c956c" name="ack-subflow" />
-			</when>
-			<when expression='#[vars.fileName contains ("PSOURCE")]'>
-				<flow-ref doc:name="psr-subflow"
-					doc:id="e88603e9-8f8d-4413-83f9-430e0e338d5a" name="psr-subflow" />
-			</when>
-			<otherwise>
-				<module-logging:log-other
-					doc:name="Log other" doc:id="99b7102d-490f-427a-9773-74fe35a02214"
-					message="******Other File*******"
-					source="update-vendor-bill-payment-status-netsuite-jpm-schedular-flow" />
-			</otherwise>
-		</choice>
-		<os:remove doc:name="Remove fileName key from OS"
-			doc:id="b0ea6e4d-6050-4d85-aa7a-9c8d6327b2ca" key="fileName"
-			objectStore="Object_store" />
-		<module-logging:log-exit doc:name="Log exit"
-			doc:id="cc837d56-71ac-42e0-8d67-471e944b6fc1"
-			message="****************update-vendor-bill-payment-status ends**************"
-			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
-	</sub-flow>
+	
 	<sub-flow
 		name="apac-update-vendor-bill-payment-status-subflow"
 		doc:id="ac2a2120-5b65-4ad7-a752-9e2c4df79218">

@@ -208,9 +208,8 @@ payload groupBy $.basic.tranDate]]></ee:set-payload>
 		</async>
 		<module-logging:log-exit doc:name="Log exit" doc:id="9496d300-dfba-4dce-a693-27b061632c76" message="Please keep checking logs for Complete processing. " source="vendor-payment-impl : vendor-payment-save-search-sub-flow"/>
 	</sub-flow>
-	<sub-flow name="jpm-netsuite-file-upload" doc:id="aed50c3e-c0da-4b99-9949-5e6a7477c676" >
-		<scatter-gather doc:name="Scatter-Gather" doc:id="b0a721e8-a64c-4dfc-b31b-88dfe0158592" >
-					<route >
+	<sub-flow name="jpm-file-upload" doc:id="aed50c3e-c0da-4b99-9949-5e6a7477c676" >
+		
 						<set-variable value="#[output application/json 
 &#10;--- 
 &#10;{ 
@@ -220,25 +219,52 @@ payload groupBy $.basic.tranDate]]></ee:set-payload>
 						<flow-ref doc:name="pgp-encryption-sftp-upload-subflow" doc:id="8ca24d56-95d0-4c8c-a599-10db2a725772" name="pgp-encryption-sftp-upload-subflow" />
 						<flow-ref doc:name="netsuite-update-subflow" doc:id="3ef5fc78-9548-4001-81e3-f339a08b3445" name="netsuite-update-subflow" />
 						<module-logging:log-exit doc:name="netsuite updation done" doc:id="9c6b6d39-ed1e-43d0-be59-6803d672d467" message="netsuite updation done" source="create-vendor-bill-payment-netsuite-jpm : check-wire-mapping-subflow" />
-					</route>
-					<route >
-						<try doc:name="Try" doc:id="efcf149f-2a12-448f-9e77-e2355a605ab9" >
-							<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="0e2af032-3a74-4e32-9aa9-963f4192a4b6" millisBetweenRetries="${https.retry.frequency}">
-							<http:request method="POST" doc:name="netsuite file upload" doc:id="5ed21346-cbaa-4633-8b5a-de1ee382ab8f" config-ref="Http_NS__Request" path="${https.addfile.path.netsuite}" responseTimeout="${http.response.timeout.netsuite}">
-							<http:query-params><![CDATA[#[{
-	folderId : p('ns.folderId'),
-	fileName : p('sftp.filename') replace  "/" with "" ++  vars.uuid
-}]]]></http:query-params>
-						</http:request>
-						</until-successful>
-							<error-handler >
-								<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="ccd794de-1b3b-49e3-8425-ae6cc3fe6700" >
-									<module-logging:log-error doc:name="Log error" doc:id="7739a554-14a3-46ec-af12-ffc4ba55e768" messageType="-----------Netsuite Add File Error ------------------" source="update-vendor-bill-payment-status-netsuite-jpm-listener-flow" message="#[error.description]"/>
-								</on-error-continue>
-							</error-handler>
-						</try>
-						<module-logging:log-exit doc:name="netsuite file upload" doc:id="36fe122c-7886-48a2-80b9-bbbde2426c81" source="create-vendor-bill-payment-netsuite-jpm : check-wire-mapping-subflow" message="file upload done in netsuite."/>
-					</route>
-				</scatter-gather>
+					
+	</sub-flow>
+	<sub-flow name="update-vendor-bill-payment-status-subflow"
+		doc:id="f64496bf-8ae8-4971-b351-d74f4f9269b5">
+		<module-logging:log-entry
+			doc:name="Log entry" doc:id="c1f838b7-e4e3-4b55-a273-e665542f919d"
+			message="*********update-vendor-bill-payment-status started**********"
+			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+		<ee:transform doc:name="fileName" doc:id="f0c90b34-4faa-4274-bb6b-f4464f05ed1c" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="fileName" ><![CDATA[%dw 2.0
+output application/java
+---
+p('sftp.filename') replace  "/" with "" ++  vars.uuid]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<os:retrieve doc:name="Retrieve fileName"
+			doc:id="cf7cd4ea-2d0c-4549-8f46-6c8ac2b92471" key="#[vars.fileName]"
+			objectStore="Object_store" target="fileName">
+			<os:default-value><![CDATA[#[""]]]></os:default-value>
+		</os:retrieve>
+		<choice doc:name="Choice : ACK or PSR file"
+			doc:id="749eb369-2611-4233-9cb1-351e93448a9e">
+			<when expression="#[vars.fileName contains ('ACK')]">
+				<flow-ref doc:name="ack-subflow"
+					doc:id="6e0f8c66-34b9-4fec-a802-10fce968d40d" name="ack-subflow" />
+			</when>
+			<when expression='#[vars.fileName contains ("PSOURCE")]'>
+				<flow-ref doc:name="psr-subflow"
+					doc:id="7acefe9c-ac33-44e8-900b-f5d4f261adbe" name="psr-subflow" />
+			</when>
+			<otherwise>
+				<module-logging:log-other
+					doc:name="Log other" doc:id="fbc76464-6714-4003-8ca1-e7c2484e152f"
+					message="******Other File*******"
+					source="update-vendor-bill-payment-status-netsuite-jpm-schedular-flow" />
+			</otherwise>
+		</choice>
+		<os:remove doc:name="Remove fileName key from OS"
+			doc:id="955ba484-55ce-4a09-85da-e610ccf20bcb" key="fileName"
+			objectStore="Object_store" />
+		<module-logging:log-exit doc:name="Log exit"
+			doc:id="c44b2b63-1dcc-45e9-8bb7-12cf094bc56d"
+			message="****************update-vendor-bill-payment-status ends**************"
+			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
 	</sub-flow>
 </mule>
