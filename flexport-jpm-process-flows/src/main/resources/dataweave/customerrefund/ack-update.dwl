@@ -8,7 +8,7 @@ output application/xml  skipNullOn="everywhere"
 {
   ns0#updateList: {
     (payload map ((item, index) -> 
-      ns0#record @("xmlns:ns0": ns0, "xmlns:ns01": ns01, xsi#"type": "ns01:CustomerRefund", internalId: item.internalId): {
+      ns0#record @("xmlns:ns0": ns0, "xmlns:ns01": ns01, xsi#"type": "ns01:VendorPayment", internalId: item.internalId): {
         ns01#customFieldList: {
           StringCustomFieldRef__custbody_jpm_ack_psr_error_message: {
             ns02#value: item.customFieldList.customField.StringCustomFieldRef__custbody_jpm_ack_psr_error_message

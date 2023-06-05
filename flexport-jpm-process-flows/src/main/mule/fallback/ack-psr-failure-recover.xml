@@ -85,7 +85,7 @@ output application/json
 				<module-logging:log-exit doc:name="Log exit" doc:id="3471119f-8548-49fa-b163-14284610c965" message='#["Netsuite Update, VM deque and Object Clear Completed"]' source="failure-recover-psr-flow" messageType='#["PSR file - " ++ vars.fileName ++ " processed Successfully"]'/>
 			</when>
 			<otherwise >
-				<module-logging:log-outbound doc:name="Log outbound" doc:id="15f925c4-0341-45ca-a621-c7aa570dbb3f" message="No file availble for given time range" source="failure-recover-psr-flow"/>
+				<module-logging:log-outbound doc:name="Log outbound" doc:id="15f925c4-0341-45ca-a621-c7aa570dbb3f" message="No file available for given time range" source="failure-recover-psr-flow" logLevel="ERROR"/>
 			</otherwise>
 		</choice>
 	</flow>
@@ -98,6 +98,7 @@ output application/json
 		</scheduler>
 		<module-logging:log-entry doc:name="Log entry" doc:id="110916ff-4c13-441e-85e9-086030ef3825" message="*********Failure-ACK-Recover-Flow Started****" messageType="*********Read Operation Started*******" source="failure-recover-ack-flow" />
 		<flow-ref doc:name="listfile-subflow" doc:id="b5f23f24-0387-489b-a180-176153bbd679" name="listfile-subflow" />
+		<module-logging:log-entry doc:name="Log entry" doc:id="d0a5a038-ec5a-430d-b14d-209a1cfa218e" source="failure-recover-ack-flow" logLevel="DEBUG" message='#["ListFile output" ++ payload]' messageType="********* List File Output *******"/>
 		<choice doc:name="Choice" doc:id="380cb072-0c06-4fb8-b6c6-061be784a4cb" >
 			<when expression="#[!isEmpty(payload)]">
 				<ee:transform doc:name="filter ACK file" doc:id="992c777d-c0b2-4eec-a7ec-366a1871fe8d">
@@ -123,8 +124,14 @@ output application/json
 }]]]></http:uri-params>
 				</http:request>
 				</until-successful>
+				<module-logging:log-entry doc:name="Log entry" doc:id="ce891dd6-53f4-481f-9eab-f678a4b4ce7a" source="failure-recover-ack-flow" message="********* Reading File *******" messageType="********* Reading File *******"/>
 				<set-payload value="#[payload]" doc:name="set mime type application/xml" doc:id="ccd0b285-53df-4986-9350-1e128a81d546" mimeType="application/xml" />
+				<os:retrieve doc:name="Retrieve fileName" doc:id="88fdcf22-55fb-40d7-8334-712ba25afdc2" key="fileName" objectStore="Object_store" target="fileName">
+					<os:default-value><![CDATA[#[""]]]></os:default-value>
+				</os:retrieve>
+				<os:remove doc:name="Remove fileName key from OS" doc:id="2859a426-2b15-41bc-aee2-2278149d8d5e" key="fileName" objectStore="Object_store" />
 				<flow-ref doc:name="ack-subflow" doc:id="db7f5354-8f65-4916-ad75-cc5b72f4ebad" name="ack-subflow" />
+				<module-logging:log-entry doc:name="Log entry" doc:id="4c607da6-3a42-4eff-b0a7-702a0eb09c48" source="failure-recover-ack-flow" message="********* Netsuite done get payments related to msgId *******" messageType="********* Netsuite done get payments related to msgId *******"/>
 				<try doc:name="Try" doc:id="d9575e17-7e6b-41e9-a436-1ff2e0f88f82">
 			<os:clear doc:name="Clear fileName" doc:id="2537e072-02b4-4d19-97be-1394b80b3c4a" objectStore="Object_store" />
 					<vm:consume queueName="${vm.queue.namea.ack.psr}" doc:name="Deque" doc:id="51f2ee70-cd51-4ce6-a9fb-3b36adc11858" config-ref="VM_Config" timeout="${vm.listener.deque.timeout}" />

@@ -120,7 +120,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 						</on-error-propagate>
 					</error-handler>
 				</try>
-				<os:store doc:name="Store XML into ObjectStore" doc:id="a805f63c-a17b-4bd8-a83b-ac6d3c39e602" key="vendorTransactionJPMFile" objectStore="Object_store" />
+				<os:store doc:name="Store XML into ObjectStore" doc:id="a805f63c-a17b-4bd8-a83b-ac6d3c39e602" key="transactionJPMFile" objectStore="Object_store" />
 				<flow-ref doc:name="jpm-file-upload" doc:id="190e598c-dad2-483d-81f1-74b9e77e942d" name="jpm-file-upload"/>		
 				<try doc:name="Try" doc:id="c8e1a3b3-d903-4d44-8e94-da5e18216a3a" >
 					<vm:consume doc:name="Consume ACK or PSR" doc:id="3e04e22a-fda4-48f4-8af9-6580af0cb93c" config-ref="VM_Config" queueName="${vm.queue.namea.ack.psr}" timeoutUnit="MINUTES" timeout="${vm.listener.timeout}" />
@@ -139,7 +139,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 					</error-handler>
 				</try>
 				<flow-ref doc:name="update-vendor-bill-payment-status-subflow" doc:id="1cfa1310-2a21-479d-85eb-664114189283" name="update-vendor-bill-payment-status-subflow"/>
-				<os:remove doc:name="Remove  transactionJPMFile" doc:id="13acb186-64ce-468b-a7ea-4dc44b623b09" key="vendorTransactionJPMFile" objectStore="Object_store" />
+				<os:remove doc:name="Remove  transactionJPMFile" doc:id="13acb186-64ce-468b-a7ea-4dc44b623b09" key="transactionJPMFile" objectStore="Object_store" />
 			</when>
 			<otherwise>
 				<module-logging:log-exit doc:name="Log exit"

@@ -21,65 +21,88 @@ http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schem
 		<module-logging:log-inbound
 			doc:name="Log inbound" doc:id="23393496-eecf-4627-956f-47717309e8b4"
 			message="******ACK File Flow Started**************"
-			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
-		<ee:transform doc:name="URI param" doc:id="fe7d3833-459f-45f1-bd6c-1da36eaa9a07" >
+			source="update-vendor-bill-payment-status-subflow" />
+		<ee:transform doc:name="FileName" doc:id="fe7d3833-459f-45f1-bd6c-1da36eaa9a07" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
 				<ee:set-variable resource="dataweave/msgId.dwl" variableName="URIParam" />
 			</ee:variables>
 		</ee:transform>
-		<until-successful maxRetries="${https.retry.attempt}"
-			doc:name="Until Successful"
-			doc:id="c9ac1a88-7a4d-4dcf-9b9b-9c8d91466e63"
-			millisBetweenRetries="${https.retry.frequency}">
-			<http:request method="GET"
-				doc:name="Request Netsuite sapi"
-				doc:id="7e5b6618-ecfd-47dd-8cdd-a691ed4f738a"
-				path="${https.retrieve.payments.path.netsuite}" config-ref="Http_NS__Request"
-				responseTimeout="${http.response.timeout.netsuite}">
-				<http:uri-params><![CDATA[#[output application/java
-				
+		<ee:transform doc:name="Get Vendor Payment based on FileName SOAP Request" doc:id="9fe9d2d5-4637-427f-ad0d-6b0fddc59c36">
+				<ee:message>
+					<ee:set-payload resource="dataweave/customerrefund/getCustomerRefundBasedFileName.dwl" />
+				</ee:message>
+			</ee:transform>
+		<http:request method="POST" doc:name="Netsuite SaveSearch Request" doc:id="f9d2b4d3-efb0-4a8e-a19d-83db22b1832e" config-ref="NSv11v2httpRequest" path="${https.netsuite.sapi.v11.v2.savesearch.path}">
+				<http:query-params><![CDATA[#[output application/java
 ---
-vars.URIParam]]]></http:uri-params>
+{
+	"pageSize" : p('vendor.payment.savesearch.pageSize'),
+	"limit" : p('vendor.payment.savesearch.limit'),
+	"searchKey" : p('vendor.payment.savesearch.searchKey')
+}]]]></http:query-params>
 			</http:request>
-		</until-successful>
 		<choice doc:name="Choice : Is ACK Data Present"
 			doc:id="8663a144-fd91-4dd4-87ad-d3c393da71c8">
 			<when expression="#[sizeOf(payload)!=0]">
 				<foreach doc:name="For Each"
 					doc:id="0f9b1317-0521-48ce-b11b-24d731cf296a"
 					collection="#[payload]" batchSize="${foreach.batch.size}">
-					<ee:transform doc:name="Transform Message"
-						doc:id="6153eff5-5f9b-45be-b4ed-2f9939d2a0fc">
+					<ee:transform doc:name="ACK Records List"
+						doc:id="2943c879-b81b-42f5-b67f-6afcaa3f8d9d">
 						<ee:message>
 							<ee:set-payload
 								resource="dataweave/namea/ackDwlTransformation.dwl" />
 						</ee:message>
 					</ee:transform>
-					<until-successful
-						maxRetries="${https.retry.attempt}" doc:name="Until Successful"
-						doc:id="275f9e22-6155-41cc-838e-984b16130f33"
-						millisBetweenRetries="${https.retry.frequency}">
-						<http:request method="PUT"
-							doc:name="Request Netsuite sapi update"
-							doc:id="29ddb87b-4d6e-439f-a732-9e178f4423c4"
-							path="${https.update.payments.path.netsuite}" config-ref="Http_NS__Request"
-							responseTimeout="${http.response.timeout.netsuite}" />
-					</until-successful>
+					<ee:transform
+						doc:name="Vendor Payment Update SOAP Request"
+						doc:id="2dce2c62-be49-41bc-aaa2-5564dacba8c3">
+						<ee:message>
+							<ee:set-payload
+								resource="dataweave/customerrefund/ack-update.dwl" />
+						</ee:message>
+					</ee:transform>
+
+					<http:request method="PUT"
+						doc:name="Netsuite Vendor Payment Request"
+						doc:id="41c8556f-91ba-4345-8b92-d8d0267630d5"
+						config-ref="NSv11v2httpRequest"
+						path="${https.netsuite.sapi.v11.v2.update.path}">
+						<http:query-params><![CDATA[#[output application/java
+---
+{
+	"recordType" : p('vendor.payment.savesearch.recordType')
+}]]]></http:query-params>
+					</http:request>
+
+					<ee:transform doc:name="XML to JSON Conversion"
+						doc:id="b70ee06b-f4c1-4544-a552-ae57f1d4e62b">
+						<ee:message>
+							<ee:set-payload
+								resource="dataweave/customerrefund/updateList-response-customer-refund.dwl" />
+						</ee:message>
+					</ee:transform>
+					<module-logging:log-outbound
+						doc:name="Log Output"
+						doc:id="363524bc-9b9d-4e52-aec0-95effa02929f"
+						message='#["Netsuite update done for block number: " ++ vars.counter]'
+						messageType="#[output application/json --- payload]"
+						source="ack-subflow" />
 				</foreach>
 			</when>
 			<otherwise>
 				<module-logging:log-other
 					doc:name="Log other" doc:id="807bd1c9-93c2-4378-ad73-23fc92abd585"
 					message="**********No Record Found  for ACK msg ID**********"
-					source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+					source="update-vendor-bill-payment-status-subflow" />
 			</otherwise>
 		</choice>
 		<module-logging:log-outbound
 			doc:name="Log outbound" doc:id="ca894ccd-65fc-41e7-85e4-ac80e74979ec"
 			message="******ACK File Flow ends*************"
-			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+			source="update-vendor-bill-payment-status-subflow" />
 	</sub-flow>
 	<sub-flow name="apac-ack-subflow" doc:id="30bdaa05-61d5-4bcd-bec0-d47757f4653d" >
 							

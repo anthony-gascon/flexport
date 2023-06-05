@@ -8,7 +8,7 @@ ns xsi http://www.w3.org/2001/XMLSchema-instance
 ---
 {
 	ns0#search: {
-		ns0#searchRecord @("xmlns:ns0": ns0,"xmlns:ns01": ns01, xsi#"type": "ns01:TransactionSearchAdvanced",  savedSearchId: p('vendor.payment.savesearch.savedSearchId') , savedSearchScriptId: p('vendor.payment.savesearch.savedSearchScriptId')): {
+		ns0#searchRecord @("xmlns:ns0": ns0,"xmlns:ns01": ns01, xsi#"type": "ns01:TransactionSearchAdvanced",  savedSearchId: p('vendor.payment.savesearch.savedSearchId') , savedSearchScriptId: 'p('vendor.payment.savesearch.savedSearchScriptId')'): {
 		}
 	}
 }

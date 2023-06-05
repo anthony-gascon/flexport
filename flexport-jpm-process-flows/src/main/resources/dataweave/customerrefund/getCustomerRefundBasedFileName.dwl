@@ -11,7 +11,7 @@ output application/xml
 		ns0#searchRecord @("xmlns:ns0": ns0, "xmlns:ns01": ns01, xsi#"type": "ns01:TransactionSearch"): {
 			ns01#basic: {
 				ns02#customFieldList: {
-					ns03#customField @(scriptId: p('customer.refund.searchBy.fields.fileName'), internalId: p('customer.refund.searchBy.fields.fileName.internalId'), operator: 'is' , xsi#"type": "ns03:SearchStringCustomField"): {
+					ns03#customField @(scriptId: p('vendor.payment.searchBy.fields.fileName'), internalId: p('vendor.payment.searchBy.fields.fileName.internalId'), operator: 'is' , xsi#"type": "ns03:SearchStringCustomField"): {
 						ns03#searchValue: vars.URIParam.msgId
 					}
 				}

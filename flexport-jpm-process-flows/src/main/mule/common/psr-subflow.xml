@@ -25,7 +25,7 @@ http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schem
 		<until-successful maxRetries="${https.retry.attempt}" doc:name="Until Successful" doc:id="74864d32-6532-49b8-846f-0204b830635e" millisBetweenRetries="${https.retry.frequency}">
 								<http:request method="POST" doc:name="Request" doc:id="9bb84247-7e4c-4534-af25-d116952fbc9c" config-ref="PGP_Encrpt_Request" path="/email" />
 							</until-successful>
-		<module-logging:log-outbound doc:name="Log outbound" doc:id="bfb43af1-440a-4915-b531-80995af5ea19" message="******Email Sent*************" source="apac-psr-subflow" />
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="bfb43af1-440a-4915-b531-80995af5ea19" message="******Email Sent*************" source="psr-subflow" />
 	</sub-flow>
 	<sub-flow name="psr-subflow"
 		doc:id="3690d9bb-c2c9-476c-83de-2af62bd1d53d">
@@ -35,7 +35,7 @@ http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schem
 		<module-logging:log-inbound
 			doc:name="Log inbound" doc:id="5ace1020-4abf-4591-a350-06e0d454b892"
 			message="******PSR File Flow Started**************"
-			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+			source="update-vendor-bill-payment-status-subflow" />
 		<ee:transform doc:name="Transform Message"
 			doc:id="192068f9-c08e-457c-a5cb-ab491b386af9">
 			<ee:message>
@@ -49,25 +49,30 @@ payload.Document.CstmrPmtStsRpt.*OrgnlPmtInfAndSts.*TxInfAndSts]]></ee:set-paylo
 			doc:id="e3aab1d5-6ece-456b-9778-6116a9244a98" collection="#[payload]"
 			batchSize="${foreach.batch.size}">
 			<try doc:name="Try" doc:id="b191fa3f-0284-47f4-8d5a-8160c3062e57">
-				<ee:transform doc:name="Transform Message"
-					doc:id="4991ec04-69a9-4fe2-9d48-c6a3920ddda0">
-					<ee:message>
-					</ee:message>
-					<ee:variables>
+				<ee:transform doc:name="PSR Update List" doc:id="05736492-8aa7-40d3-8945-28c178ff83a8" >
+					<ee:message />
+					<ee:variables >
 						<ee:set-variable resource="dataweave/apac/psrVariableDwlTransformation.dwl" variableName="psrVariable" />
 					</ee:variables>
 				</ee:transform>
-				<until-successful
-					maxRetries="${https.retry.attempt}" doc:name="Until Successful"
-					doc:id="b689bce4-8fbd-4561-a4d1-ceb17da92331"
-					millisBetweenRetries="${https.retry.frequency}">
-					<http:request method="PUT" doc:name="Netsuite Request"
-						doc:id="6c06a199-c78d-4cc3-84ed-b40b7ef51eb5"
-						responseTimeout="${http.response.timeout.netsuite}"
-						config-ref="Http_NS__Request" path="${https.update.payments.path.netsuite}">
-						<http:body><![CDATA[#[vars.psrVariable]]]></http:body>
-					</http:request>
-				</until-successful>
+				<ee:transform doc:name="PSR Update SOAP Request" doc:id="1339587a-ce97-4410-9bcb-ba47b0e0d146" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/updatelist-psr-soap-request.dwl" />
+					</ee:message>
+				</ee:transform>
+				<http:request method="PUT" doc:name="Netsuite Vendor Payment Update Request" doc:id="c38fe527-2511-4312-a874-ec462cc5d582" config-ref="NSv11v2httpRequest" path="${https.netsuite.sapi.v11.v2.update.path}" >
+					<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"recordType" : p('vendor.payment.savesearch.recordType')
+}]]]></http:query-params>
+				</http:request>
+				<ee:transform doc:name="XML to JSON Conversion" doc:id="f152c693-fa14-4b81-9a3a-a5ce6568a443" >
+					<ee:message >
+						<ee:set-payload resource="dataweave/customerrefund/updateList-response-customer-refund.dwl" />
+					</ee:message>
+				</ee:transform>
+				<module-logging:log-outbound doc:name="Log Output" doc:id="62069d75-da5a-4c86-93e5-28df38b69981" message='#["Netsuite update done for block number: " ++ vars.counter]' messageType="#[output application/json --- payload]" source="psr-subflow" />
 				<error-handler>
 					<on-error-continue enableNotifications="true"
 						logException="true" doc:name="On Error Continue"
@@ -85,32 +90,8 @@ payload.Document.CstmrPmtStsRpt.*OrgnlPmtInfAndSts.*TxInfAndSts]]></ee:set-paylo
 							messageType="-----------Netsuite Update Error ------------------" />
 						<try doc:name="Try"
 							doc:id="f343fb33-0fb3-4ddc-9fcb-45cc60a2e79d">
-							<ee:transform doc:name="error internalId csv"
-								doc:id="c0256fca-11e3-415f-a8cb-4d9526417381">
-								<ee:message>
-									<ee:set-payload
-										resource="dataweave/namea/email-netsuite-psr-csv.dwl" />
-								</ee:message>
-							</ee:transform>
-							<ee:transform doc:name="email payload"
-								doc:id="1c167a0c-9ead-4b4b-a8e9-a1e53b34bd13">
-								<ee:message>
-									<ee:set-payload resource="dataweave/apac/email-psr.dwl" />
-								</ee:message>
-							</ee:transform>
-							<until-successful
-								maxRetries="${https.retry.attempt}" doc:name="Until Successful"
-								doc:id="42abdcc5-5688-4e5e-ad19-e814fe01360b"
-								millisBetweenRetries="${https.retry.frequency}">
-								<http:request method="POST" doc:name="Request"
-									doc:id="402e1bde-0bcf-47b2-86d6-5e2b0b77c968"
-									config-ref="PGP_Encrpt_Request" path="${https.email.path.pgp}" />
-							</until-successful>
-							<module-logging:log-outbound
-								doc:name="Log outbound"
-								doc:id="ac7a99d2-9dc0-43cf-bdbc-e2ea63ffb7bd"
-								message="******Email Sent*************"
-								source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+							
+							<flow-ref doc:name="email-psr-csv-subflow" doc:id="864765ef-0b2d-4f6e-8596-5eef62da7fb1" name="email-psr-csv-subflow"/>
 							<error-handler>
 								<on-error-continue enableNotifications="true"
 									logException="true" doc:name="On Error Continue"
@@ -131,7 +112,7 @@ payload.Document.CstmrPmtStsRpt.*OrgnlPmtInfAndSts.*TxInfAndSts]]></ee:set-paylo
 		<module-logging:log-outbound
 			doc:name="Log outbound" doc:id="0741c025-edb2-4031-8886-f37033a922a0"
 			message="******PSR File Flow ends*************"
-			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
+			source="psr-subflow" />
 	</sub-flow>
 	<sub-flow name="apac-psr-subflow" doc:id="f488b30c-b5c0-46fc-9571-b84bfa4461d9" >
 		<set-variable value='""' doc:name="psrVariable" doc:id="9d86ca3b-a3d8-45a7-baee-4e347a9b8285" variableName="psrVariable" />

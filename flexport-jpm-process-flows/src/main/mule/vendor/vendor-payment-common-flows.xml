@@ -8,7 +8,42 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
 http://www.mulesoft.org/schema/mule/module-logging http://www.mulesoft.org/schema/mule/module-logging/current/mule-module-logging.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
-
+<sub-flow name="common-upload-ack-error-data-subflow" doc:id="4f8d3bb1-23cf-4b9c-bffb-cfa435138c6d" >
+		<ee:transform doc:name="Set email body" doc:id="f30fad8c-81a2-4854-9e61-7b7679482ff0">
+					<ee:message />
+					<ee:variables>
+						<ee:set-variable resource="dataweave/customerrefund/email-ack-file.dwl" variableName="emailPayload" />
+					</ee:variables>
+				</ee:transform>
+		<http:request method="POST" doc:name="ACK File Email Request " doc:id="9f222475-d9c0-481d-a11f-c06f6cdf8ab9" config-ref="PGP_Encrpt_Request" path="/email" target="AckEmailResp">
+						<http:body><![CDATA[#[vars.emailPayload]]]></http:body>
+					</http:request>
+		<ee:transform doc:name="ACK lineNumbers" doc:id="5e8f8b62-34d8-4706-9cda-7c5553816e1c">
+					<ee:message>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable resource="dataweave/customerrefund/ack-lineNumbers.dwl" variableName="lineNumbers" />
+					</ee:variables>
+				</ee:transform>
+		<os:retrieve doc:name="Retrieve JPM File Obj Store" doc:id="e831faa7-73e7-422b-87ed-aa1190da75d9" key="transactionJPMFile" objectStore="Object_store">
+					<os:default-value><![CDATA[#[""]]]></os:default-value>
+				</os:retrieve>
+		<ee:transform doc:name="ACK-Troubleshout-JSONFile" doc:id="bea890dd-e592-402f-b43d-0c77e561bb3f">
+					<ee:message>
+						<ee:set-payload resource="dataweave/customerrefund/ack-errorline-internalId-file.dwl" />
+					</ee:message>
+				</ee:transform>
+		<http:request method="POST" doc:name="Request File Upload File Cabinet" doc:id="e4f50501-7766-42bb-9f87-4d1ac2470d43" config-ref="NSv11v2httpRequest" path='${https.netsuite.sapi.v11.v2.addfile.path}'>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"folderId" : p('namea.customer.refund.ns.folderId'),
+	"fileName" : vars.fileName
+}]]]></http:query-params>
+		</http:request>
+		<module-logging:log-outbound doc:name="Log outbound" doc:id="c28421ea-59d8-4b26-b53b-38b6d5f6b44c" message="#[%dw 2.0&#10;output application/json writeAttributes=true&#10;---&#10;payload]" source="common-upload-ack-error-data-subflow" messageType="*********************** File Upload to Cabinet Done ***********************"/>
+	
+</sub-flow>
 	<sub-flow name="vendor-payment-netsuite-mapping-subflow" doc:id="5cf95a2e-1ce8-4063-83b9-ece526c184b7" >
 		<set-payload value="#[payload..searchRow]" doc:name="Set Payload" doc:id="c4a540e0-fa3a-4f9b-98cd-64bd32213955" />
 		<ee:transform doc:name="mapping NS fields" doc:id="a1e8a2e6-f51d-46c4-bc4e-0ddbacefbc63">
@@ -227,26 +262,22 @@ payload groupBy $.basic.tranDate]]></ee:set-payload>
 			doc:name="Log entry" doc:id="c1f838b7-e4e3-4b55-a273-e665542f919d"
 			message="*********update-vendor-bill-payment-status started**********"
 			source="update-vendor-bill-payment-status-netsuite-jpm-Flow" />
-		<ee:transform doc:name="fileName" doc:id="f0c90b34-4faa-4274-bb6b-f4464f05ed1c" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="fileName" ><![CDATA[%dw 2.0
-output application/java
----
-p('sftp.filename') replace  "/" with "" ++  vars.uuid]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
 		<os:retrieve doc:name="Retrieve fileName"
-			doc:id="cf7cd4ea-2d0c-4549-8f46-6c8ac2b92471" key="#[vars.fileName]"
+			doc:id="cf7cd4ea-2d0c-4549-8f46-6c8ac2b92471" key="fileName"
 			objectStore="Object_store" target="fileName">
 			<os:default-value><![CDATA[#[""]]]></os:default-value>
 		</os:retrieve>
 		<choice doc:name="Choice : ACK or PSR file"
 			doc:id="749eb369-2611-4233-9cb1-351e93448a9e">
 			<when expression="#[vars.fileName contains ('ACK')]">
-				<flow-ref doc:name="ack-subflow"
-					doc:id="6e0f8c66-34b9-4fec-a802-10fce968d40d" name="ack-subflow" />
+				<scatter-gather doc:name="Scatter-Gather" doc:id="22c5d71e-02f0-4e14-bed9-e84d815b58f8" >
+					<route >
+						<flow-ref doc:name="common-upload-ack-error-data-subflow" doc:id="789c3764-02db-4844-bf1b-3eee607fe7df" name="common-upload-ack-error-data-subflow" />
+					</route>
+					<route >
+						<flow-ref doc:name="ack-subflow" doc:id="6e0f8c66-34b9-4fec-a802-10fce968d40d" name="ack-subflow" />
+					</route>
+				</scatter-gather>
 			</when>
 			<when expression='#[vars.fileName contains ("PSOURCE")]'>
 				<flow-ref doc:name="psr-subflow"
